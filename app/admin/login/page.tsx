@@ -61,7 +61,6 @@ export default function LoginPage() {
         <label>
           <span style={{ display: "block", fontWeight: 800, fontSize: "13.5px", marginBottom: "6px" }}>Lozinka</span>
           <input
-            required
             type="password"
             name="lozinka"
             autoComplete="current-password"
@@ -70,6 +69,9 @@ export default function LoginPage() {
               border: "2px solid #EDE5D4", background: "#FDFBF6", fontSize: "15px",
             }}
           />
+          <span style={{ display: "block", fontSize: "12px", opacity: 0.55, fontWeight: 700, marginTop: "6px" }}>
+            Prva prijava? Ostavite lozinku praznom — postavit ćete je u sljedećem koraku.
+          </span>
         </label>
         {state.error && (
           <div role="alert" style={{ fontSize: "13.5px", fontWeight: 700, color: "#C0503A" }}>

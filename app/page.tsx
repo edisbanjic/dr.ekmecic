@@ -237,8 +237,8 @@ export default function Home() {
       </section>
 
       <section id="zakazivanje" style={{background:"#F5F0E8",padding:"clamp(30px,5vw,60px) 0 clamp(70px,10vw,120px)",position:"relative",overflow:"hidden"}}>
-        <div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 clamp(18px,4vw,32px)",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:"clamp(32px,5vw,64px)",alignItems:"center"}}>
-          <div data-reveal="">
+        <div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 clamp(18px,4vw,32px)",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:"clamp(32px,5vw,64px)",alignItems:"start"}}>
+          <div data-reveal="" style={{paddingTop:"clamp(24px,4vw,42px)"}}>
             <div style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"#FBE7DA",borderRadius:"999px",padding:"8px 16px",fontFamily:"var(--font-fredoka)",fontWeight:"600",fontSize:"12.5px",letterSpacing:".14em",color:"#A05A42"}}>ZAKAZIVANJE</div>
             <h2 style={{margin:"16px 0 0",fontFamily:"var(--font-fredoka)",fontWeight:"700",fontSize:"clamp(38px,5.6vw,62px)",lineHeight:"1.02"}}>Rezerviši svoj <span style={{color:"#E8836A"}}>termin</span></h2>
             <p style={{margin:"20px 0 0",maxWidth:"440px",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>Ispunite formu, a mi vas nazovemo da potvrdimo termin — obično već isti dan. Bez čekanja, bez komplikacija.</p>

@@ -25,16 +25,27 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isLogin = request.nextUrl.pathname === "/admin/login";
+  const path = request.nextUrl.pathname;
+  const isLogin = path === "/admin/login";
+  const isPostaviLozinku = path === "/admin/postavi-lozinku";
   if (!user && !isLogin) {
     const to = request.nextUrl.clone();
     to.pathname = "/admin/login";
     return NextResponse.redirect(to);
   }
-  if (user && isLogin) {
-    const to = request.nextUrl.clone();
-    to.pathname = "/admin";
-    return NextResponse.redirect(to);
+  if (user) {
+    // onboarding: dok lozinka nije postavljena, sve vodi na taj ekran
+    const moraLozinku = user.user_metadata?.mora_postaviti_lozinku === true;
+    if (moraLozinku && !isPostaviLozinku) {
+      const to = request.nextUrl.clone();
+      to.pathname = "/admin/postavi-lozinku";
+      return NextResponse.redirect(to);
+    }
+    if (!moraLozinku && (isLogin || isPostaviLozinku)) {
+      const to = request.nextUrl.clone();
+      to.pathname = "/admin";
+      return NextResponse.redirect(to);
+    }
   }
   return response;
 }

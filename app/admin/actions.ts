@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getSupabase } from "@/lib/supabase";
 import { getSupabaseServer } from "@/lib/supabase-server";
 import { datumUHorizontu, parseDatum, slotoviZaDan } from "@/lib/termini";
 import type { TerminStatus } from "@/lib/types";
@@ -97,12 +98,30 @@ function radnikIzForme(formData: FormData) {
 
 export async function noviRadnik(formData: FormData): Promise<void> {
   const supabase = await db();
+  const radnik = radnikIzForme(formData);
   const { data, error } = await supabase
     .from("radnici")
-    .insert(radnikIzForme(formData))
+    .insert(radnik)
     .select("id")
     .single();
   if (error) throw new Error("Greška pri kreiranju radnika: " + error.message);
+
+  // Radnik s emailom odmah dobija login nalog bez lozinke: prijavi se samo
+  // emailom, a lozinku postavlja pri prvoj prijavi.
+  if (radnik.email) {
+    const admin = getSupabase();
+    if (admin) {
+      const { data: nalog } = await admin.auth.admin.createUser({
+        email: radnik.email,
+        email_confirm: true,
+        user_metadata: { mora_postaviti_lozinku: true },
+      });
+      if (nalog?.user) {
+        await supabase.from("radnici").update({ user_id: nalog.user.id }).eq("id", data.id);
+      }
+    }
+  }
+
   revalidatePath("/admin/radnici");
   redirect(`/admin/radnici/${data.id}`);
 }
