@@ -57,6 +57,17 @@ export type Termin = {
   radnik_id: string | null;
 };
 
+export type Objava = {
+  id: string;
+  created_at: string;
+  naslov: string;
+  slug: string;
+  sazetak: string | null;
+  sadrzaj: string;
+  objavljena: boolean;
+  datum: string;
+};
+
 export type Zapis = {
   id: string;
   created_at: string;

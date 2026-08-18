@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { slugify } from "@/lib/slug";
 import { getSupabase } from "@/lib/supabase";
 import { getSupabaseServer } from "@/lib/supabase-server";
 import { datumUHorizontu, HORIZONT_ADMIN, parseDatum, slotoviZaDan } from "@/lib/termini";
@@ -179,6 +180,66 @@ export async function noviTermin(
   }
   revalidatePath("/admin/kalendar");
   redirect("/admin/kalendar?datum=" + termin.datum);
+}
+
+// ---------- objave (savjeti / vijesti) ----------
+
+function objavaIzForme(formData: FormData) {
+  return {
+    naslov: s(formData, "naslov"),
+    sazetak: sOrNull(formData, "sazetak"),
+    sadrzaj: s(formData, "sadrzaj"),
+    objavljena: formData.get("objavljena") === "on",
+    datum: s(formData, "datum") || undefined,
+  };
+}
+
+function osvjeziJavneObjave() {
+  revalidatePath("/");
+  revalidatePath("/savjeti", "layout");
+}
+
+export async function novaObjava(formData: FormData): Promise<void> {
+  const supabase = await db();
+  const objava = objavaIzForme(formData);
+  if (!objava.naslov || !objava.sadrzaj) throw new Error("Naslov i sadržaj su obavezni.");
+
+  // jedinstven slug: dodaj brojčani sufiks ako je zauzet
+  const osnova = slugify(objava.naslov) || "objava";
+  let slug = osnova;
+  for (let i = 2; ; i++) {
+    const { data } = await supabase.from("objave").select("id").eq("slug", slug).maybeSingle();
+    if (!data) break;
+    slug = `${osnova}-${i}`;
+  }
+
+  const { data, error } = await supabase
+    .from("objave")
+    .insert({ ...objava, slug })
+    .select("id")
+    .single();
+  if (error) throw new Error("Greška pri kreiranju objave: " + error.message);
+  revalidatePath("/admin/objave");
+  osvjeziJavneObjave();
+  redirect(`/admin/objave/${data.id}`);
+}
+
+export async function urediObjavu(id: string, formData: FormData): Promise<void> {
+  const supabase = await db();
+  const { error } = await supabase.from("objave").update(objavaIzForme(formData)).eq("id", id);
+  if (error) throw new Error("Greška pri izmjeni objave: " + error.message);
+  revalidatePath(`/admin/objave/${id}`);
+  revalidatePath("/admin/objave");
+  osvjeziJavneObjave();
+}
+
+export async function obrisiObjavu(id: string): Promise<void> {
+  const supabase = await db();
+  const { error } = await supabase.from("objave").delete().eq("id", id);
+  if (error) throw new Error("Greška pri brisanju objave: " + error.message);
+  revalidatePath("/admin/objave");
+  osvjeziJavneObjave();
+  redirect("/admin/objave");
 }
 
 // ---------- moj profil ----------

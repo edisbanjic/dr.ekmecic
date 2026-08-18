@@ -89,6 +89,24 @@ create policy "osoblje puni pristup" on termini
 create policy "osoblje puni pristup" on zapisi
   for all to authenticated using (true) with check (true);
 
+-- Objave (savjeti/vijesti) — pišu se iz admin panela
+create table objave (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  naslov text not null,
+  slug text not null unique,
+  sazetak text,
+  sadrzaj text not null,
+  objavljena boolean not null default false,
+  datum date not null default current_date
+);
+
+alter table objave enable row level security;
+create policy "osoblje puni pristup" on objave
+  for all to authenticated using (true) with check (true);
+create policy "javno citanje objavljenih" on objave
+  for select to anon using (objavljena);
+
 -- Storage: javno čitljive profilne slike, upload samo za osoblje
 insert into storage.buckets (id, name, public) values ('avatari', 'avatari', true)
 on conflict (id) do nothing;
