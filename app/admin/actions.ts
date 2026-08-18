@@ -206,26 +206,6 @@ export async function sacuvajProfil(
   return { ok: true };
 }
 
-export async function poveziProfil(formData: FormData): Promise<void> {
-  const supabase = await db();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("Niste prijavljeni.");
-  const radnikId = s(formData, "radnik_id");
-  if (!radnikId) return;
-
-  // makni eventualnu staru vezu pa preuzmi odabrani karton (ako je slobodan)
-  await supabase.from("radnici").update({ user_id: null }).eq("user_id", user.id);
-  const { error } = await supabase
-    .from("radnici")
-    .update({ user_id: user.id })
-    .eq("id", radnikId)
-    .is("user_id", null);
-  if (error) throw new Error("Greška pri povezivanju profila: " + error.message);
-  revalidatePath("/admin/profil");
-}
-
 export async function kreirajMojProfil(formData: FormData): Promise<void> {
   const supabase = await db();
   const {
