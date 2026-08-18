@@ -288,6 +288,37 @@ export async function kreirajKartonIzTermina(terminId: string): Promise<void> {
   redirect(`/admin/pacijenti/${pacijent.id}`);
 }
 
+/**
+ * Završi termin uz opcionu napomenu o zahvatu. Napomena se sprema na termin,
+ * a ako je termin povezan s kartonom pacijenta, ulazi i u "Zapisi u kartonu".
+ */
+export async function zavrsiTermin(terminId: string, formData: FormData): Promise<void> {
+  const supabase = await db();
+  const izvjestaj = sOrNull(formData, "izvjestaj");
+
+  const { data: termin, error } = await supabase
+    .from("termini")
+    .update({ status: "zavrsen", ...(izvjestaj ? { izvjestaj } : {}) })
+    .eq("id", terminId)
+    .select("*")
+    .single();
+  if (error) throw new Error("Greška pri završavanju termina: " + error.message);
+
+  if (izvjestaj && termin.pacijent_id) {
+    const { error: zapisError } = await supabase.from("zapisi").insert({
+      pacijent_id: termin.pacijent_id,
+      radnik_id: termin.radnik_id,
+      datum: termin.datum ?? undefined,
+      opis: izvjestaj,
+    });
+    if (zapisError) console.error("Zapis u karton nije uspio:", zapisError);
+    revalidatePath(`/admin/pacijenti/${termin.pacijent_id}`);
+  }
+
+  revalidatePath("/admin/kalendar");
+  revalidatePath("/admin");
+}
+
 /** Dodijeli (ili promijeni) doktora za termin, uz zaštitu od duplog slota. */
 export async function dodijeliDoktora(terminId: string, formData: FormData): Promise<void> {
   const supabase = await db();

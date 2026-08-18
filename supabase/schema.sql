@@ -50,6 +50,8 @@ create table termini (
   email text,
   usluga text,
   napomena text,
+  -- napomena osoblja pri završavanju termina (šta je rađeno)
+  izvjestaj text,
   status text not null default 'na_cekanju'
     check (status in ('na_cekanju', 'potvrdjen', 'otkazan', 'zavrsen')),
   pacijent_id uuid references pacijenti (id) on delete set null,

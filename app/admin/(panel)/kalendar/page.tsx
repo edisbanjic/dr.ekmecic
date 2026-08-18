@@ -7,6 +7,7 @@ import {
 } from "@/app/admin/actions";
 import type { Radnik } from "@/lib/types";
 import NemaSupabase from "@/components/admin/NemaSupabase";
+import ZavrsiTermin from "@/components/admin/ZavrsiTermin";
 import { getDoktoriAdmin, getMojRadnik } from "@/lib/admin";
 import { nadjiPacijenta, type PacijentKratko } from "@/lib/match";
 import { getSupabaseServer } from "@/lib/supabase-server";
@@ -312,6 +313,11 @@ export default async function KalendarPage({
                     {t.usluga && <div style={{ opacity: 0.8 }}>{t.usluga}</div>}
                     {t.telefon && <div style={{ opacity: 0.8 }}>{t.telefon}</div>}
                     {t.email && <div style={{ opacity: 0.8, wordBreak: "break-all" }}>{t.email}</div>}
+                    {t.izvjestaj && (
+                      <div style={{ marginTop: "4px", fontSize: "12px", fontStyle: "italic", opacity: 0.85 }}>
+                        „{t.izvjestaj}“
+                      </div>
+                    )}
                     <div style={{ marginTop: "4px", fontSize: "11px", fontWeight: 800, letterSpacing: ".04em" }}>
                       {st.label.toUpperCase()}
                     </div>
@@ -327,9 +333,7 @@ export default async function KalendarPage({
                           </form>
                         )}
                         {t.status === "potvrdjen" && (
-                          <form action={promijeniStatusTermina.bind(null, t.id, "zavrsen")}>
-                            <button type="submit">Završi</button>
-                          </form>
+                          <ZavrsiTermin terminId={t.id} imaKarton={!!t.pacijent_id} />
                         )}
                         <form action={promijeniStatusTermina.bind(null, t.id, "otkazan")}>
                           <button type="submit">Otkaži</button>

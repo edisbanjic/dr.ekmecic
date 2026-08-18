@@ -51,6 +51,7 @@ export type Termin = {
   email: string | null;
   usluga: string | null;
   napomena: string | null;
+  izvjestaj: string | null;
   status: TerminStatus;
   pacijent_id: string | null;
   radnik_id: string | null;
