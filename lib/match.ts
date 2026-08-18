@@ -16,6 +16,19 @@ export function normalizujTelefon(t: string | null | undefined): string | null {
   return d.length >= 6 ? d : null;
 }
 
+/**
+ * Validira unos i vraća broj u kanonskom obliku "+387 61 123 456".
+ * Prihvata "061 123 456", "61123456", "+387 61…", "00387…"; null = neispravan.
+ */
+export function kanonskiTelefon(unos: string): string | null {
+  let d = unos.replace(/\D/g, "");
+  if (d.startsWith("00387")) d = d.slice(5);
+  else if (d.startsWith("387")) d = d.slice(3);
+  if (d.startsWith("0")) d = d.slice(1);
+  if (d.length < 8 || d.length > 9) return null;
+  return `+387 ${d.slice(0, 2)} ${d.slice(2, 5)} ${d.slice(5)}`;
+}
+
 const normalizujIme = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
 
 /**

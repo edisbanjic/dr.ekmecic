@@ -1,5 +1,6 @@
 "use server";
 
+import { kanonskiTelefon } from "@/lib/match";
 import { getSupabase } from "@/lib/supabase";
 import { datumUHorizontu, parseDatum, slotoviZaDan, USLUGE } from "@/lib/termini";
 import type { Doktor } from "@/lib/types";
@@ -63,6 +64,11 @@ export async function submitBooking(formData: FormData): Promise<BookingResult> 
   if (!termin.ime || !termin.telefon) {
     return { ok: false, error: "Ime i broj telefona su obavezni." };
   }
+  const kanonTelefon = kanonskiTelefon(termin.telefon);
+  if (!kanonTelefon) {
+    return { ok: false, error: "Unesite ispravan broj telefona (npr. 61 123 456)." };
+  }
+  termin.telefon = kanonTelefon;
   if (!USLUGE.includes(termin.usluga)) {
     return { ok: false, error: "Odaberite uslugu." };
   }
@@ -88,14 +94,12 @@ export async function submitBooking(formData: FormData): Promise<BookingResult> 
     return { ok: true };
   }
 
-  // odabrani doktor mora biti stvaran aktivan doktor
-  const doktori = await getDoktori();
-  if (doktori.length > 0) {
-    if (!termin.radnik_id || !doktori.some((d) => d.id === termin.radnik_id)) {
-      return { ok: false, error: "Odaberite doktora." };
+  // doktor je opcionalan, ali ako je odabran mora biti stvaran aktivan doktor
+  if (termin.radnik_id) {
+    const doktori = await getDoktori();
+    if (!doktori.some((d) => d.id === termin.radnik_id)) {
+      return { ok: false, error: "Odaberite doktora iz liste." };
     }
-  } else {
-    termin.radnik_id = null;
   }
 
   const { error } = await supabase.from("termini").insert(termin);

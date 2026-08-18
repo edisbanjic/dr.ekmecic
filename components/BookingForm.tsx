@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition, type CSSProperties } from "react";
 import { getDoktori, getZauzeto, submitBooking } from "@/app/actions";
+import { kanonskiTelefon } from "@/lib/match";
 import {
   DANI_KRATKO,
   fmtDatum,
@@ -126,8 +127,8 @@ export default function BookingForm() {
       setError("Unesite ime i broj telefona.");
       return;
     }
-    if (doktori.length > 0 && !doktor) {
-      setError("Odaberite doktora.");
+    if (!kanonskiTelefon(podaci.telefon)) {
+      setError("Unesite ispravan broj telefona (npr. 61 123 456).");
       return;
     }
     setError(null);
@@ -142,7 +143,7 @@ export default function BookingForm() {
     }
     const formData = new FormData();
     formData.set("ime", podaci.ime);
-    formData.set("telefon", podaci.telefon);
+    formData.set("telefon", kanonskiTelefon(podaci.telefon) ?? podaci.telefon);
     formData.set("usluga", podaci.usluga);
     formData.set("napomena", podaci.napomena);
     formData.set("radnik_id", doktor);
@@ -249,24 +250,49 @@ export default function BookingForm() {
             </label>
             <label style={{ display: "block" }}>
               <span style={labelTextStyle}>Broj telefona</span>
-              <input
-                required
-                type="tel"
-                value={podaci.telefon}
-                onChange={(e) => setPodaci({ ...podaci, telefon: e.target.value })}
-                placeholder="npr. 061 123 456"
-                style={fieldStyle}
-              />
+              <span
+                style={{
+                  ...fieldStyle,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "0 0 0 16px",
+                }}
+              >
+                <span style={{ fontWeight: 800, opacity: 0.7, flex: "0 0 auto" }}>+387</span>
+                <input
+                  required
+                  type="tel"
+                  inputMode="numeric"
+                  value={podaci.telefon}
+                  onChange={(e) =>
+                    setPodaci({ ...podaci, telefon: e.target.value.replace(/[^\d\s/-]/g, "") })
+                  }
+                  placeholder="61 123 456"
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    border: "none",
+                    outline: "none",
+                    background: "transparent",
+                    font: "inherit",
+                    fontSize: "15px",
+                    padding: "13px 16px 13px 0",
+                  }}
+                />
+              </span>
             </label>
             {doktori.length > 0 && (
               <label style={{ display: "block", gridColumn: "1 / -1" }}>
-                <span style={labelTextStyle}>Doktor</span>
+                <span style={labelTextStyle}>
+                  Doktor <span style={{ opacity: 0.5, fontWeight: 600 }}>(opciono)</span>
+                </span>
                 <select
                   value={doktor}
                   onChange={(e) => setDoktor(e.target.value)}
                   style={{ ...fieldStyle, appearance: "none" }}
                 >
-                  <option value="">— odaberite doktora —</option>
+                  <option value="">— bez preferencije —</option>
                   {doktori.map((d) => (
                     <option key={d.id} value={d.id}>
                       Dr. {d.ime} {d.prezime}
