@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460">
-  <rect width="400" height="460" fill="#E7F0FB"/>
-  <path d="M200 130C176 130 156 143 156 167c0 16 7.5 26 12.5 41 3.8 11 4.4 29 15 29 10 0 8-20 16.5-20s6.5 20 16.5 20c10.6 0 11.2-18 15-29 5-15 12.5-25 12.5-41 0-24-20-37-44-37Z" fill="#7EAEE8" opacity=".55"/>
-  <text x="200" y="290" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#3E5F86">fotografija doktorice</text>
-  <text x="200" y="316" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600" fill="#3E5F86" opacity=".7">zamijeni: public/assets/dr-druga</text>
-</svg>
