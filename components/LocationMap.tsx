@@ -6,8 +6,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 /** Ordinacija — Bolnička bb, Cazin */
-const LNG = 15.9433;
-const LAT = 44.9664;
+const LNG = 15.93211628755716;
+const LAT = 44.96627043157745;
 const ZOOM = 15.4;
 
 /** Otvara navigaciju u aplikaciji koju korisnik ima (Maps/Google Maps). */
@@ -68,14 +68,21 @@ export default function LocationMap() {
         "border:3px solid #F5F0E8;box-shadow:0 0 0 6px rgba(126,174,232,.28);cursor:pointer";
       pin.setAttribute("role", "img");
       pin.setAttribute("aria-label", "Ordinacija — Bolnička bb, Cazin");
-      new mapboxgl.Marker({ element: pin, anchor: "center" })
+      const marker = new mapboxgl.Marker({ element: pin, anchor: "center" })
         .setLngLat([LNG, LAT])
         .setPopup(
           new mapboxgl.Popup({ offset: 18, closeButton: false }).setHTML(
-            '<strong style="font-weight:700">Dr. Ekmečić</strong><br>Bolnička bb, Cazin'
+            '<div style="color:#3D4142;font-family:inherit;font-size:13.5px;line-height:1.5">' +
+              '<strong style="font-weight:800;font-size:14.5px">Dr. Ekmečić</strong><br>' +
+              "Bolnička bb, Cazin<br>" +
+              `<a href="${DIRECTIONS}" target="_blank" rel="noopener" ` +
+              'style="color:#3E5F86;font-weight:800;text-decoration:underline;text-underline-offset:3px">' +
+              "otvori navigaciju →</a></div>"
           )
         )
         .addTo(map);
+      // popup otvoren odmah, da se adresa i navigacija vide bez klika
+      marker.togglePopup();
     })();
 
     return () => {
@@ -85,7 +92,7 @@ export default function LocationMap() {
   }, [visible]);
 
   return (
-    <div style={{ flex: "1 1 300px", minWidth: "260px" }}>
+    <div className="mapa-footer" style={{ flex: "1 1 300px", minWidth: "260px" }}>
       <div
         style={{
           borderRadius: "24px",
