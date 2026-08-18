@@ -27,6 +27,7 @@ function pacijentIzForme(formData: FormData) {
     adresa: sOrNull(formData, "adresa"),
     alergije: sOrNull(formData, "alergije"),
     napomena: sOrNull(formData, "napomena"),
+    radnik_id: sOrNull(formData, "radnik_id"),
   };
 }
 
@@ -90,6 +91,7 @@ function radnikIzForme(formData: FormData) {
     datum_zaposlenja: sOrNull(formData, "datum_zaposlenja"),
     napomena: sOrNull(formData, "napomena"),
     aktivan: formData.get("aktivan") === "on",
+    je_doktor: formData.get("je_doktor") === "on",
   };
 }
 
@@ -152,6 +154,96 @@ export async function noviTermin(
   }
   revalidatePath("/admin/kalendar");
   redirect("/admin/kalendar?datum=" + termin.datum);
+}
+
+// ---------- moj profil ----------
+
+export async function sacuvajProfil(
+  radnikId: string,
+  _prev: { error?: string; ok?: boolean },
+  formData: FormData
+): Promise<{ error?: string; ok?: boolean }> {
+  const supabase = await db();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Niste prijavljeni." };
+
+  const izmjene: Record<string, unknown> = {
+    ime: s(formData, "ime"),
+    prezime: s(formData, "prezime"),
+    email: sOrNull(formData, "email"),
+    telefon: sOrNull(formData, "telefon"),
+    uloga: s(formData, "uloga") || "osoblje",
+    biografija: sOrNull(formData, "biografija"),
+    biljeske: sOrNull(formData, "biljeske"),
+  };
+  if (!izmjene.ime || !izmjene.prezime) return { error: "Ime i prezime su obavezni." };
+
+  const slika = formData.get("slika");
+  if (slika instanceof File && slika.size > 0) {
+    if (slika.size > 4 * 1024 * 1024) return { error: "Slika je prevelika (maks. 4 MB)." };
+    const ext = (slika.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const putanja = `${radnikId}.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from("avatari")
+      .upload(putanja, slika, { upsert: true, contentType: slika.type || undefined });
+    if (uploadError) return { error: "Greška pri uploadu slike: " + uploadError.message };
+    const { data: pub } = supabase.storage.from("avatari").getPublicUrl(putanja);
+    // query-param razbija keš nakon zamjene slike pod istim imenom
+    izmjene.slika_url = `${pub.publicUrl}?v=${Date.now()}`;
+  }
+
+  const { error } = await supabase
+    .from("radnici")
+    .update(izmjene)
+    .eq("id", radnikId)
+    .eq("user_id", user.id);
+  if (error) return { error: "Greška pri spremanju profila: " + error.message };
+
+  revalidatePath("/admin/profil");
+  revalidatePath("/admin/radnici");
+  return { ok: true };
+}
+
+export async function poveziProfil(formData: FormData): Promise<void> {
+  const supabase = await db();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Niste prijavljeni.");
+  const radnikId = s(formData, "radnik_id");
+  if (!radnikId) return;
+
+  // makni eventualnu staru vezu pa preuzmi odabrani karton (ako je slobodan)
+  await supabase.from("radnici").update({ user_id: null }).eq("user_id", user.id);
+  const { error } = await supabase
+    .from("radnici")
+    .update({ user_id: user.id })
+    .eq("id", radnikId)
+    .is("user_id", null);
+  if (error) throw new Error("Greška pri povezivanju profila: " + error.message);
+  revalidatePath("/admin/profil");
+}
+
+export async function kreirajMojProfil(formData: FormData): Promise<void> {
+  const supabase = await db();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("Niste prijavljeni.");
+
+  const { error } = await supabase.from("radnici").insert({
+    ime: s(formData, "ime"),
+    prezime: s(formData, "prezime"),
+    uloga: s(formData, "uloga") || "osoblje",
+    email: user.email ?? null,
+    je_doktor: formData.get("je_doktor") === "on",
+    user_id: user.id,
+  });
+  if (error) throw new Error("Greška pri kreiranju profila: " + error.message);
+  revalidatePath("/admin/profil");
+  revalidatePath("/admin/radnici");
 }
 
 export async function promijeniStatusTermina(id: string, status: TerminStatus): Promise<void> {

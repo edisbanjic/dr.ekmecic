@@ -12,12 +12,18 @@ export default async function PacijentiPage({
   if (!supabase) return <NemaSupabase />;
 
   const { q } = await searchParams;
-  let query = supabase.from("pacijenti").select("*").order("prezime").limit(200);
+  let query = supabase
+    .from("pacijenti")
+    .select("*, radnici(ime, prezime)")
+    .order("prezime")
+    .limit(200);
   if (q) {
     query = query.or(`ime.ilike.%${q}%,prezime.ilike.%${q}%,telefon.ilike.%${q}%`);
   }
   const { data } = await query;
-  const pacijenti = (data ?? []) as Pacijent[];
+  const pacijenti = (data ?? []) as (Pacijent & {
+    radnici: { ime: string; prezime: string } | null;
+  })[];
 
   return (
     <>
@@ -50,6 +56,7 @@ export default async function PacijentiPage({
             <thead>
               <tr>
                 <th>PACIJENT</th>
+                <th>PRIMARNI DOKTOR</th>
                 <th>TELEFON</th>
                 <th>EMAIL</th>
                 <th>DATUM ROĐENJA</th>
@@ -63,6 +70,7 @@ export default async function PacijentiPage({
                       {p.prezime}, {p.ime}
                     </Link>
                   </td>
+                  <td>{p.radnici ? `Dr. ${p.radnici.ime} ${p.radnici.prezime}` : "—"}</td>
                   <td>{p.telefon ?? "—"}</td>
                   <td>{p.email ?? "—"}</td>
                   <td>{p.datum_rodjenja ?? "—"}</td>

@@ -1,7 +1,7 @@
-import type { Pacijent } from "@/lib/types";
+import type { Pacijent, Radnik } from "@/lib/types";
 
 /** Zajednička polja za kreiranje i izmjenu pacijenta. */
-export default function PacijentPolja({ p }: { p?: Pacijent }) {
+export default function PacijentPolja({ p, doktori }: { p?: Pacijent; doktori: Radnik[] }) {
   return (
     <>
       <label>
@@ -27,6 +27,17 @@ export default function PacijentPolja({ p }: { p?: Pacijent }) {
       <label>
         <span>Adresa</span>
         <input name="adresa" defaultValue={p?.adresa ?? ""} />
+      </label>
+      <label className="puno">
+        <span>Primarni doktor</span>
+        <select name="radnik_id" defaultValue={p?.radnik_id ?? ""}>
+          <option value="">— neodređen —</option>
+          {doktori.map((d) => (
+            <option key={d.id} value={d.id}>
+              Dr. {d.ime} {d.prezime}
+            </option>
+          ))}
+        </select>
       </label>
       <label className="puno">
         <span>Alergije</span>

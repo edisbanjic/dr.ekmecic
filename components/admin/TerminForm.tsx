@@ -15,18 +15,21 @@ export default function TerminForm({
 }) {
   const [state, formAction, pending] = useActionState(noviTermin, {});
   const [datum, setDatum] = useState("");
+  const [radnik, setRadnik] = useState("");
   const [zauzeto, setZauzeto] = useState<string[]>([]);
   const [ime, setIme] = useState("");
   const [telefon, setTelefon] = useState("");
 
+  const doktori = radnici.filter((r) => r.je_doktor);
+
   useEffect(() => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) return;
     let aktivan = true;
-    getZauzeto(datum).then((z) => aktivan && setZauzeto(z));
+    getZauzeto(datum, radnik || null).then((z) => aktivan && setZauzeto(z));
     return () => {
       aktivan = false;
     };
-  }, [datum]);
+  }, [datum, radnik]);
 
   const slotovi = /^\d{4}-\d{2}-\d{2}$/.test(datum)
     ? slotoviZaDan(parseDatum(datum).getDay()).filter((s) => !zauzeto.includes(s))
@@ -41,6 +44,7 @@ export default function TerminForm({
     if (p) {
       setIme(`${p.ime} ${p.prezime}`);
       if (p.telefon) setTelefon(p.telefon);
+      if (p.radnik_id && doktori.some((d) => d.id === p.radnik_id)) setRadnik(p.radnik_id);
     }
   };
 
@@ -58,12 +62,12 @@ export default function TerminForm({
         </select>
       </label>
       <label>
-        <span>Radnik (opciono)</span>
-        <select name="radnik_id">
+        <span>Doktor</span>
+        <select name="radnik_id" value={radnik} onChange={(e) => setRadnik(e.target.value)}>
           <option value="">— neodređeno —</option>
-          {radnici.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.prezime}, {r.ime} ({r.uloga})
+          {doktori.map((d) => (
+            <option key={d.id} value={d.id}>
+              Dr. {d.prezime}, {d.ime}
             </option>
           ))}
         </select>

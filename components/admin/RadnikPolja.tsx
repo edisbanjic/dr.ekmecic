@@ -41,6 +41,15 @@ export default function RadnikPolja({ r }: { r?: Radnik }) {
         />
         <span style={{ margin: 0 }}>Aktivan</span>
       </label>
+      <label className="puno" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <input
+          type="checkbox"
+          name="je_doktor"
+          defaultChecked={r?.je_doktor ?? false}
+          style={{ width: "auto" }}
+        />
+        <span style={{ margin: 0 }}>Doktor — prima termine (vidljiv u dropdownu za zakazivanje)</span>
+      </label>
     </>
   );
 }

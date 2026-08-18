@@ -47,7 +47,7 @@ export default async function KartonPage({ params }: { params: Promise<{ id: str
         <div className="adm-karta">
           <h2 style={{ marginTop: 0, fontFamily: "var(--font-fredoka)", fontSize: "20px" }}>Podaci</h2>
           <form action={urediPacijenta.bind(null, pacijent.id)} className="adm-forma">
-            <PacijentPolja p={pacijent} />
+            <PacijentPolja p={pacijent} doktori={radnici.filter((r) => r.je_doktor)} />
             <div className="puno">
               <button type="submit" className="adm-dugme">Spremi izmjene</button>
             </div>
@@ -144,8 +144,8 @@ export default async function KartonPage({ params }: { params: Promise<{ id: str
                   const st = STATUSI[t.status];
                   return (
                     <tr key={t.id}>
-                      <td style={{ fontWeight: 800 }}>{t.datum}</td>
-                      <td>{t.vrijeme.slice(0, 5)}</td>
+                      <td style={{ fontWeight: 800 }}>{t.datum ?? "po dogovoru"}</td>
+                      <td>{t.vrijeme?.slice(0, 5) ?? "—"}</td>
                       <td>{t.usluga ?? "—"}</td>
                       <td>
                         <span className="adm-znacka" style={{ color: st.boja, background: st.pozadina }}>
