@@ -15,6 +15,8 @@ export const USLUGE = [
 
 export const TRAJANJE_MIN = 30;
 export const HORIZONT_DANA = 60;
+/** Osoblje može zakazivati dalje unaprijed nego javna forma. */
+export const HORIZONT_ADMIN = 180;
 
 type RadnoVrijeme = { od: string; do: string; pauza: [string, string] };
 
@@ -58,13 +60,13 @@ export function parseDatum(s: string): Date {
 }
 
 /** Da li je datum unutar perioda u kojem se može zakazati. */
-export function datumUHorizontu(datum: string): boolean {
+export function datumUHorizontu(datum: string, horizont: number = HORIZONT_DANA): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) return false;
   const d = parseDatum(datum);
   const danas = new Date();
   danas.setHours(0, 0, 0, 0);
   const max = new Date(danas);
-  max.setDate(max.getDate() + HORIZONT_DANA);
+  max.setDate(max.getDate() + horizont);
   return d >= danas && d <= max;
 }
 

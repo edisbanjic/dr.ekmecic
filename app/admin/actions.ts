@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSupabase } from "@/lib/supabase";
 import { getSupabaseServer } from "@/lib/supabase-server";
-import { datumUHorizontu, parseDatum, slotoviZaDan } from "@/lib/termini";
+import { datumUHorizontu, HORIZONT_ADMIN, parseDatum, slotoviZaDan } from "@/lib/termini";
 import type { TerminStatus } from "@/lib/types";
 
 async function db() {
@@ -163,7 +163,7 @@ export async function noviTermin(
   // zahtjev "za dogovor" iz kojeg je termin nastao — otkazuje se nakon zakazivanja
   const izZahtjeva = sOrNull(formData, "iz");
   if (!termin.ime) return { error: "Ime je obavezno." };
-  if (!datumUHorizontu(termin.datum)) return { error: "Odaberite ispravan datum." };
+  if (!datumUHorizontu(termin.datum, HORIZONT_ADMIN)) return { error: "Odaberite ispravan datum." };
   if (!slotoviZaDan(parseDatum(termin.datum).getDay()).includes(termin.vrijeme)) {
     return { error: "Odaberite ispravno vrijeme." };
   }
@@ -292,6 +292,29 @@ export async function kreirajKartonIzTermina(terminId: string): Promise<void> {
   await supabase.from("termini").update({ pacijent_id: pacijent.id }).eq("id", terminId);
   revalidatePath("/admin/kalendar");
   redirect(`/admin/pacijenti/${pacijent.id}`);
+}
+
+/** Zauzeti slotovi za dan (s imenom pacijenta) — za kalendar u formi novog termina. */
+export async function getZauzetoAdmin(
+  datum: string,
+  radnikId: string | null
+): Promise<{ vrijeme: string; ime: string }[]> {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) return [];
+  const supabase = await db();
+  let query = supabase
+    .from("termini")
+    .select("vrijeme, ime")
+    .eq("datum", datum)
+    .neq("status", "otkazan");
+  if (radnikId) {
+    query = query.or(`radnik_id.eq.${radnikId},radnik_id.is.null`);
+  }
+  const { data, error } = await query;
+  if (error) {
+    console.error("Greška pri čitanju zauzetih termina:", error);
+    return [];
+  }
+  return (data ?? []).map((r) => ({ vrijeme: String(r.vrijeme).slice(0, 5), ime: r.ime }));
 }
 
 /**
