@@ -70,6 +70,7 @@ type Podaci = {
   telefon: string;
   email: string;
   usluga: string;
+  napomena: string;
 };
 
 export default function BookingForm() {
@@ -81,6 +82,7 @@ export default function BookingForm() {
     telefon: '',
     email: '',
     usluga: USLUGE[0],
+    napomena: '',
   });
   const [greske, setGreske] = useState<Record<string, boolean>>({});
   const [doktori, setDoktori] = useState<Doktor[]>([]);
@@ -191,6 +193,7 @@ export default function BookingForm() {
     formData.set('telefon', kanonskiTelefon(podaci.telefon) ?? podaci.telefon);
     formData.set('email', podaci.email);
     formData.set('usluga', podaci.usluga);
+    formData.set('napomena', podaci.napomena);
     formData.set('radnik_id', doktor);
     if (predlozi) {
       formData.set('predlozi', '1');
@@ -451,6 +454,19 @@ export default function BookingForm() {
                   <option key={u}>{u}</option>
                 ))}
               </select>
+            </label>
+            <label style={{ display: 'block', gridColumn: '1 / -1' }}>
+              <span style={labelTextStyle}>
+                Napomena{' '}
+                <span style={{ opacity: 0.5, fontWeight: 600 }}>(opciono)</span>
+              </span>
+              <textarea
+                value={podaci.napomena}
+                onChange={(e) => upisi('napomena', e.target.value)}
+                rows={2}
+                placeholder="Recite nam nešto više — strah, bol, želje…"
+                style={{ ...fieldStyle, resize: 'vertical' }}
+              />
             </label>
           </div>
           <div
