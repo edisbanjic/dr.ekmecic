@@ -288,6 +288,31 @@ export async function kreirajKartonIzTermina(terminId: string): Promise<void> {
   redirect(`/admin/pacijenti/${pacijent.id}`);
 }
 
+/** Dodijeli (ili promijeni) doktora za termin, uz zaštitu od duplog slota. */
+export async function dodijeliDoktora(terminId: string, formData: FormData): Promise<void> {
+  const supabase = await db();
+  const radnikId = sOrNull(formData, "radnik_id");
+  const { data: postojeci } = await supabase
+    .from("termini")
+    .select("datum")
+    .eq("id", terminId)
+    .maybeSingle();
+
+  const { error } = await supabase
+    .from("termini")
+    .update({ radnik_id: radnikId })
+    .eq("id", terminId);
+  if (error) {
+    if (error.code === "23505") {
+      const datum = postojeci?.datum ? `datum=${postojeci.datum}&` : "";
+      redirect(`/admin/kalendar?${datum}greska=slot-zauzet`);
+    }
+    throw new Error("Greška pri dodjeli doktora: " + error.message);
+  }
+  revalidatePath("/admin/kalendar");
+  revalidatePath("/admin");
+}
+
 export async function promijeniStatusTermina(id: string, status: TerminStatus): Promise<void> {
   const supabase = await db();
   const { error } = await supabase.from("termini").update({ status }).eq("id", id);

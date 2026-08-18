@@ -1,15 +1,62 @@
 import Link from "next/link";
 import {
+  dodijeliDoktora,
   kreirajKartonIzTermina,
   poveziTerminSPacijentom,
   promijeniStatusTermina,
 } from "@/app/admin/actions";
+import type { Radnik } from "@/lib/types";
 import NemaSupabase from "@/components/admin/NemaSupabase";
 import { getDoktoriAdmin, getMojRadnik } from "@/lib/admin";
 import { nadjiPacijenta, type PacijentKratko } from "@/lib/match";
 import { getSupabaseServer } from "@/lib/supabase-server";
 import { DANI, fmtDatum, MJESECI, parseDatum, STATUSI } from "@/lib/termini";
 import type { Termin } from "@/lib/types";
+
+/** Dodjela (ili promjena) doktora direktno s kartice termina. */
+function DoktorForma({ t, doktori }: { t: Termin; doktori: Radnik[] }) {
+  return (
+    <form
+      action={dodijeliDoktora.bind(null, t.id)}
+      style={{ display: "flex", gap: "6px", marginTop: "6px", alignItems: "center" }}
+    >
+      <select
+        name="radnik_id"
+        defaultValue={t.radnik_id ?? ""}
+        style={{
+          flex: 1,
+          minWidth: 0,
+          border: "1px solid rgba(61,65,66,.25)",
+          borderRadius: "8px",
+          padding: "4px 6px",
+          fontFamily: "inherit",
+          fontWeight: 700,
+          fontSize: "11.5px",
+          background: "rgba(255,255,255,.85)",
+          color: "#3D4142",
+        }}
+      >
+        <option value="">— bez doktora —</option>
+        {doktori.map((d) => (
+          <option key={d.id} value={d.id}>
+            Dr. {d.ime} {d.prezime}
+          </option>
+        ))}
+      </select>
+      <button
+        type="submit"
+        title="Dodijeli doktora"
+        style={{
+          border: "none", cursor: "pointer", borderRadius: "999px", padding: "4px 10px",
+          fontFamily: "inherit", fontWeight: 800, fontSize: "11.5px",
+          background: "#7EAEE8", color: "#243038", flex: "0 0 auto",
+        }}
+      >
+        ✓
+      </button>
+    </form>
+  );
+}
 
 /** Prijedlog kartona: poveži postojeći, otvori povezani ili kreiraj novi. */
 function KartonZaTermin({ t, pacijenti }: { t: Termin; pacijenti: PacijentKratko[] }) {
@@ -73,12 +120,12 @@ function ponedjeljak(d: Date): Date {
 export default async function KalendarPage({
   searchParams,
 }: {
-  searchParams: Promise<{ datum?: string; doktor?: string }>;
+  searchParams: Promise<{ datum?: string; doktor?: string; greska?: string }>;
 }) {
   const supabase = await getSupabaseServer();
   if (!supabase) return <NemaSupabase />;
 
-  const { datum, doktor } = await searchParams;
+  const { datum, doktor, greska } = await searchParams;
   const [mojRadnik, doktori] = await Promise.all([
     getMojRadnik(supabase),
     getDoktoriAdmin(supabase),
@@ -179,6 +226,12 @@ export default async function KalendarPage({
         ))}
       </div>
 
+      {greska === "slot-zauzet" && (
+        <div className="adm-greska" style={{ marginBottom: "16px" }}>
+          Taj doktor već ima termin u tom slotu — odaberite drugog doktora ili pomjerite termin.
+        </div>
+      )}
+
       {bezDatuma.length > 0 && (
         <div className="adm-karta" style={{ marginBottom: "20px", borderColor: "#F4A08A" }}>
           <h2 style={{ marginTop: 0, fontFamily: "var(--font-fredoka)", fontSize: "18px" }}>
@@ -204,7 +257,9 @@ export default async function KalendarPage({
                     {t.email && <div style={{ fontSize: "12.5px", opacity: 0.7 }}>{t.email}</div>}
                   </td>
                   <td>{t.usluga ?? "—"}</td>
-                  <td>{doktorIme(t.radnik_id) ?? "—"}</td>
+                  <td style={{ minWidth: "170px" }}>
+                    <DoktorForma t={t} doktori={doktori} />
+                  </td>
                   <td>
                     <KartonZaTermin t={t} pacijenti={pacijenti} />
                   </td>
@@ -261,6 +316,9 @@ export default async function KalendarPage({
                       {st.label.toUpperCase()}
                     </div>
                     <KartonZaTermin t={t} pacijenti={pacijenti} />
+                    {t.status !== "otkazan" && t.status !== "zavrsen" && (
+                      <DoktorForma t={t} doktori={doktori} />
+                    )}
                     {t.status !== "otkazan" && t.status !== "zavrsen" && (
                       <div className="akcije">
                         {t.status === "na_cekanju" && (
