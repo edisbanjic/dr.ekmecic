@@ -48,6 +48,7 @@ export type Termin = {
   trajanje_min: number;
   ime: string;
   telefon: string | null;
+  email: string | null;
   usluga: string | null;
   napomena: string | null;
   status: TerminStatus;

@@ -199,7 +199,10 @@ export default async function KalendarPage({
               {bezDatuma.map((t) => (
                 <tr key={t.id}>
                   <td style={{ fontWeight: 800 }}>{t.ime}</td>
-                  <td>{t.telefon ?? "—"}</td>
+                  <td>
+                    {t.telefon ?? "—"}
+                    {t.email && <div style={{ fontSize: "12.5px", opacity: 0.7 }}>{t.email}</div>}
+                  </td>
                   <td>{t.usluga ?? "—"}</td>
                   <td>{doktorIme(t.radnik_id) ?? "—"}</td>
                   <td>
@@ -253,6 +256,7 @@ export default async function KalendarPage({
                     )}
                     {t.usluga && <div style={{ opacity: 0.8 }}>{t.usluga}</div>}
                     {t.telefon && <div style={{ opacity: 0.8 }}>{t.telefon}</div>}
+                    {t.email && <div style={{ opacity: 0.8, wordBreak: "break-all" }}>{t.email}</div>}
                     <div style={{ marginTop: "4px", fontSize: "11px", fontWeight: 800, letterSpacing: ".04em" }}>
                       {st.label.toUpperCase()}
                     </div>

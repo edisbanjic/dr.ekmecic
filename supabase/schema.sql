@@ -47,6 +47,7 @@ create table termini (
   trajanje_min int not null default 30,
   ime text not null,
   telefon text,
+  email text,
   usluga text,
   napomena text,
   status text not null default 'na_cekanju'

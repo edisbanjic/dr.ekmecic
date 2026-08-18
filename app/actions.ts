@@ -51,9 +51,13 @@ export async function getZauzeto(datum: string, radnikId: string | null): Promis
 export async function submitBooking(formData: FormData): Promise<BookingResult> {
   // predlozi = "1": pacijent nije birao datum — ordinacija ga kontaktira
   const predlozi = String(formData.get("predlozi") ?? "") === "1";
+  const ime = String(formData.get("ime") ?? "").trim();
+  const prezime = String(formData.get("prezime") ?? "").trim();
   const termin = {
-    ime: String(formData.get("ime") ?? "").trim(),
+    // u bazi je jedno polje; matching i "+ Novi karton" računaju na "Ime Prezime"
+    ime: [ime, prezime].filter(Boolean).join(" "),
     telefon: String(formData.get("telefon") ?? "").trim(),
+    email: String(formData.get("email") ?? "").trim() || null,
     usluga: String(formData.get("usluga") ?? "").trim(),
     napomena: String(formData.get("napomena") ?? "").trim() || null,
     datum: (String(formData.get("datum") ?? "").trim() || null) as string | null,
@@ -61,14 +65,17 @@ export async function submitBooking(formData: FormData): Promise<BookingResult> 
     radnik_id: String(formData.get("radnik_id") ?? "").trim() || null,
   };
 
-  if (!termin.ime || !termin.telefon) {
-    return { ok: false, error: "Ime i broj telefona su obavezni." };
+  if (!ime || !prezime || !termin.telefon) {
+    return { ok: false, error: "Ime, prezime i broj telefona su obavezni." };
   }
   const kanonTelefon = kanonskiTelefon(termin.telefon);
   if (!kanonTelefon) {
     return { ok: false, error: "Unesite ispravan broj telefona (npr. 61 123 456)." };
   }
   termin.telefon = kanonTelefon;
+  if (termin.email && !/^\S+@\S+\.\S+$/.test(termin.email)) {
+    return { ok: false, error: "Unesite ispravan email." };
+  }
   if (!USLUGE.includes(termin.usluga)) {
     return { ok: false, error: "Odaberite uslugu." };
   }
