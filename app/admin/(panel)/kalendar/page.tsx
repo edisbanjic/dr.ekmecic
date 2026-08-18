@@ -1,10 +1,67 @@
 import Link from "next/link";
-import { promijeniStatusTermina } from "@/app/admin/actions";
+import {
+  kreirajKartonIzTermina,
+  poveziTerminSPacijentom,
+  promijeniStatusTermina,
+} from "@/app/admin/actions";
 import NemaSupabase from "@/components/admin/NemaSupabase";
 import { getDoktoriAdmin, getMojRadnik } from "@/lib/admin";
+import { nadjiPacijenta, type PacijentKratko } from "@/lib/match";
 import { getSupabaseServer } from "@/lib/supabase-server";
 import { DANI, fmtDatum, MJESECI, parseDatum, STATUSI } from "@/lib/termini";
 import type { Termin } from "@/lib/types";
+
+/** Prijedlog kartona: poveži postojeći, otvori povezani ili kreiraj novi. */
+function KartonZaTermin({ t, pacijenti }: { t: Termin; pacijenti: PacijentKratko[] }) {
+  if (t.pacijent_id) {
+    const p = pacijenti.find((p) => p.id === t.pacijent_id);
+    return (
+      <div style={{ marginTop: "4px", fontSize: "12px", fontWeight: 800 }}>
+        📋{" "}
+        <Link href={`/admin/pacijenti/${t.pacijent_id}`} style={{ textDecoration: "underline", textUnderlineOffset: "2px", color: "inherit" }}>
+          {p ? `${p.ime} ${p.prezime}` : "Otvori karton"}
+        </Link>
+      </div>
+    );
+  }
+  const m = nadjiPacijenta({ ime: t.ime, telefon: t.telefon }, pacijenti);
+  if (m) {
+    return (
+      <div style={{ marginTop: "6px", background: "rgba(255,255,255,.65)", borderRadius: "10px", padding: "6px 8px" }}>
+        <div style={{ fontSize: "11.5px", fontWeight: 800 }}>
+          Postojeći pacijent?{" "}
+          <Link href={`/admin/pacijenti/${m.id}`} style={{ textDecoration: "underline", textUnderlineOffset: "2px", color: "inherit" }}>
+            {m.ime} {m.prezime}
+          </Link>
+        </div>
+        <form action={poveziTerminSPacijentom.bind(null, t.id, m.id)} style={{ marginTop: "4px" }}>
+          <button
+            type="submit"
+            style={{
+              border: "none", cursor: "pointer", borderRadius: "999px", padding: "3px 10px",
+              fontFamily: "inherit", fontWeight: 800, fontSize: "11.5px", background: "#7EAEE8", color: "#243038",
+            }}
+          >
+            ✓ Poveži s kartonom
+          </button>
+        </form>
+      </div>
+    );
+  }
+  return (
+    <form action={kreirajKartonIzTermina.bind(null, t.id)} style={{ marginTop: "6px" }}>
+      <button
+        type="submit"
+        style={{
+          border: "none", cursor: "pointer", borderRadius: "999px", padding: "3px 10px",
+          fontFamily: "inherit", fontWeight: 800, fontSize: "11.5px", background: "rgba(255,255,255,.75)", color: "inherit",
+        }}
+      >
+        + Novi karton
+      </button>
+    </form>
+  );
+}
 
 function ponedjeljak(d: Date): Date {
   const r = new Date(d);
@@ -58,9 +115,14 @@ export default async function KalendarPage({
     .order("created_at");
   if (aktivniDoktor) bezDatumaQuery = bezDatumaQuery.eq("radnik_id", aktivniDoktor);
 
-  const [{ data }, { data: bezDatumaData }] = await Promise.all([query, bezDatumaQuery]);
+  const [{ data }, { data: bezDatumaData }, { data: pacijentiData }] = await Promise.all([
+    query,
+    bezDatumaQuery,
+    supabase.from("pacijenti").select("id, ime, prezime, telefon"),
+  ]);
   const termini = (data ?? []) as Termin[];
   const bezDatuma = (bezDatumaData ?? []) as Termin[];
+  const pacijenti = (pacijentiData ?? []) as PacijentKratko[];
 
   const doktorIme = (id: string | null) => {
     const d = doktori.find((d) => d.id === id);
@@ -129,6 +191,7 @@ export default async function KalendarPage({
                 <th>TELEFON</th>
                 <th>USLUGA</th>
                 <th>DOKTOR</th>
+                <th>KARTON</th>
                 <th></th>
               </tr>
             </thead>
@@ -139,6 +202,9 @@ export default async function KalendarPage({
                   <td>{t.telefon ?? "—"}</td>
                   <td>{t.usluga ?? "—"}</td>
                   <td>{doktorIme(t.radnik_id) ?? "—"}</td>
+                  <td>
+                    <KartonZaTermin t={t} pacijenti={pacijenti} />
+                  </td>
                   <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>
                     <div style={{ display: "inline-flex", gap: "6px" }}>
                       <Link href="/admin/kalendar/novi" className="adm-dugme sekundarno malo">
@@ -190,6 +256,7 @@ export default async function KalendarPage({
                     <div style={{ marginTop: "4px", fontSize: "11px", fontWeight: 800, letterSpacing: ".04em" }}>
                       {st.label.toUpperCase()}
                     </div>
+                    <KartonZaTermin t={t} pacijenti={pacijenti} />
                     {t.status !== "otkazan" && t.status !== "zavrsen" && (
                       <div className="akcije">
                         {t.status === "na_cekanju" && (

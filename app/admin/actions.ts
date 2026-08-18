@@ -226,6 +226,49 @@ export async function kreirajMojProfil(formData: FormData): Promise<void> {
   revalidatePath("/admin/radnici");
 }
 
+export async function poveziTerminSPacijentom(
+  terminId: string,
+  pacijentId: string
+): Promise<void> {
+  const supabase = await db();
+  const { error } = await supabase
+    .from("termini")
+    .update({ pacijent_id: pacijentId })
+    .eq("id", terminId);
+  if (error) throw new Error("Greška pri povezivanju termina: " + error.message);
+  revalidatePath("/admin/kalendar");
+  revalidatePath(`/admin/pacijenti/${pacijentId}`);
+  revalidatePath("/admin");
+}
+
+/** Kreira karton pacijenta iz podataka javnog zahtjeva i veže termin za njega. */
+export async function kreirajKartonIzTermina(terminId: string): Promise<void> {
+  const supabase = await db();
+  const { data: termin } = await supabase
+    .from("termini")
+    .select("*")
+    .eq("id", terminId)
+    .maybeSingle();
+  if (!termin) throw new Error("Termin nije pronađen.");
+
+  const dijelovi = String(termin.ime ?? "").trim().split(/\s+/);
+  const { data: pacijent, error } = await supabase
+    .from("pacijenti")
+    .insert({
+      ime: dijelovi[0] || "—",
+      prezime: dijelovi.slice(1).join(" ") || "—",
+      telefon: termin.telefon,
+      radnik_id: termin.radnik_id,
+    })
+    .select("id")
+    .single();
+  if (error) throw new Error("Greška pri kreiranju kartona: " + error.message);
+
+  await supabase.from("termini").update({ pacijent_id: pacijent.id }).eq("id", terminId);
+  revalidatePath("/admin/kalendar");
+  redirect(`/admin/pacijenti/${pacijent.id}`);
+}
+
 export async function promijeniStatusTermina(id: string, status: TerminStatus): Promise<void> {
   const supabase = await db();
   const { error } = await supabase.from("termini").update({ status }).eq("id", id);
