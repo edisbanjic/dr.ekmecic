@@ -266,7 +266,7 @@ export default async function KalendarPage({
                   </td>
                   <td style={{ textAlign: "right", whiteSpace: "nowrap" }}>
                     <div style={{ display: "inline-flex", gap: "6px" }}>
-                      <Link href="/admin/kalendar/novi" className="adm-dugme sekundarno malo">
+                      <Link href={`/admin/kalendar/novi?iz=${t.id}`} className="adm-dugme sekundarno malo">
                         Zakaži
                       </Link>
                       <form action={promijeniStatusTermina.bind(null, t.id, "otkazan")} style={{ display: "inline" }}>
@@ -279,7 +279,8 @@ export default async function KalendarPage({
             </tbody>
           </table>
           <p style={{ margin: "12px 0 0", fontSize: "13px", opacity: 0.6, fontWeight: 700 }}>
-            Kad dogovorite termin telefonom: „Zakaži" kreira novi termin, a ovaj zahtjev zatim otkažite.
+            Kad dogovorite termin telefonom: „Zakaži" otvara novi termin s prenesenim podacima,
+            a ovaj zahtjev se automatski otkazuje.
           </p>
         </div>
       )}

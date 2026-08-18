@@ -153,12 +153,15 @@ export async function noviTermin(
     vrijeme: s(formData, "vrijeme"),
     ime: s(formData, "ime"),
     telefon: sOrNull(formData, "telefon"),
+    email: sOrNull(formData, "email"),
     usluga: sOrNull(formData, "usluga"),
     napomena: sOrNull(formData, "napomena"),
     pacijent_id: sOrNull(formData, "pacijent_id"),
     radnik_id: sOrNull(formData, "radnik_id"),
     status: "potvrdjen" as const,
   };
+  // zahtjev "za dogovor" iz kojeg je termin nastao — otkazuje se nakon zakazivanja
+  const izZahtjeva = sOrNull(formData, "iz");
   if (!termin.ime) return { error: "Ime je obavezno." };
   if (!datumUHorizontu(termin.datum)) return { error: "Odaberite ispravan datum." };
   if (!slotoviZaDan(parseDatum(termin.datum).getDay()).includes(termin.vrijeme)) {
@@ -170,6 +173,9 @@ export async function noviTermin(
   if (error) {
     if (error.code === "23505") return { error: "Taj slot je već zauzet." };
     return { error: "Greška pri kreiranju termina: " + error.message };
+  }
+  if (izZahtjeva) {
+    await supabase.from("termini").update({ status: "otkazan" }).eq("id", izZahtjeva);
   }
   revalidatePath("/admin/kalendar");
   redirect("/admin/kalendar?datum=" + termin.datum);

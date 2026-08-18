@@ -4,21 +4,24 @@ import { useActionState, useEffect, useState } from "react";
 import { getZauzeto } from "@/app/actions";
 import { noviTermin } from "@/app/admin/actions";
 import { fmtDatum, HORIZONT_DANA, parseDatum, slotoviZaDan, USLUGE } from "@/lib/termini";
-import type { Pacijent, Radnik } from "@/lib/types";
+import type { Pacijent, Radnik, Termin } from "@/lib/types";
 
 export default function TerminForm({
   pacijenti,
   radnici,
+  izTermina,
 }: {
   pacijenti: Pacijent[];
   radnici: Radnik[];
+  /** Zahtjev "za dogovor" iz kojeg se prenose podaci; otkazuje se pri zakazivanju. */
+  izTermina?: Termin | null;
 }) {
   const [state, formAction, pending] = useActionState(noviTermin, {});
   const [datum, setDatum] = useState("");
-  const [radnik, setRadnik] = useState("");
+  const [radnik, setRadnik] = useState(izTermina?.radnik_id ?? "");
   const [zauzeto, setZauzeto] = useState<string[]>([]);
-  const [ime, setIme] = useState("");
-  const [telefon, setTelefon] = useState("");
+  const [ime, setIme] = useState(izTermina?.ime ?? "");
+  const [telefon, setTelefon] = useState(izTermina?.telefon ?? "");
 
   const doktori = radnici.filter((r) => r.je_doktor);
 
@@ -50,9 +53,15 @@ export default function TerminForm({
 
   return (
     <form action={formAction} className="adm-forma">
+      {izTermina && <input type="hidden" name="iz" value={izTermina.id} />}
+      {izTermina?.email && <input type="hidden" name="email" value={izTermina.email} />}
       <label>
         <span>Pacijent iz kartoteke (opciono)</span>
-        <select name="pacijent_id" onChange={(e) => odaberiPacijenta(e.target.value)}>
+        <select
+          name="pacijent_id"
+          defaultValue={izTermina?.pacijent_id ?? ""}
+          onChange={(e) => odaberiPacijenta(e.target.value)}
+        >
           <option value="">— bez kartona —</option>
           {pacijenti.map((p) => (
             <option key={p.id} value={p.id}>
@@ -104,7 +113,12 @@ export default function TerminForm({
       </label>
       <label className="puno">
         <span>Usluga</span>
-        <select name="usluga">
+        <select
+          name="usluga"
+          defaultValue={
+            izTermina?.usluga && USLUGE.includes(izTermina.usluga) ? izTermina.usluga : USLUGE[0]
+          }
+        >
           {USLUGE.map((u) => (
             <option key={u}>{u}</option>
           ))}
@@ -112,7 +126,7 @@ export default function TerminForm({
       </label>
       <label className="puno">
         <span>Napomena</span>
-        <textarea name="napomena" rows={2} />
+        <textarea name="napomena" rows={2} defaultValue={izTermina?.napomena ?? ""} />
       </label>
       {state.error && <div className="adm-greska puno">{state.error}</div>}
       <div className="puno">
