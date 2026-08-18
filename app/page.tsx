@@ -180,6 +180,23 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <div data-reveal="" style={{display:"flex",flexDirection:"row-reverse",gap:"clamp(36px,6vw,72px)",alignItems:"center",flexWrap:"wrap",marginTop:"clamp(56px,8vw,96px)"}}>
+            <div style={{position:"relative",flex:"0 1 340px",minWidth:"260px",maxWidth:"380px",margin:"0 auto"}}>
+              <div data-parallax="-0.04" style={{position:"absolute",left:"-8%",top:"-6%",width:"112%",height:"110%",background:"rgba(126,174,232,.4)",borderRadius:"58% 42% 61% 39% / 45% 61% 39% 55%",transform:"rotate(-7deg)"}}></div>
+              <div style={{position:"relative",aspectRatio:"0.87",borderRadius:"46% 54% 42% 58% / 56% 48% 52% 44%",overflow:"hidden"}}>
+                <img src="/assets/dr-druga.svg" alt="Dr. Ime Prezime" style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
+              </div>
+              <span style={{position:"absolute",right:"-14px",top:"6%",width:"28px",transform:"rotate(14deg)"}}><span style={{display:"block",animation:"floatY 8s ease-in-out 1s infinite"}}><svg viewBox="0 0 100 100" style={{width:"100%",display:"block"}}><path d="M50 5C31 5 15 15 15 34c0 13 6 21 10 33 3 9 3.5 23 12 23 8 0 6.5-16 13-16s5 16 13 16c8.5 0 9-14 12-23 4-12 10-20 10-33C85 15 69 5 50 5Z" fill="#F4A08A"></path></svg></span></span>
+              <span style={{position:"absolute",left:"-6px",top:"-14px",fontSize:"22px",color:"#5B8FD4",animation:"floatB 7s ease-in-out infinite"}}>✦</span>
+              <div style={{position:"absolute",left:"-10px",bottom:"-14px",background:"#FFFFFF",borderRadius:"18px",padding:"12px 18px",transform:"rotate(2.5deg)",boxShadow:"0 18px 34px -18px rgba(61,65,66,.4)",fontFamily:"var(--font-shantell)",fontWeight:"600",fontSize:"17px"}}>drugi par pažljivih ruku <span style={{color:"#5B8FD4"}}>✦</span></div>
+            </div>
+            <div style={{flex:"1 1 340px",minWidth:"290px"}}>
+              <div style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"#FFFFFF",borderRadius:"999px",padding:"8px 16px",fontFamily:"var(--font-fredoka)",fontWeight:"600",fontSize:"12.5px",letterSpacing:".14em",color:"#3E5F86"}}>NAŠ TIM</div>
+              <h3 style={{margin:"16px 0 0",fontFamily:"var(--font-fredoka)",fontWeight:"700",fontSize:"clamp(28px,4vw,44px)",lineHeight:"1.04",letterSpacing:"-.01em"}}>Dr. Ime Prezime</h3>
+              <p style={{margin:"18px 0 0",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>Kratki opis druge doktorice — čime se posebno bavi, kakav je njen pristup pacijentima i zašto ćete se kod nje osjećati sigurno. Ovaj tekst zamijenite pravim.</p>
+              <p style={{margin:"14px 0 0",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>Zajedno brinemo da svaki termin prođe mirno, temeljito i s osmijehom na kraju.</p>
+            </div>
+          </div>
           <div style={{display:"flex",gap:"clamp(18px,3vw,30px)",justifyContent:"center",flexWrap:"wrap",marginTop:"clamp(48px,7vw,80px)"}}>
             <div data-reveal="" data-delay="0" style={{background:"#FFFFFF",padding:"12px 12px 14px",borderRadius:"6px",boxShadow:"0 20px 38px -20px rgba(61,65,66,.4)",transform:"rotate(-4deg)"}}>
               <img src="/assets/polaroid-ordinacija.webp" alt="Ordinacija" style={{width:"230px",height:"170px",display:"block",objectFit:"cover",borderRadius:"2px"}} />
