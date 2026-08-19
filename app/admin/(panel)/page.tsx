@@ -1,128 +1,129 @@
 import Link from "next/link";
-import NemaSupabase from "@/components/admin/NemaSupabase";
-import { getDoktoriAdmin, getMojRadnik } from "@/lib/admin";
+import NoSupabase from "@/components/admin/NoSupabase";
+import { getDoctorsAdmin, getMyStaff } from "@/lib/admin";
 import { getSupabaseServer } from "@/lib/supabase-server";
-import { fmtDatum, STATUSI } from "@/lib/termini";
-import type { Termin } from "@/lib/types";
+import { formatDate, STATUSES } from "@/lib/appointments";
+import type { Appointment } from "@/lib/types";
+import { fullName } from "@/lib/types";
 
-export default async function AdminPocetna({
+export default async function AdminHome({
   searchParams,
 }: {
-  searchParams: Promise<{ doktor?: string }>;
+  searchParams: Promise<{ doctor?: string }>;
 }) {
   const supabase = await getSupabaseServer();
-  if (!supabase) return <NemaSupabase />;
+  if (!supabase) return <NoSupabase />;
 
-  const { doktor } = await searchParams;
-  const [mojRadnik, doktori] = await Promise.all([
-    getMojRadnik(supabase),
-    getDoktoriAdmin(supabase),
+  const { doctor } = await searchParams;
+  const [myStaff, doctors] = await Promise.all([
+    getMyStaff(supabase),
+    getDoctorsAdmin(supabase),
   ]);
 
-  // podrazumijevano: moji današnji termini (ako sam povezan s kartonom), inače svi
-  const aktivniDoktor =
-    doktor === "svi" ? null : doktor && doktori.some((d) => d.id === doktor) ? doktor : mojRadnik?.id ?? null;
+  // default: my today's appointments (if linked to a record), otherwise all
+  const activeDoctor =
+    doctor === "all" ? null : doctor && doctors.some((d) => d.id === doctor) ? doctor : myStaff?.id ?? null;
 
-  const danas = fmtDatum(new Date());
-  let danasnjiQuery = supabase
-    .from("termini")
+  const today = formatDate(new Date());
+  let todayQuery = supabase
+    .from("appointments")
     .select("*")
-    .eq("datum", danas)
-    .neq("status", "otkazan")
-    .order("vrijeme");
-  if (aktivniDoktor) danasnjiQuery = danasnjiQuery.eq("radnik_id", aktivniDoktor);
+    .eq("date", today)
+    .neq("status", "cancelled")
+    .order("time");
+  if (activeDoctor) todayQuery = todayQuery.eq("staff_id", activeDoctor);
 
-  const [pacijenti, radnici, naCekanju, danasnji] = await Promise.all([
-    supabase.from("pacijenti").select("id", { count: "exact", head: true }),
-    supabase.from("radnici").select("id", { count: "exact", head: true }).eq("aktivan", true),
-    supabase.from("termini").select("id", { count: "exact", head: true }).eq("status", "na_cekanju"),
-    danasnjiQuery,
+  const [patients, staff, pending, todayRes] = await Promise.all([
+    supabase.from("patients").select("id", { count: "exact", head: true }),
+    supabase.from("staff").select("id", { count: "exact", head: true }).eq("active", true),
+    supabase.from("appointments").select("id", { count: "exact", head: true }).eq("status", "pending"),
+    todayQuery,
   ]);
 
-  const termini = (danasnji.data ?? []) as Termin[];
-  const doktorIme = (id: string | null) => {
-    const d = doktori.find((d) => d.id === id);
-    return d ? `Dr. ${d.ime} ${d.prezime}` : "—";
+  const appointments = (todayRes.data ?? []) as Appointment[];
+  const doctorName = (id: string | null) => {
+    const d = doctors.find((d) => d.id === id);
+    return d ? `Dr. ${fullName(d)}` : "—";
   };
 
   return (
     <>
-      <div className="adm-naslov">
+      <div className="adm-heading">
         <h1>
-          Dobrodošli nazad{mojRadnik ? `, ${mojRadnik.ime}` : ""} 👋
+          Dobrodošli nazad{myStaff ? `, ${myStaff.first_name}` : ""} 👋
         </h1>
-        <Link href="/admin/kalendar/novi" className="adm-dugme">+ Novi termin</Link>
+        <Link href="/admin/calendar/new" className="adm-btn">+ Novi termin</Link>
       </div>
 
       <div className="adm-stat">
-        <div className="adm-karta">
-          <b>{pacijenti.count ?? 0}</b>
+        <div className="adm-card">
+          <b>{patients.count ?? 0}</b>
           <span>pacijenata u kartoteci</span>
         </div>
-        <div className="adm-karta">
-          <b>{radnici.count ?? 0}</b>
+        <div className="adm-card">
+          <b>{staff.count ?? 0}</b>
           <span>aktivnih radnika</span>
         </div>
-        <div className="adm-karta">
-          <b>{naCekanju.count ?? 0}</b>
+        <div className="adm-card">
+          <b>{pending.count ?? 0}</b>
           <span>zahtjeva na čekanju</span>
         </div>
-        <div className="adm-karta">
-          <b>{termini.length}</b>
-          <span>{aktivniDoktor ? "mojih termina danas" : "termina danas"}</span>
+        <div className="adm-card">
+          <b>{appointments.length}</b>
+          <span>{activeDoctor ? "mojih termina danas" : "termina danas"}</span>
         </div>
       </div>
 
-      <div className="adm-karta">
+      <div className="adm-card">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", flexWrap: "wrap" }}>
           <h2 style={{ margin: 0, fontFamily: "var(--font-fredoka)", fontSize: "20px" }}>
-            Današnji termini{aktivniDoktor ? ` — ${doktorIme(aktivniDoktor)}` : " — svi doktori"}
+            Današnji termini{activeDoctor ? ` — ${doctorName(activeDoctor)}` : " — svi doktori"}
           </h2>
           <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
             <Link
-              href="/admin?doktor=svi"
-              className="adm-dugme malo"
-              style={aktivniDoktor === null ? {} : { background: "#FFFFFF", border: "2px solid #EDE5D4" }}
+              href="/admin?doctor=all"
+              className="adm-btn sm"
+              style={activeDoctor === null ? {} : { background: "#FFFFFF", border: "2px solid #EDE5D4" }}
             >
               Svi
             </Link>
-            {doktori.map((d) => (
+            {doctors.map((d) => (
               <Link
                 key={d.id}
-                href={`/admin?doktor=${d.id}`}
-                className="adm-dugme malo"
-                style={aktivniDoktor === d.id ? {} : { background: "#FFFFFF", border: "2px solid #EDE5D4" }}
+                href={`/admin?doctor=${d.id}`}
+                className="adm-btn sm"
+                style={activeDoctor === d.id ? {} : { background: "#FFFFFF", border: "2px solid #EDE5D4" }}
               >
-                Dr. {d.prezime}
-                {mojRadnik?.id === d.id ? " (ja)" : ""}
+                Dr. {d.last_name}
+                {myStaff?.id === d.id ? " (ja)" : ""}
               </Link>
             ))}
           </div>
         </div>
-        {termini.length === 0 ? (
-          <div className="adm-prazno">Danas nema zakazanih termina.</div>
+        {appointments.length === 0 ? (
+          <div className="adm-empty">Danas nema zakazanih termina.</div>
         ) : (
-          <table className="adm-tabela" style={{ marginTop: "10px" }}>
+          <table className="adm-table" style={{ marginTop: "10px" }}>
             <thead>
               <tr>
                 <th>VRIJEME</th>
                 <th>PACIJENT</th>
                 <th>USLUGA</th>
-                {!aktivniDoktor && <th>DOKTOR</th>}
+                {!activeDoctor && <th>DOKTOR</th>}
                 <th>STATUS</th>
               </tr>
             </thead>
             <tbody>
-              {termini.map((t) => {
-                const st = STATUSI[t.status];
+              {appointments.map((t) => {
+                const st = STATUSES[t.status];
                 return (
                   <tr key={t.id}>
-                    <td style={{ fontWeight: 800 }}>{t.vrijeme?.slice(0, 5)}</td>
-                    <td>{t.ime}</td>
-                    <td>{t.usluga ?? "—"}</td>
-                    {!aktivniDoktor && <td>{doktorIme(t.radnik_id)}</td>}
+                    <td style={{ fontWeight: 800 }}>{t.time?.slice(0, 5)}</td>
+                    <td>{t.name}</td>
+                    <td>{t.service ?? "—"}</td>
+                    {!activeDoctor && <td>{doctorName(t.staff_id)}</td>}
                     <td>
-                      <span className="adm-znacka" style={{ color: st.boja, background: st.pozadina }}>
+                      <span className="adm-badge" style={{ color: st.color, background: st.bg }}>
                         {st.label}
                       </span>
                     </td>
@@ -133,7 +134,7 @@ export default async function AdminPocetna({
           </table>
         )}
         <div style={{ marginTop: "14px" }}>
-          <Link href="/admin/kalendar" className="adm-dugme sekundarno malo">Otvori kalendar →</Link>
+          <Link href="/admin/calendar" className="adm-btn secondary sm">Otvori kalendar →</Link>
         </div>
       </div>
     </>

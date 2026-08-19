@@ -1,14 +1,14 @@
-// Prepoznavanje postojećeg pacijenta iz podataka javnog zahtjeva.
+// Match an existing patient from a public booking request.
 
-export type PacijentKratko = {
+export type PatientBrief = {
   id: string;
-  ime: string;
-  prezime: string;
-  telefon: string | null;
+  first_name: string;
+  last_name: string;
+  phone: string | null;
 };
 
-/** Svodi broj na lokalni oblik sa vodećom nulom: "061 123-456", "+387 61…" → "061123456". */
-export function normalizujTelefon(t: string | null | undefined): string | null {
+/** Reduce a number to local form with a leading zero: "061 123-456", "+387 61…" → "061123456". */
+export function normalizePhone(t: string | null | undefined): string | null {
   if (!t) return null;
   let d = t.replace(/\D/g, "");
   if (d.startsWith("00387")) d = "0" + d.slice(5);
@@ -17,11 +17,11 @@ export function normalizujTelefon(t: string | null | undefined): string | null {
 }
 
 /**
- * Validira unos i vraća broj u kanonskom obliku "+387 61 123 456".
- * Prihvata "061 123 456", "61123456", "+387 61…", "00387…"; null = neispravan.
+ * Validate input and return the number in canonical form "+387 61 123 456".
+ * Accepts "061 123 456", "61123456", "+387 61…", "00387…"; null = invalid.
  */
-export function kanonskiTelefon(unos: string): string | null {
-  let d = unos.replace(/\D/g, "");
+export function canonicalPhone(input: string): string | null {
+  let d = input.replace(/\D/g, "");
   if (d.startsWith("00387")) d = d.slice(5);
   else if (d.startsWith("387")) d = d.slice(3);
   if (d.startsWith("0")) d = d.slice(1);
@@ -29,28 +29,28 @@ export function kanonskiTelefon(unos: string): string | null {
   return `+387 ${d.slice(0, 2)} ${d.slice(2, 5)} ${d.slice(5)}`;
 }
 
-const normalizujIme = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
+const normalizeName = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
 
 /**
- * Nađe pacijenta koji odgovara zahtjevu: prvo po telefonu (jak signal),
- * zatim po punom imenu ("Ime Prezime" ili "Prezime Ime").
+ * Find a patient matching the request: phone first (strong signal),
+ * then full name ("First Last" or "Last First").
  */
-export function nadjiPacijenta<T extends PacijentKratko>(
-  termin: { ime: string; telefon: string | null },
-  pacijenti: T[]
+export function findPatient<T extends PatientBrief>(
+  appointment: { name: string; phone: string | null },
+  patients: T[]
 ): T | null {
-  const tel = normalizujTelefon(termin.telefon);
+  const tel = normalizePhone(appointment.phone);
   if (tel) {
-    const poTelefonu = pacijenti.find((p) => normalizujTelefon(p.telefon) === tel);
-    if (poTelefonu) return poTelefonu;
+    const byPhone = patients.find((p) => normalizePhone(p.phone) === tel);
+    if (byPhone) return byPhone;
   }
-  const ime = normalizujIme(termin.ime);
-  if (!ime) return null;
+  const name = normalizeName(appointment.name);
+  if (!name) return null;
   return (
-    pacijenti.find(
+    patients.find(
       (p) =>
-        normalizujIme(`${p.ime} ${p.prezime}`) === ime ||
-        normalizujIme(`${p.prezime} ${p.ime}`) === ime
+        normalizeName(`${p.first_name} ${p.last_name}`) === name ||
+        normalizeName(`${p.last_name} ${p.first_name}`) === name
     ) ?? null
   );
 }

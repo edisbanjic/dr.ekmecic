@@ -1,61 +1,63 @@
-# Stomatološka ordinacija dr. Ekmečić
+# Dental clinic dr. Ekmečić
 
-Next.js (App Router) aplikacija — javni sajt sa kalendarskim zakazivanjem termina i admin panel
-sa digitalnim kartonom pacijenata i radnika. Backend: Supabase. Hosting: Vercel.
+Next.js (App Router) app — public site with calendar booking and an admin panel
+with digital charts for patients and staff. Backend: Supabase. Hosting: Vercel.
 
-## Pokretanje
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Sajt radi i bez konfigurisanog Supabase-a — javna forma tada samo loguje zahtjev na serveru,
-a admin stranice pokazuju uputu za konfiguraciju.
+The site works without Supabase configured — the public form then only logs the
+request on the server, and admin pages show setup instructions.
 
 ## Supabase setup
 
-1. Kopirajte `.env.example` u `.env.local` i popunite ključeve (Project Settings → API).
-2. Pokrenite `supabase/schema.sql` u Supabase SQL editoru — kreira tabele
-   `pacijenti`, `radnici`, `termini` i `zapisi` sa RLS politikama.
-3. Kreirajte admin korisnika: Supabase dashboard → Authentication → Users → **Add user**
-   (email + lozinka). Tim nalogom se prijavljujete na `/admin/login`.
+1. Copy `.env.example` to `.env.local` and fill in the keys (Project Settings → API).
+2. Run `supabase/schema.sql` in the Supabase SQL editor — creates tables
+   `patients`, `staff`, `appointments`, `records` and `posts` with RLS policies.
+   Safe to re-run in development (drops previous tables first).
+3. Create an admin user: Supabase dashboard → Authentication → Users → **Add user**
+   (email + password). Sign in at `/admin/login`.
 
-Pristup podacima:
-- **Javno zakazivanje** ide kroz server action sa `SUPABASE_SERVICE_ROLE_KEY`
-  (ključ ostaje na serveru); posjetiocima se nikad ne vraćaju lični podaci —
-  samo zauzeta vremena.
-- **Admin panel** koristi sesiju prijavljenog korisnika (`@supabase/ssr` kolačići),
-  pa RLS radi pod `authenticated` rolom. Rute `/admin/*` štiti middleware.
+Data access:
+- **Public booking** goes through a server action with `SUPABASE_SERVICE_ROLE_KEY`
+  (the key stays on the server); visitors never receive personal data —
+  only occupied times.
+- **Admin panel** uses the signed-in user's session (`@supabase/ssr` cookies),
+  so RLS runs under the `authenticated` role. `/admin/*` routes are guarded by middleware.
 
-## Funkcionalnosti
+## Features
 
-- **Javni sajt** (`/`) — dizajn iz Claude Design projekta; zakazivanje po kalendaru:
-  posjetilac bira datum (radno vrijeme ordinacije, pauze isključene), vidi slobodne
-  slotove od 30 min i rezerviše — termin ulazi u bazu sa statusom „na čekanju".
-- **Admin** (`/admin`) — pregled dana + statistika.
-  - `/admin/kalendar` — sedmični kalendar termina; potvrda, otkazivanje, završavanje;
-    ručno kreiranje termina (uz vezanje za karton pacijenta i radnika).
-  - `/admin/pacijenti` — kartoteka: podaci, alergije, zapisi zahvata po zubu,
-    historija termina.
-  - `/admin/radnici` — karton radnika: uloga, kontakt, status.
+- **Public site** (`/`) — booking by calendar: the visitor picks a date
+  (clinic opening hours, breaks excluded), sees free 30-min slots and reserves —
+  the appointment enters the database with status “pending”.
+- **Admin** (`/admin`) — day overview + stats.
+  - `/admin/calendar` — weekly appointment calendar; confirm, cancel, complete;
+    manual booking (linked to a patient chart and staff member).
+  - `/admin/patients` — charts: details, allergies, tooth procedure notes,
+    appointment history.
+  - `/admin/staff` — staff records: role, contact, status.
+  - `/admin/posts` — tips/news published on `/savjeti` (rewritten from `app/tips`).
 
-## Mapa
+## Map
 
-Footer koristi interaktivnu Mapbox GL mapu (`components/LocationMap.tsx`) kad je
-postavljen `NEXT_PUBLIC_MAPBOX_TOKEN`; bez tokena pada na OpenStreetMap iframe.
+The footer uses an interactive Mapbox GL map (`components/LocationMap.tsx`) when
+`NEXT_PUBLIC_MAPBOX_TOKEN` is set; without a token it falls back to an OpenStreetMap iframe.
 
 ## Deploy (Vercel)
 
-Import repozitorija na Vercel i postaviti env varijable iz `.env.example`.
-Radno vrijeme i trajanje slota se mijenjaju u `lib/termini.ts`.
+Import the repository on Vercel and set the env vars from `.env.example`.
+Opening hours and slot length are changed in `lib/appointments.ts`.
 
-## Struktura
+## Structure
 
-- `app/page.tsx` — javna stranica (markup iz dizajna)
-- `app/actions.ts` — javne server akcije (slobodni slotovi, rezervacija)
-- `app/admin/**` — admin panel (login + zaštićene stranice)
-- `app/admin/actions.ts` — CRUD za pacijente, radnike, termine i zapise
-- `components/` — BookingForm (kalendar + slotovi), ScrollEffects, Faq, LocationMap, admin komponente
-- `lib/termini.ts` — radno vrijeme, generisanje slotova, statusi
-- `supabase/schema.sql` — šema baze i RLS
+- `app/page.tsx` — public page
+- `app/actions.ts` — public server actions (free slots, booking)
+- `app/admin/**` — admin panel (login + protected pages)
+- `app/admin/actions.ts` — CRUD for patients, staff, appointments and records
+- `components/` — BookingForm, ScrollEffects, Faq, LocationMap, admin components
+- `lib/appointments.ts` — opening hours, slot generation, statuses
+- `supabase/schema.sql` — database schema and RLS

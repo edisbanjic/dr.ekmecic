@@ -1,13 +1,13 @@
-const ZAMJENE: Record<string, string> = {
+const REPLACEMENTS: Record<string, string> = {
   č: "c", ć: "c", đ: "dj", š: "s", ž: "z",
   Č: "c", Ć: "c", Đ: "dj", Š: "s", Ž: "z",
 };
 
 /** "Kako pobijediti strah od zubara?" → "kako-pobijediti-strah-od-zubara" */
-export function slugify(naslov: string): string {
-  return naslov
+export function slugify(title: string): string {
+  return title
     .split("")
-    .map((ch) => ZAMJENE[ch] ?? ch)
+    .map((ch) => REPLACEMENTS[ch] ?? ch)
     .join("")
     .toLowerCase()
     .normalize("NFD")

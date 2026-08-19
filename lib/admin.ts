@@ -1,51 +1,51 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Radnik } from "./types";
+import type { Staff } from "./types";
 
 /**
- * Karton radnika povezan s prijavljenim nalogom. Ako veza još ne postoji,
- * automatski se uspostavlja preko emaila: karton čiji email odgovara
- * emailu logina postaje "moj" pri prvoj posjeti.
+ * Staff record linked to the signed-in account. If the link does not exist
+ * yet, it is established via email: the record whose email matches the
+ * login email becomes "mine" on first visit.
  */
-export async function getMojRadnik(supabase: SupabaseClient): Promise<Radnik | null> {
+export async function getMyStaff(supabase: SupabaseClient): Promise<Staff | null> {
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return null;
 
   const { data } = await supabase
-    .from("radnici")
+    .from("staff")
     .select("*")
     .eq("user_id", user.id)
     .maybeSingle();
-  if (data) return data as Radnik;
+  if (data) return data as Staff;
 
   if (!user.email) return null;
-  const { data: poEmailu } = await supabase
-    .from("radnici")
+  const { data: byEmail } = await supabase
+    .from("staff")
     .select("*")
     .ilike("email", user.email)
     .is("user_id", null)
     .limit(1);
-  const karton = (poEmailu?.[0] as Radnik) ?? null;
-  if (!karton) return null;
+  const record = (byEmail?.[0] as Staff) ?? null;
+  if (!record) return null;
 
-  const { data: povezan } = await supabase
-    .from("radnici")
+  const { data: linked } = await supabase
+    .from("staff")
     .update({ user_id: user.id })
-    .eq("id", karton.id)
+    .eq("id", record.id)
     .is("user_id", null)
     .select("*")
     .maybeSingle();
-  return (povezan as Radnik) ?? { ...karton, user_id: user.id };
+  return (linked as Staff) ?? { ...record, user_id: user.id };
 }
 
-/** Aktivni doktori (za dropdown filtere u adminu). */
-export async function getDoktoriAdmin(supabase: SupabaseClient): Promise<Radnik[]> {
+/** Active doctors (for admin filter dropdowns). */
+export async function getDoctorsAdmin(supabase: SupabaseClient): Promise<Staff[]> {
   const { data } = await supabase
-    .from("radnici")
+    .from("staff")
     .select("*")
-    .eq("je_doktor", true)
-    .eq("aktivan", true)
-    .order("prezime");
-  return (data ?? []) as Radnik[];
+    .eq("is_doctor", true)
+    .eq("active", true)
+    .order("last_name");
+  return (data ?? []) as Staff[];
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { prijava, type PrijavaState } from "@/app/admin/auth-actions";
+import { login, type LoginState } from "@/app/admin/auth-actions";
 
 export default function LoginPage() {
-  const [state, formAction, pending] = useActionState<PrijavaState, FormData>(prijava, {});
+  const [state, formAction, pending] = useActionState<LoginState, FormData>(login, {});
 
   return (
     <div
@@ -62,7 +62,7 @@ export default function LoginPage() {
           <span style={{ display: "block", fontWeight: 800, fontSize: "13.5px", marginBottom: "6px" }}>Lozinka</span>
           <input
             type="password"
-            name="lozinka"
+            name="password"
             autoComplete="current-password"
             style={{
               width: "100%", boxSizing: "border-box", padding: "13px 16px", borderRadius: "16px",

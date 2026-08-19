@@ -2,41 +2,22 @@
 
 import { useState } from "react";
 
-const ITEMS = [
-  {
-    q: "Da li popravka zuba boli?",
-    a: "Iskreno — ne. Koristimo modernu anesteziju i tehnike koje popravku čine gotovo neprimjetnom. A ako vam ikad zatreba pauza, samo podignite ruku — stajemo odmah.",
-    delay: 0,
-  },
-  {
-    q: "Šta me čeka na prvom pregledu?",
-    a: "Upoznajemo vas i vaše zube: detaljan pregled, snimak po potrebi i jasan plan liječenja s cijenama. Bez obaveza i bez iznenađenja.",
-    delay: 70,
-  },
-  {
-    q: "Radite li s djecom?",
-    a: "Naravno — dječija stomatologija je naša posebna ljubav. Prvi posjet pretvaramo u igru: dijete upoznaje ordinaciju, „vozi se“ u stolici i dobija nagradu za hrabrost.",
-    delay: 140,
-  },
-  {
-    q: "Kako mogu platiti?",
-    a: "Gotovinom ili karticom, kako vam odgovara. Za veće zahvate uvijek se možemo dogovoriti o plaćanju u više rata — pitajte bez ustručavanja.",
-    delay: 210,
-  },
-];
+type FaqItem = { q: string; a: string };
 
-export default function Faq() {
+const REVEAL_STEP_MS = 70;
+
+export default function Faq({ items }: { items: FaqItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
     <div id="faq-list">
-      {ITEMS.map((item, i) => {
+      {items.map((item, i) => {
         const isOpen = open === i;
         return (
           <div
-            key={item.q}
+            key={i}
             data-reveal=""
-            data-delay={item.delay}
+            data-delay={i * REVEAL_STEP_MS}
             style={{
               background: isOpen ? "#FDF9F0" : "#FFFFFF",
               border: "2px solid #EFE7D6",

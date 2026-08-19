@@ -1,0 +1,275 @@
+{
+  "meta": {
+    "siteName": "Dr. Ekmečić",
+    "clinicName": "Opća stomatološka ordinacija dr. Kamala Ekmečić",
+    "ogLocale": "bs_BA",
+    "home": {
+      "title": "Dr. Ekmečić — Stomatološka ordinacija Cazin",
+      "description": "Opća stomatološka ordinacija dr. Kamala Ekmečić, Cazin — moderna oprema, nježan pristup i 25+ godina iskustva. Zakažite termin: 037 514 771.",
+      "keywords": ["stomatolog Cazin", "zubar Cazin", "stomatološka ordinacija Cazin", "dr. Kamala Ekmečić", "popravka zuba", "izbjeljivanje zuba", "dječija stomatologija"]
+    },
+    "tips": {
+      "title": "Kutak za osmijeh — savjeti i novosti | Dr. Ekmečić",
+      "description": "Savjeti i novosti iz stomatološke ordinacije dr. Ekmečić, Cazin."
+    },
+    "postNotFound": "Objava nije pronađena — Dr. Ekmečić",
+    "postFallbackDescription": "Savjeti i novosti iz stomatološke ordinacije dr. Ekmečić, Cazin."
+  },
+  "header": {
+    "tagline": "STOMATOLOŠKA ORDINACIJA",
+    "nav": {
+      "services": "Usluge",
+      "hours": "Radno vrijeme",
+      "tips": "Savjeti",
+      "contact": "Kontakt"
+    },
+    "call": "Pozovi",
+    "bookCta": "Zakaži termin",
+    "langSwitchAria": "Switch to English"
+  },
+  "hero": {
+    "titlePre": "Osmijeh koji ",
+    "titleHighlight": "voliš",
+    "titlePost": " pokazati",
+    "lead": "Dobrodošli u ordinaciju u kojoj se i najveći strah od zubara pretvara u osmijeh — moderna oprema, nježan pristup i tim koji zaista brine.",
+    "ctaPrimary": "Zakaži termin",
+    "ctaSecondary": "Pogledaj usluge",
+    "orCall": "ili nazovi",
+    "altSmile": "Širok osmijeh",
+    "altClinic": "Ordinacija",
+    "altPatient": "Sretan pacijent",
+    "badgeRating": "5,0 prosječna ocjena",
+    "badgeYears": "25+ godina iskustva",
+    "badgeSmiles": "10.000+ osmijeha",
+    "nameKamala": "Dr. Kamala Ekmečić",
+    "nameZehra": "Dr. Zehra Ekmečić",
+    "nameTech": "John Doe"
+  },
+  "marquee": ["ZDRAV OSMIJEH", "BEZ BOLA", "MODERNA OPREMA", "INDIVIDUALAN PRISTUP"],
+  "services": {
+    "badge": "NAŠE USLUGE",
+    "title": "Sve za tvoj osmijeh",
+    "lead": "Od redovnog pregleda do potpune obnove osmijeha — osam usluga pod jednim krovom.",
+    "startHere": "KRENITE OVDJE ✦",
+    "cards": {
+      "general": { "title": "Opšta stomatologija", "text": "Pregledi, dijagnostika i jasan plan liječenja — temelj svakog zdravog osmijeha. Preventiva je najbolja (i najpovoljnija) stomatologija." },
+      "fillings": { "title": "Popravka zuba", "text": "Estetske plombe u boji zuba — precizno, trajno i potpuno bezbolno." },
+      "endo": { "title": "Liječenje korijena", "text": "Spašavamo i zube koji se čine izgubljenim — modernom endodoncijom." },
+      "extraction": { "title": "Vađenje zuba", "text": "Kad je vađenje jedina opcija: brzo, pažljivo i uz nježnu anesteziju." },
+      "prosthetics": { "title": "Protetika", "text": "Krunice, mostovi i proteze koje se ne razlikuju od prirodnih zuba." },
+      "whitening": { "title": "Izbjeljivanje zuba", "text": "Profesionalno izbjeljivanje sigurno za gleđ — osmijeh svjetliji za nekoliko nijansi, često već nakon prvog tretmana." },
+      "scaling": { "title": "Uklanjanje kamenca", "text": "Ultrazvučno čišćenje i poliranje za svjež dah i zdrave desni." },
+      "kids": { "title": "Dječija stomatologija", "text": "Prvi posjet bez suza: kroz igru, strpljenje i malu nagradu za hrabrost. Mališani od nas odlaze s osmijehom — i vraćaju se rado." }
+    },
+    "help": {
+      "title": "Niste sigurni šta vam treba?",
+      "text": "Nazovite — rado ćemo vas posavjetovati."
+    }
+  },
+  "about": {
+    "badge": "UPOZNAJTE DOKTORICU",
+    "titlePre": "Mirna ruka, ",
+    "titleHighlight": "toplo srce",
+    "p1": "Iza svakog zdravog osmijeha stoji strpljivo srce. Dr. Kamala Ekmečić vjeruje da posjeta stomatologu ne mora biti stresna — zato u našoj ordinaciji uvijek ima vremena za vaša pitanja, objašnjenje svakog koraka i pauzu kad vam zatreba.",
+    "p2": "Uz kontinuiranu edukaciju i modernu opremu, svakom pacijentu pristupamo individualno — jer svaki osmijeh priča svoju priču.",
+    "sticker": "25+ godina uz vaš osmijeh",
+    "altPortrait": "Dr. Kamala Ekmečić",
+    "stats": [
+      { "value": "25", "suffix": "+", "display": "25+", "label": "godina iskustva" },
+      { "value": "10000", "suffix": "+", "display": "10.000+", "label": "zadovoljnih pacijenata" },
+      { "value": "98", "suffix": "%", "display": "98%", "label": "dolazi po preporuci" }
+    ],
+    "team": {
+      "badge": "NAŠ TIM",
+      "namePre": "Dr. Zehra ",
+      "nameHighlight": "Ekmečić",
+      "p1": "Nova generacija iste posvećenosti — dr. Zehra u ordinaciju donosi svježa znanja, mirnu ruku i osmijeh koji opušta već u čekaonici. Posebno je vole najmlađi pacijenti i svi koje je strah od zubara dosad držao podalje.",
+      "p2": "Zajedno brinemo da svaki termin prođe mirno, temeljito i s osmijehom na kraju.",
+      "sticker": "drugi par pažljivih ruku",
+      "altPortrait": "Dr. Zehra Ekmečić"
+    },
+    "tech": {
+      "badge": "ZUBNA TEHNIČARKA",
+      "namePre": "John ",
+      "nameHighlight": "Doe",
+      "p1": "Treći par pažljivih ruku u našem timu — naša tehničarka priprema ordinaciju, asistira pri svakom zahvatu i brine da sve bude spremno prije nego što sjednete u stolicu.",
+      "p2": "Tiha snaga ordinacije: uz nju svaki termin počinje na vrijeme i prolazi bez zastoja.",
+      "sticker": "treći par vrijednih ruku",
+      "altPortrait": "Zubna tehničarka"
+    },
+    "polaroids": [
+      { "caption": "naša ordinacija", "alt": "Ordinacija" },
+      { "caption": "moderna oprema", "alt": "Oprema" },
+      { "caption": "kutak za najhrabrije", "alt": "Čekaonica" }
+    ]
+  },
+  "hours": {
+    "badge": "KAD SMO TU ZA VAS",
+    "title": "Radno vrijeme",
+    "monWed": "Ponedjeljak – Srijeda",
+    "thursday": "Četvrtak",
+    "thursdayTag": "POSLIJEPODNE ✦",
+    "friday": "Petak",
+    "weekend": "Vikend i praznici",
+    "pauseShort": "pauza 10:30 – 11:00",
+    "pauseThursday": "pauza 14:00 – 14:30",
+    "closed": "ne radimo",
+    "closedNote": "vidimo se u ponedjeljak!",
+    "tip": "Savjet: četvrtkom radimo poslijepodne — idealno ako ste prijepodne zauzeti."
+  },
+  "bookingSection": {
+    "badge": "ZAKAZIVANJE",
+    "titlePre": "Rezerviši svoj ",
+    "titleHighlight": "termin",
+    "lead": "Ispunite formu, a mi vas nazovemo da potvrdimo termin — obično već isti dan. Bez čekanja, bez komplikacija.",
+    "messagesNote": "Odgovaramo i na poruke — pišite slobodno."
+  },
+  "reviews": {
+    "badge": "RECENZIJE",
+    "titlePre": "Osmjesi govore ",
+    "titleHighlight": "prije nas",
+    "rating": "★ 5,0 — prosječna ocjena naših pacijenata",
+    "items": [
+      { "text": "„Godinama sam odgađala zubara zbog straha. Ovdje sam se prvi put opustila — sve objasne, ništa ne boli, a osoblje je predivno.“", "name": "Amira K.", "role": "liječenje korijena" },
+      { "text": "„Kćerka je imala prvi pregled i jedva čeka sljedeći! Ko bi rekao da će dijete moliti da ide zubaru.“", "name": "Emir H.", "role": "tata male Lamije" },
+      { "text": "„Profesionalno, brzo i bez čekanja. Kamenac skinut, zubi ko novi. Sve preporuke!“", "name": "Selma B.", "role": "uklanjanje kamenca" },
+      { "text": "„Nova krunica izgleda toliko prirodno da je ni ja ne razlikujem. Hvala na strpljenju i savršenom poslu!“", "name": "Jasmin M.", "role": "protetika" }
+    ]
+  },
+  "faq": {
+    "badge": "ČESTA PITANJA",
+    "title": "Pitate nas često",
+    "items": [
+      { "q": "Da li popravka zuba boli?", "a": "Iskreno — ne. Koristimo modernu anesteziju i tehnike koje popravku čine gotovo neprimjetnom. A ako vam ikad zatreba pauza, samo podignite ruku — stajemo odmah." },
+      { "q": "Šta me čeka na prvom pregledu?", "a": "Upoznajemo vas i vaše zube: detaljan pregled, snimak po potrebi i jasan plan liječenja s cijenama. Bez obaveza i bez iznenađenja." },
+      { "q": "Radite li s djecom?", "a": "Naravno — dječija stomatologija je naša posebna ljubav. Prvi posjet pretvaramo u igru: dijete upoznaje ordinaciju, „vozi se“ u stolici i dobija nagradu za hrabrost." },
+      { "q": "Kako mogu platiti?", "a": "Gotovinom ili karticom, kako vam odgovara. Za veće zahvate uvijek se možemo dogovoriti o plaćanju u više rata — pitajte bez ustručavanja." }
+    ]
+  },
+  "form": {
+    "step1": "1 · Vaši podaci",
+    "step2": "2 · Termin",
+    "firstName": "Ime",
+    "lastName": "Prezime",
+    "phone": "Broj telefona",
+    "email": "Email",
+    "optional": "(opciono)",
+    "doctor": "Doktor",
+    "noPreference": "— bez preferencije —",
+    "service": "Usluga",
+    "notes": "Napomena",
+    "placeholderFirstName": "npr. Amina",
+    "placeholderLastName": "npr. Hodžić",
+    "placeholderPhone": "61 123 456",
+    "placeholderEmail": "npr. amina@gmail.com",
+    "placeholderNotes": "Recite nam nešto više — strah, bol, želje…",
+    "next": "Dalje — odaberi termin →",
+    "chooseDate": "Odaberite datum",
+    "chooseTime": "Odaberite vrijeme",
+    "loadingSlots": "Učitavam slobodne termine…",
+    "prevMonth": "Prethodni mjesec",
+    "nextMonth": "Sljedeći mjesec",
+    "submit": "Rezerviši termin",
+    "sending": "Šaljemo…",
+    "propose": "Ne mogu naći termin — predložite mi vi",
+    "back": "← nazad na podatke",
+    "errorPhone": "Unesite ispravan broj telefona (npr. 61 123 456).",
+    "errorDateTime": "Odaberite datum i vrijeme, ili kliknite „Predložite mi termin“.",
+    "errorGeneric": "Nešto je pošlo po zlu. Pokušajte ponovo.",
+    "sentTitle": "Zahtjev je poslan!",
+    "sentPropose": "Hvala na povjerenju! Nazvat ćemo vas u najkraćem roku i zajedno pronaći termin koji vam odgovara.",
+    "sentBooked": "Rezervisali ste {day}. {month} u {time}. Nazvat ćemo vas u najkraćem roku da potvrdimo termin."
+  },
+  "bookingErrors": {
+    "required": "Ime, prezime i broj telefona su obavezni.",
+    "phone": "Unesite ispravan broj telefona (npr. 61 123 456).",
+    "email": "Unesite ispravan email.",
+    "service": "Odaberite uslugu.",
+    "date": "Odaberite datum u kalendaru.",
+    "slot": "Odaberite slobodan termin.",
+    "doctor": "Odaberite doktora iz liste.",
+    "taken": "Ovaj termin je upravo zauzet — odaberite drugi.",
+    "generic": "Nešto je pošlo po zlu. Pokušajte ponovo ili nas nazovite."
+  },
+  "modal": {
+    "label": "ZAKAZIVANJE",
+    "titlePre": "Rezerviši svoj ",
+    "titleHighlight": "termin",
+    "lead": "Popunite podatke — nazvat ćemo vas da potvrdimo termin.",
+    "close": "Zatvori"
+  },
+  "footer": {
+    "tagline": "STOMATOLOŠKA ORDINACIJA",
+    "slogan": "Osmijeh koji voliš pokazati",
+    "contactTitle": "Kontakt",
+    "addressLine1": "Bolnička bb,",
+    "addressLine2": "77220 Cazin, BiH",
+    "hoursPre": "Pon–Pet · pogledaj ",
+    "hoursLink": "radno vrijeme",
+    "copyright": "© 2026 Opća stomatološka ordinacija, vl. dr. Kamala Ekmečić",
+    "madeWith": "Napravljeno s osmijehom"
+  },
+  "map": {
+    "boxAria": "Mapa — lokacija ordinacije u Cazinu",
+    "iframeTitle": "Mapa — Cazin",
+    "streetTitle": "3D prikaz ulice — Cazin",
+    "pinAria": "Ordinacija — Bolnička bb, Cazin",
+    "popupName": "Dr. Ekmečić",
+    "popupAddress": "Bolnička bb, Cazin",
+    "directions": "otvori navigaciju",
+    "addressShort": "Bolnička bb, Cazin",
+    "viewMap": "Mapa",
+    "viewStreet": "3D prikaz",
+    "viewSwitchAria": "Odaberi prikaz mape"
+  },
+  "tips": {
+    "badge": "SAVJETI I NOVOSTI",
+    "title": "Kutak za osmijeh",
+    "lead": "Kratki savjeti, novosti iz ordinacije i mali podsjetnici koji čine osmijeh još bezbrižnijim.",
+    "all": "Sve",
+    "soon": "uskoro",
+    "emptyCategoryTitle": "Još nema objava u kategoriji “{category}”.",
+    "emptyTitle": "Prvi savjeti su u pripremi.",
+    "emptyCategoryText": "Dodaj novu objavu u ovu kategoriju i ovdje će se odmah pojaviti.",
+    "emptyText": "Kad objave krenu, ovdje će biti mali kutak za savjete, novosti i lijepe priče iz ordinacije.",
+    "readMore": "Pročitaj više",
+    "categories": {
+      "Savjeti": "Savjeti",
+      "Novosti": "Novosti",
+      "Iz ordinacije": "Iz ordinacije"
+    }
+  },
+  "post": {
+    "back": "← Svi savjeti",
+    "ctaBadge": "SPREMNI ZA POSJETU?",
+    "ctaTitle": "Rezervišite termin bez stresa",
+    "ctaText": "Ako vas zanima kako izgleda pregled, koje uređaje koristimo ili zašto nam je važan miran pristup, najljepše je da se upoznamo uživo. Tu smo da odgovorimo na pitanja i učinimo da svaki dolazak bude lakši, topliji i opušteniji.",
+    "ctaBook": "Zakaži termin →",
+    "ctaContact": "Kontaktiraj nas"
+  },
+  "share": {
+    "label": "Podijeli",
+    "native": "Podijeli",
+    "copy": "Kopiraj link",
+    "copied": "Link kopiran",
+    "facebook": "Podijeli na Facebooku",
+    "whatsapp": "Podijeli na WhatsAppu",
+    "x": "Podijeli na X",
+    "email": "Pošalji emailom"
+  },
+  "phoneDisplay": "037 514 771",
+  "months": ["Januar", "Februar", "Mart", "April", "Maj", "Juni", "Juli", "August", "Septembar", "Oktobar", "Novembar", "Decembar"],
+  "daysShort": ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"],
+  "servicesList": [
+    "Prvi pregled i konsultacija",
+    "Opšta stomatologija",
+    "Popravka zuba",
+    "Liječenje korijena",
+    "Vađenje zuba",
+    "Protetika",
+    "Izbjeljivanje",
+    "Uklanjanje kamenca",
+    "Dječija stomatologija",
+    "Nešto drugo"
+  ]
+}

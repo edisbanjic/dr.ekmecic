@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { odjava } from "@/app/admin/auth-actions";
+import { logout } from "@/app/admin/auth-actions";
 import AdminNav from "@/components/admin/AdminNav";
 import "../admin.css";
 
@@ -27,8 +27,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </span>
         </a>
         <AdminNav />
-        <form action={odjava}>
-          <button type="submit" className="adm-odjava">Odjava</button>
+        <form action={logout}>
+          <button type="submit" className="adm-logout">Odjava</button>
         </form>
       </header>
       <main className="adm-main">{children}</main>

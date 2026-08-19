@@ -2,27 +2,40 @@
 
 import { useEffect, useRef, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useLocale } from "@/components/LocaleProvider";
+import { getDict } from "@/lib/i18n";
 
 const TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
-/** Ordinacija — Bolnička bb, Cazin */
+/** Clinic — Bolnička bb, Cazin */
 const LNG = 15.93211628755716;
 const LAT = 44.96627043157745;
 const ZOOM = 15.4;
 
-/** Otvara navigaciju u aplikaciji koju korisnik ima (Maps/Google Maps). */
+/** Opens navigation in whatever maps app the user has. */
 const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${LAT},${LNG}`;
 
+/** Google's 3D Street View embed of the clinic's street. */
+const STREET_VIEW_SRC =
+  "https://www.google.com/maps/embed?pb=!4v1787170258664!6m8!1m7!1soTwkXzzwj2wHJPFWdaTUXw!2m2!1d44.96623974455438!2d15.93225772888374!3f280.00696!4f0!5f0.7820865974627469";
+
 /**
- * Interaktivna Mapbox GL mapa lokacije ordinacije. Mapbox biblioteka se
- * učitava dinamički pri prvom ulasku u viewport da ne tereti initial load.
- * Bez NEXT_PUBLIC_MAPBOX_TOKEN pada na OSM iframe, pa sajt radi i bez ključa.
+ * Interactive Mapbox GL map of the clinic location. The Mapbox library is
+ * loaded dynamically on first viewport entry so it does not weigh down the
+ * initial load. Without NEXT_PUBLIC_MAPBOX_TOKEN it falls back to an OSM
+ * iframe, so the site still works without a key.
  */
 export default function LocationMap() {
+  const t = getDict(useLocale().locale).map;
   const box = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [view, setView] = useState<"map" | "street">("map");
+  // latest copy for the imperative Mapbox popup — a locale switch must not
+  // recreate the map, so the map effect reads it through this ref
+  const tRef = useRef(t);
+  tRef.current = t;
 
-  // lazy: kreni s učitavanjem tek kad je mapa blizu ekrana
+  // lazy: start loading only once the map is near the viewport
   useEffect(() => {
     const el = box.current;
     if (!el || !TOKEN) return;
@@ -61,28 +74,27 @@ export default function LocationMap() {
       map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
       map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
 
-      // marker u brend plavoj
+      // marker in brand blue
       const pin = document.createElement("div");
       pin.style.cssText =
         "width:22px;height:22px;border-radius:50%;background:#7EAEE8;" +
         "border:3px solid #F5F0E8;box-shadow:0 0 0 6px rgba(126,174,232,.28);cursor:pointer";
+      const popupText = tRef.current;
       pin.setAttribute("role", "img");
-      pin.setAttribute("aria-label", "Ordinacija — Bolnička bb, Cazin");
-      const marker = new mapboxgl.Marker({ element: pin, anchor: "center" })
+      pin.setAttribute("aria-label", popupText.pinAria);
+      new mapboxgl.Marker({ element: pin, anchor: "center" })
         .setLngLat([LNG, LAT])
         .setPopup(
           new mapboxgl.Popup({ offset: 18, closeButton: false }).setHTML(
             '<div style="color:#3D4142;font-family:inherit;font-size:13.5px;line-height:1.5">' +
-              '<strong style="font-weight:800;font-size:14.5px">Dr. Ekmečić</strong><br>' +
-              "Bolnička bb, Cazin<br>" +
+              `<strong style="font-weight:800;font-size:14.5px">${popupText.popupName}</strong><br>` +
+              `${popupText.popupAddress}<br>` +
               `<a href="${DIRECTIONS}" target="_blank" rel="noopener" ` +
               'style="color:#3E5F86;font-weight:800;text-decoration:underline;text-underline-offset:3px">' +
-              "otvori navigaciju →</a></div>"
+              `${popupText.directions} →</a></div>`
           )
         )
         .addTo(map);
-      // popup otvoren odmah, da se adresa i navigacija vide bez klika
-      marker.togglePopup();
     })();
 
     return () => {
@@ -92,9 +104,10 @@ export default function LocationMap() {
   }, [visible]);
 
   return (
-    <div className="mapa-footer" style={{ flex: "1 1 300px", minWidth: "260px" }}>
+    <div className="map-footer" style={{ flex: "1 1 300px", minWidth: "260px" }}>
       <div
         style={{
+          position: "relative",
           borderRadius: "24px",
           overflow: "hidden",
           border: "4px solid rgba(245,240,232,.14)",
@@ -102,26 +115,82 @@ export default function LocationMap() {
           background: "rgba(245,240,232,.06)",
         }}
       >
-        {TOKEN ? (
-          <div ref={box} style={{ width: "100%", height: "230px" }} aria-label="Mapa — lokacija ordinacije u Cazinu" />
-        ) : (
+        <div
+          role="group"
+          aria-label={t.viewSwitchAria}
+          style={{
+            position: "absolute",
+            bottom: "10px",
+            left: "10px",
+            zIndex: 2,
+            display: "flex",
+            gap: "2px",
+            padding: "3px",
+            borderRadius: "999px",
+            background: "rgba(36,48,56,.72)",
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          {(["map", "street"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              aria-pressed={view === v}
+              style={{
+                fontFamily: "inherit",
+                fontSize: "12.5px",
+                fontWeight: 600,
+                lineHeight: "1.4",
+                padding: "6px 12px",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+                color: view === v ? "#243038" : "#F5F0E8",
+                background: view === v ? "#7EAEE8" : "transparent",
+                transition: "background .2s, color .2s",
+              }}
+            >
+              {v === "map" ? t.viewMap : t.viewStreet}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ width: "100%", height: "230px" }}>
+          {TOKEN && (
+            <div
+              ref={box}
+              aria-label={t.boxAria}
+              style={{ width: "100%", height: "100%", display: view === "map" ? "block" : "none" }}
+            />
+          )}
+          {!TOKEN && (
+            <iframe
+              title={t.iframeTitle}
+              loading="lazy"
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=15.915%2C44.945%2C15.975%2C44.985&layer=mapnik&marker=${LAT}%2C${LNG}`}
+              style={{ width: "100%", height: "100%", border: "0", display: view === "map" ? "block" : "none" }}
+            />
+          )}
           <iframe
-            title="Mapa — Cazin"
+            title={t.streetTitle}
             loading="lazy"
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=15.915%2C44.945%2C15.975%2C44.985&layer=mapnik&marker=${LAT}%2C${LNG}`}
-            style={{ width: "100%", height: "230px", border: "0" }}
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            src={STREET_VIEW_SRC}
+            style={{ width: "100%", height: "100%", border: "0", display: view === "street" ? "block" : "none" }}
           />
-        )}
+        </div>
       </div>
       <div style={{ fontSize: "13px", opacity: ".6", marginTop: "8px" }}>
-        Bolnička bb, Cazin —{" "}
+        {t.addressShort} —{" "}
         <a
           href={DIRECTIONS}
           target="_blank"
           rel="noopener"
           style={{ color: "#F5F0E8", textDecoration: "underline", textUnderlineOffset: "3px" }}
         >
-          otvori navigaciju
+          {t.directions}
         </a>
       </div>
     </div>

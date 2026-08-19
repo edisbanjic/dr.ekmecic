@@ -2,12 +2,12 @@
 
 export default function ConfirmButton({
   action,
-  poruka,
+  message,
   children,
-  className = "adm-dugme opasno malo",
+  className = "adm-btn danger sm",
 }: {
   action: () => Promise<void>;
-  poruka: string;
+  message: string;
   children: React.ReactNode;
   className?: string;
 }) {
@@ -15,7 +15,7 @@ export default function ConfirmButton({
     <form
       action={action}
       onSubmit={(e) => {
-        if (!confirm(poruka)) e.preventDefault();
+        if (!confirm(message)) e.preventDefault();
       }}
       style={{ display: "inline" }}
     >

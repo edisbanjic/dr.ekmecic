@@ -1,121 +1,126 @@
 "use server";
 
-import { kanonskiTelefon } from "@/lib/match";
+import { canonicalPhone } from "@/lib/match";
 import { getSupabase } from "@/lib/supabase";
-import { datumUHorizontu, parseDatum, slotoviZaDan, USLUGE } from "@/lib/termini";
-import type { Doktor } from "@/lib/types";
+import { dateInHorizon, parseDate, slotsForDay, SERVICES } from "@/lib/appointments";
+import { getDict, LOCALES, type Locale } from "@/lib/i18n";
+import type { Doctor } from "@/lib/types";
 
 export type BookingResult = { ok: boolean; error?: string };
 
-/** Aktivni doktori za javni dropdown — samo id i ime. */
-export async function getDoktori(): Promise<Doktor[]> {
+/** Active doctors for the public dropdown — id and name only. */
+export async function getDoctors(): Promise<Doctor[]> {
   const supabase = getSupabase();
   if (!supabase) return [];
   const { data, error } = await supabase
-    .from("radnici")
-    .select("id, ime, prezime")
-    .eq("aktivan", true)
-    .eq("je_doktor", true)
-    .order("prezime");
+    .from("staff")
+    .select("id, first_name, last_name")
+    .eq("active", true)
+    .eq("is_doctor", true)
+    .order("last_name");
   if (error) {
-    console.error("Greška pri čitanju doktora:", error);
+    console.error("Failed to load doctors:", error);
     return [];
   }
-  return (data ?? []) as Doktor[];
+  return (data ?? []) as Doctor[];
 }
 
 /**
- * Zauzeta početna vremena ("HH:MM") za dati datum i doktora — bez ličnih
- * podataka. Termini bez dodijeljenog doktora blokiraju sve doktore.
+ * Occupied start times ("HH:MM") for the given date and doctor — no personal
+ * data. Appointments without an assigned doctor block every doctor.
  */
-export async function getZauzeto(datum: string, radnikId: string | null): Promise<string[]> {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) return [];
+export async function getBooked(date: string, staffId: string | null): Promise<string[]> {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return [];
   const supabase = getSupabase();
   if (!supabase) return [];
   let query = supabase
-    .from("termini")
-    .select("vrijeme")
-    .eq("datum", datum)
-    .neq("status", "otkazan");
-  if (radnikId) {
-    query = query.or(`radnik_id.eq.${radnikId},radnik_id.is.null`);
+    .from("appointments")
+    .select("time")
+    .eq("date", date)
+    .neq("status", "cancelled");
+  if (staffId) {
+    query = query.or(`staff_id.eq.${staffId},staff_id.is.null`);
   }
   const { data, error } = await query;
   if (error) {
-    console.error("Greška pri čitanju zauzetih termina:", error);
+    console.error("Failed to load booked appointments:", error);
     return [];
   }
-  return (data ?? []).map((r) => String(r.vrijeme).slice(0, 5));
+  return (data ?? []).map((r) => String(r.time).slice(0, 5));
 }
 
 export async function submitBooking(formData: FormData): Promise<BookingResult> {
-  // predlozi = "1": pacijent nije birao datum — ordinacija ga kontaktira
-  const predlozi = String(formData.get("predlozi") ?? "") === "1";
-  const ime = String(formData.get("ime") ?? "").trim();
-  const prezime = String(formData.get("prezime") ?? "").trim();
-  const termin = {
-    // u bazi je jedno polje; matching i "+ Novi karton" računaju na "Ime Prezime"
-    ime: [ime, prezime].filter(Boolean).join(" "),
-    telefon: String(formData.get("telefon") ?? "").trim(),
+  // errors go back in the language of the page the form was submitted from
+  const lang = String(formData.get("lang") ?? "");
+  const locale: Locale = (LOCALES as string[]).includes(lang) ? (lang as Locale) : "bs";
+  const t = getDict(locale).bookingErrors;
+  // propose = "1": patient did not pick a date — the clinic contacts them
+  const propose = String(formData.get("propose") ?? "") === "1";
+  const firstName = String(formData.get("first_name") ?? "").trim();
+  const lastName = String(formData.get("last_name") ?? "").trim();
+  const appointment = {
+    // single name field in the DB; matching and "+ New chart" expect "First Last"
+    name: [firstName, lastName].filter(Boolean).join(" "),
+    phone: String(formData.get("phone") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim() || null,
-    usluga: String(formData.get("usluga") ?? "").trim(),
-    napomena: String(formData.get("napomena") ?? "").trim() || null,
-    datum: (String(formData.get("datum") ?? "").trim() || null) as string | null,
-    vrijeme: (String(formData.get("vrijeme") ?? "").trim() || null) as string | null,
-    radnik_id: String(formData.get("radnik_id") ?? "").trim() || null,
+    service: String(formData.get("service") ?? "").trim(),
+    notes: String(formData.get("notes") ?? "").trim() || null,
+    date: (String(formData.get("date") ?? "").trim() || null) as string | null,
+    time: (String(formData.get("time") ?? "").trim() || null) as string | null,
+    staff_id: String(formData.get("staff_id") ?? "").trim() || null,
   };
 
-  if (!ime || !prezime || !termin.telefon) {
-    return { ok: false, error: "Ime, prezime i broj telefona su obavezni." };
+  if (!firstName || !lastName || !appointment.phone) {
+    return { ok: false, error: t.required };
   }
-  const kanonTelefon = kanonskiTelefon(termin.telefon);
-  if (!kanonTelefon) {
-    return { ok: false, error: "Unesite ispravan broj telefona (npr. 61 123 456)." };
+  const phone = canonicalPhone(appointment.phone);
+  if (!phone) {
+    return { ok: false, error: t.phone };
   }
-  termin.telefon = kanonTelefon;
-  if (termin.email && !/^\S+@\S+\.\S+$/.test(termin.email)) {
-    return { ok: false, error: "Unesite ispravan email." };
+  appointment.phone = phone;
+  if (appointment.email && !/^\S+@\S+\.\S+$/.test(appointment.email)) {
+    return { ok: false, error: t.email };
   }
-  if (!USLUGE.includes(termin.usluga)) {
-    return { ok: false, error: "Odaberite uslugu." };
+  if (!SERVICES.includes(appointment.service)) {
+    return { ok: false, error: t.service };
   }
-  if (predlozi) {
-    termin.datum = null;
-    termin.vrijeme = null;
+  if (propose) {
+    appointment.date = null;
+    appointment.time = null;
   } else {
-    if (!termin.datum || !datumUHorizontu(termin.datum)) {
-      return { ok: false, error: "Odaberite datum u kalendaru." };
+    if (!appointment.date || !dateInHorizon(appointment.date)) {
+      return { ok: false, error: t.date };
     }
     if (
-      !termin.vrijeme ||
-      !slotoviZaDan(parseDatum(termin.datum).getDay()).includes(termin.vrijeme)
+      !appointment.time ||
+      !slotsForDay(parseDate(appointment.date).getDay()).includes(appointment.time)
     ) {
-      return { ok: false, error: "Odaberite slobodan termin." };
+      return { ok: false, error: t.slot };
     }
   }
 
   const supabase = getSupabase();
   if (!supabase) {
-    // Supabase još nije konfigurisan — prihvati zahtjev da sajt radi.
-    console.log("Zahtjev za termin (Supabase nije konfigurisan):", termin);
+    // Supabase is not configured yet — accept the request so the site still works.
+    console.log("Appointment request (Supabase not configured):", appointment);
     return { ok: true };
   }
 
-  // doktor je opcionalan, ali ako je odabran mora biti stvaran aktivan doktor
-  if (termin.radnik_id) {
-    const doktori = await getDoktori();
-    if (!doktori.some((d) => d.id === termin.radnik_id)) {
-      return { ok: false, error: "Odaberite doktora iz liste." };
+  // doctor is optional, but if chosen must be a real active doctor
+  if (appointment.staff_id) {
+    const doctors = await getDoctors();
+    if (!doctors.some((d) => d.id === appointment.staff_id)) {
+      return { ok: false, error: t.doctor };
     }
   }
 
-  const { error } = await supabase.from("termini").insert(termin);
+  const { error } = await supabase.from("appointments").insert(appointment);
   if (error) {
     if (error.code === "23505") {
-      return { ok: false, error: "Ovaj termin je upravo zauzet — odaberite drugi." };
+      return { ok: false, error: t.taken };
     }
-    console.error("Greška pri spremanju termina:", error);
-    return { ok: false, error: "Nešto je pošlo po zlu. Pokušajte ponovo ili nas nazovite." };
+    console.error("Failed to save appointment:", error);
+    return { ok: false, error: t.generic };
   }
   return { ok: true };
 }

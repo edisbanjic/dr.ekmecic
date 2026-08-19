@@ -2,9 +2,9 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 /**
- * Supabase klijent vezan za sesiju prijavljenog korisnika (kolačići).
- * Koristi se u admin dijelu — RLS radi pod `authenticated` rolom.
- * Vraća null dok Supabase nije konfigurisan.
+ * Supabase client bound to the signed-in user's session (cookies).
+ * Used in the admin area — RLS runs under the `authenticated` role.
+ * Returns null while Supabase is not configured.
  */
 export async function getSupabaseServer() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -20,7 +20,7 @@ export async function getSupabaseServer() {
             cookieStore.set(name, value, options)
           );
         } catch {
-          // Poziv iz server komponente — middleware osvježava sesiju.
+          // Called from a Server Component — middleware refreshes the session.
         }
       },
     },

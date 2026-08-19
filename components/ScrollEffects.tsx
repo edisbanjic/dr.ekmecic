@@ -23,7 +23,7 @@ export default function ScrollEffects() {
     const onScroll = () => {
       const y = window.scrollY;
       if (hdr) {
-        const on = y > 24;
+        const on = hdr.dataset.solid === "1" || y > 24;
         hdr.style.background = on ? "rgba(245,240,232,.85)" : "transparent";
         hdr.style.backdropFilter = on ? "blur(14px)" : "none";
         hdr.style.boxShadow = on ? "0 12px 30px -20px rgba(61,65,66,.4)" : "none";

@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  // Bez konfigurisanog Supabase-a pustimo zahtjev — stranice pokazuju uputu.
+  // Without Supabase configured, let the request through — pages show setup help.
   if (!url || !key) return NextResponse.next();
 
   let response = NextResponse.next({ request });
@@ -27,21 +27,21 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
   const isLogin = path === "/admin/login";
-  const isPostaviLozinku = path === "/admin/postavi-lozinku";
+  const isSetPassword = path === "/admin/set-password";
   if (!user && !isLogin) {
     const to = request.nextUrl.clone();
     to.pathname = "/admin/login";
     return NextResponse.redirect(to);
   }
   if (user) {
-    // onboarding: dok lozinka nije postavljena, sve vodi na taj ekran
-    const moraLozinku = user.user_metadata?.mora_postaviti_lozinku === true;
-    if (moraLozinku && !isPostaviLozinku) {
+    // onboarding: until a password is set, everything leads to that screen
+    const mustSetPassword = user.user_metadata?.must_set_password === true;
+    if (mustSetPassword && !isSetPassword) {
       const to = request.nextUrl.clone();
-      to.pathname = "/admin/postavi-lozinku";
+      to.pathname = "/admin/set-password";
       return NextResponse.redirect(to);
     }
-    if (!moraLozinku && (isLogin || isPostaviLozinku)) {
+    if (!mustSetPassword && (isLogin || isSetPassword)) {
       const to = request.nextUrl.clone();
       to.pathname = "/admin";
       return NextResponse.redirect(to);

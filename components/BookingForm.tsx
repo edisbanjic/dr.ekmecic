@@ -8,18 +8,18 @@ import {
   useTransition,
   type CSSProperties,
 } from 'react';
-import { getDoktori, getZauzeto, submitBooking } from '@/app/actions';
-import { kanonskiTelefon } from '@/lib/match';
+import { getDoctors, getBooked, submitBooking } from '@/app/actions';
+import { canonicalPhone } from '@/lib/match';
 import {
-  DANI_KRATKO,
-  fmtDatum,
-  HORIZONT_DANA,
-  MJESECI,
-  parseDatum,
-  slotoviZaDan,
-  USLUGE,
-} from '@/lib/termini';
-import type { Doktor } from '@/lib/types';
+  formatDate,
+  BOOKING_HORIZON_DAYS,
+  parseDate,
+  slotsForDay,
+  SERVICES,
+} from '@/lib/appointments';
+import { useLocale } from '@/components/LocaleProvider';
+import { getDict } from '@/lib/i18n';
+import type { Doctor } from '@/lib/types';
 
 const labelTextStyle: CSSProperties = {
   display: 'block',
@@ -37,7 +37,7 @@ const fieldStyle: CSSProperties = {
   fontSize: '15px',
   transition: 'border-color .25s ease, box-shadow .25s ease',
 };
-const dugmeStyle: CSSProperties = {
+const buttonStyle: CSSProperties = {
   background: '#7EAEE8',
   color: '#243038',
   border: 'none',
@@ -51,182 +51,175 @@ const dugmeStyle: CSSProperties = {
   cursor: 'pointer',
 };
 
-const Obavezno = () => (
+const RequiredMark = () => (
   <span aria-hidden="true" style={{ color: '#C0503A' }}>
     {' '}
     *
   </span>
 );
 
-function danasBezVremena() {
+function todayAtMidnight() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   return d;
 }
 
-type Podaci = {
-  ime: string;
-  prezime: string;
-  telefon: string;
+type Fields = {
+  firstName: string;
+  lastName: string;
+  phone: string;
   email: string;
-  usluga: string;
-  napomena: string;
+  service: string;
+  notes: string;
 };
 
 export default function BookingForm() {
-  const danas = useMemo(danasBezVremena, []);
-  const [korak, setKorak] = useState<1 | 2>(1);
-  const [podaci, setPodaci] = useState<Podaci>({
-    ime: '',
-    prezime: '',
-    telefon: '',
+  const { locale } = useLocale();
+  const t = getDict(locale);
+  const today = useMemo(todayAtMidnight, []);
+  const [step, setStep] = useState<1 | 2>(1);
+  const [fields, setFields] = useState<Fields>({
+    firstName: '',
+    lastName: '',
+    phone: '',
     email: '',
-    usluga: USLUGE[0],
-    napomena: '',
+    service: SERVICES[0],
+    notes: '',
   });
-  const [greske, setGreske] = useState<Record<string, boolean>>({});
-  const [doktori, setDoktori] = useState<Doktor[]>([]);
-  const [doktor, setDoktor] = useState('');
-  const [mjesec, setMjesec] = useState(
-    () => new Date(danas.getFullYear(), danas.getMonth(), 1),
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [doctor, setDoctor] = useState('');
+  const [month, setMonth] = useState(
+    () => new Date(today.getFullYear(), today.getMonth(), 1),
   );
-  const [datum, setDatum] = useState<string | null>(null);
-  const [vrijeme, setVrijeme] = useState<string | null>(null);
-  const [zauzeto, setZauzeto] = useState<string[]>([]);
-  const [ucitavam, setUcitavam] = useState(false);
+  const [date, setDate] = useState<string | null>(null);
+  const [time, setTime] = useState<string | null>(null);
+  const [booked, setBooked] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState<
-    { datum: string; vrijeme: string } | 'predlozi' | null
+    { date: string; time: string } | 'propose' | null
   >(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-  const vrh = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
 
-  const maxDatum = useMemo(() => {
-    const d = new Date(danas);
-    d.setDate(d.getDate() + HORIZONT_DANA);
+  const maxDate = useMemo(() => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + BOOKING_HORIZON_DAYS);
     return d;
-  }, [danas]);
+  }, [today]);
 
   useEffect(() => {
-    let aktivan = true;
-    getDoktori().then((d) => {
-      if (!aktivan) return;
-      setDoktori(d);
-      if (d.length === 1) setDoktor(d[0].id);
+    let alive = true;
+    getDoctors().then((d) => {
+      if (!alive) return;
+      setDoctors(d);
+      if (d.length === 1) setDoctor(d[0].id);
     });
     return () => {
-      aktivan = false;
+      alive = false;
     };
   }, []);
 
   useEffect(() => {
-    if (!datum) return;
-    let aktivan = true;
-    setUcitavam(true);
-    setVrijeme(null);
-    getZauzeto(datum, doktor || null)
-      .then((z) => aktivan && setZauzeto(z))
-      .finally(() => aktivan && setUcitavam(false));
+    if (!date) return;
+    let alive = true;
+    setLoading(true);
+    setTime(null);
+    getBooked(date, doctor || null)
+      .then((z) => alive && setBooked(z))
+      .finally(() => alive && setLoading(false));
     return () => {
-      aktivan = false;
+      alive = false;
     };
-  }, [datum, doktor]);
+  }, [date, doctor]);
 
-  // ćelije mjeseca, sedmica počinje ponedjeljkom
-  const celije = useMemo(() => {
-    const prvi = new Date(mjesec.getFullYear(), mjesec.getMonth(), 1);
-    const zadnji = new Date(mjesec.getFullYear(), mjesec.getMonth() + 1, 0);
-    const praznih = (prvi.getDay() + 6) % 7;
-    const cells: (Date | null)[] = Array(praznih).fill(null);
-    for (let i = 1; i <= zadnji.getDate(); i++) {
-      cells.push(new Date(mjesec.getFullYear(), mjesec.getMonth(), i));
+  // month cells, week starts Monday
+  const cells = useMemo(() => {
+    const first = new Date(month.getFullYear(), month.getMonth(), 1);
+    const lastDay = new Date(month.getFullYear(), month.getMonth() + 1, 0);
+    const pad = (first.getDay() + 6) % 7;
+    const result: (Date | null)[] = Array(pad).fill(null);
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+      result.push(new Date(month.getFullYear(), month.getMonth(), i));
     }
-    return cells;
-  }, [mjesec]);
+    return result;
+  }, [month]);
 
-  const mozeNazad = mjesec > new Date(danas.getFullYear(), danas.getMonth(), 1);
-  const mozeNaprijed =
-    new Date(mjesec.getFullYear(), mjesec.getMonth() + 1, 1) <= maxDatum;
-  const slotovi = datum ? slotoviZaDan(parseDatum(datum).getDay()) : [];
+  const canPrev = month > new Date(today.getFullYear(), today.getMonth(), 1);
+  const canNext =
+    new Date(month.getFullYear(), month.getMonth() + 1, 1) <= maxDate;
+  const slots = date ? slotsForDay(parseDate(date).getDay()) : [];
 
-  const skrolNaVrh = () =>
-    vrh.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollToTop = () =>
+    topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  // ažurira polje i skida crveni border čim se počne ispravljati
-  const upisi = (polje: keyof Podaci, vrijednost: string) => {
-    setPodaci((p) => ({ ...p, [polje]: vrijednost }));
-    setGreske((g) => (g[polje] ? { ...g, [polje]: false } : g));
+  // update a field and drop the red border as soon as the user starts correcting it
+  const updateField = (field: keyof Fields, value: string) => {
+    setFields((p) => ({ ...p, [field]: value }));
+    setErrors((g) => (g[field] ? { ...g, [field]: false } : g));
   };
 
-  const naKorak2 = () => {
-    const nove: Record<string, boolean> = {
-      ime: !podaci.ime.trim(),
-      prezime: !podaci.prezime.trim(),
-      telefon: !kanonskiTelefon(podaci.telefon),
+  const goToStep2 = () => {
+    const next: Record<string, boolean> = {
+      firstName: !fields.firstName.trim(),
+      lastName: !fields.lastName.trim(),
+      phone: !canonicalPhone(fields.phone),
       email:
-        podaci.email.trim() !== '' && !/^\S+@\S+\.\S+$/.test(podaci.email),
+        fields.email.trim() !== '' && !/^\S+@\S+\.\S+$/.test(fields.email),
     };
-    setGreske(nove);
-    if (Object.values(nove).some(Boolean)) {
-      setError(
-        podaci.telefon.trim() && nove.telefon
-          ? 'Unesite ispravan broj telefona (npr. 61 123 456).'
-          : null,
-      );
+    setErrors(next);
+    if (Object.values(next).some(Boolean)) {
+      setError(fields.phone.trim() && next.phone ? t.form.errorPhone : null);
       return;
     }
     setError(null);
-    setKorak(2);
-    skrolNaVrh();
+    setStep(2);
+    scrollToTop();
   };
 
-  const posalji = (predlozi: boolean) => {
-    if (!predlozi && (!datum || !vrijeme)) {
-      setError(
-        'Odaberite datum i vrijeme, ili kliknite „Predložite mi termin“.',
-      );
+  const send = (propose: boolean) => {
+    if (!propose && (!date || !time)) {
+      setError(t.form.errorDateTime);
       return;
     }
     const formData = new FormData();
-    formData.set('ime', podaci.ime);
-    formData.set('prezime', podaci.prezime);
-    formData.set('telefon', kanonskiTelefon(podaci.telefon) ?? podaci.telefon);
-    formData.set('email', podaci.email);
-    formData.set('usluga', podaci.usluga);
-    formData.set('napomena', podaci.napomena);
-    formData.set('radnik_id', doktor);
-    if (predlozi) {
-      formData.set('predlozi', '1');
+    formData.set('first_name', fields.firstName);
+    formData.set('last_name', fields.lastName);
+    formData.set('phone', canonicalPhone(fields.phone) ?? fields.phone);
+    formData.set('email', fields.email);
+    formData.set('service', fields.service);
+    formData.set('notes', fields.notes);
+    formData.set('staff_id', doctor);
+    formData.set('lang', locale);
+    if (propose) {
+      formData.set('propose', '1');
     } else {
-      formData.set('datum', datum!);
-      formData.set('vrijeme', vrijeme!);
+      formData.set('date', date!);
+      formData.set('time', time!);
     }
     setError(null);
     startTransition(async () => {
       const result = await submitBooking(formData);
       if (result.ok) {
-        setSent(predlozi ? 'predlozi' : { datum: datum!, vrijeme: vrijeme! });
-        skrolNaVrh();
+        setSent(propose ? 'propose' : { date: date!, time: time! });
+        scrollToTop();
       } else {
-        setError(result.error ?? 'Nešto je pošlo po zlu. Pokušajte ponovo.');
+        setError(result.error ?? t.form.errorGeneric);
       }
     });
   };
 
   if (sent) {
-    const poruka =
-      sent === 'predlozi' ? (
-        <>
-          Hvala na povjerenju! Nazvat ćemo vas u najkraćem roku i zajedno
-          pronaći termin koji vam odgovara.
-        </>
-      ) : (
-        <>
-          Rezervisali ste {parseDatum(sent.datum).getDate()}.{' '}
-          {MJESECI[parseDatum(sent.datum).getMonth()].toLowerCase()} u{' '}
-          {sent.vrijeme}. Nazvat ćemo vas u najkraćem roku da potvrdimo termin.
-        </>
-      );
+    let message = t.form.sentPropose;
+    if (sent !== 'propose') {
+      const d = parseDate(sent.date);
+      const monthName = t.months[d.getMonth()];
+      message = t.form.sentBooked
+        .replace('{day}', String(d.getDate()))
+        .replace('{month}', locale === 'bs' ? monthName.toLowerCase() : monthName)
+        .replace('{time}', sent.time);
+    }
     return (
       <div
         style={{
@@ -260,7 +253,7 @@ export default function BookingForm() {
             fontSize: '26px',
           }}
         >
-          Zahtjev je poslan!
+          {t.form.sentTitle}
         </div>
         <p
           style={{
@@ -271,7 +264,7 @@ export default function BookingForm() {
             maxWidth: '380px',
           }}
         >
-          {poruka} <span style={{ color: '#F4A08A' }}>✦</span>
+          {message} <span style={{ color: '#F4A08A' }}>✦</span>
         </p>
       </div>
     );
@@ -279,10 +272,11 @@ export default function BookingForm() {
 
   return (
     <div
-      ref={vrh}
+      ref={topRef}
+      className="booking-form"
       style={{ display: 'grid', gap: '18px', scrollMarginTop: '110px' }}
     >
-      {/* indikator koraka */}
+      {/* step indicator */}
       <div
         style={{
           display: 'flex',
@@ -294,29 +288,29 @@ export default function BookingForm() {
       >
         <span
           style={{
-            background: korak === 1 ? '#7EAEE8' : '#E7F0FB',
+            background: step === 1 ? '#7EAEE8' : '#E7F0FB',
             color: '#243038',
             borderRadius: '999px',
             padding: '5px 14px',
           }}
         >
-          1 · Vaši podaci
+          {t.form.step1}
         </span>
         <span style={{ opacity: 0.35 }}>—</span>
         <span
           style={{
-            background: korak === 2 ? '#7EAEE8' : '#E7F0FB',
+            background: step === 2 ? '#7EAEE8' : '#E7F0FB',
             color: '#243038',
             borderRadius: '999px',
             padding: '5px 14px',
-            opacity: korak === 2 ? 1 : 0.6,
+            opacity: step === 2 ? 1 : 0.6,
           }}
         >
-          2 · Termin
+          {t.form.step2}
         </span>
       </div>
 
-      {korak === 1 && (
+      {step === 1 && (
         <>
           <div
             style={{
@@ -327,54 +321,54 @@ export default function BookingForm() {
           >
             <label style={{ display: 'block' }}>
               <span style={labelTextStyle}>
-                Ime
-                <Obavezno />
+                {t.form.firstName}
+                <RequiredMark />
               </span>
               <input
                 required
                 type="text"
                 autoComplete="given-name"
-                value={podaci.ime}
-                onChange={(e) => upisi('ime', e.target.value)}
-                placeholder="npr. Amina"
+                value={fields.firstName}
+                onChange={(e) => updateField('firstName', e.target.value)}
+                placeholder={t.form.placeholderFirstName}
                 style={{
                   ...fieldStyle,
-                  ...(greske.ime ? { borderColor: '#C0503A' } : {}),
+                  ...(errors.firstName ? { borderColor: '#C0503A' } : {}),
                 }}
               />
             </label>
             <label style={{ display: 'block' }}>
               <span style={labelTextStyle}>
-                Prezime
-                <Obavezno />
+                {t.form.lastName}
+                <RequiredMark />
               </span>
               <input
                 required
                 type="text"
                 autoComplete="family-name"
-                value={podaci.prezime}
-                onChange={(e) => upisi('prezime', e.target.value)}
-                placeholder="npr. Hodžić"
+                value={fields.lastName}
+                onChange={(e) => updateField('lastName', e.target.value)}
+                placeholder={t.form.placeholderLastName}
                 style={{
                   ...fieldStyle,
-                  ...(greske.prezime ? { borderColor: '#C0503A' } : {}),
+                  ...(errors.lastName ? { borderColor: '#C0503A' } : {}),
                 }}
               />
             </label>
             <label style={{ display: 'block' }}>
               <span style={labelTextStyle}>
-                Broj telefona
-                <Obavezno />
+                {t.form.phone}
+                <RequiredMark />
               </span>
               <span
-                className="tel-polje"
+                className="tel-field"
                 style={{
                   ...fieldStyle,
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                   padding: '0 0 0 16px',
-                  ...(greske.telefon ? { borderColor: '#C0503A' } : {}),
+                  ...(errors.phone ? { borderColor: '#C0503A' } : {}),
                 }}
               >
                 <span
@@ -386,11 +380,11 @@ export default function BookingForm() {
                   required
                   type="tel"
                   inputMode="numeric"
-                  value={podaci.telefon}
+                  value={fields.phone}
                   onChange={(e) =>
-                    upisi('telefon', e.target.value.replace(/[^\d\s/-]/g, ''))
+                    updateField('phone', e.target.value.replace(/[^\d\s/-]/g, ''))
                   }
-                  placeholder="61 123 456"
+                  placeholder={t.form.placeholderPhone}
                   style={{
                     flex: 1,
                     minWidth: 0,
@@ -406,65 +400,68 @@ export default function BookingForm() {
             </label>
             <label style={{ display: 'block' }}>
               <span style={labelTextStyle}>
-                Email{' '}
-                <span style={{ opacity: 0.5, fontWeight: 600 }}>(opciono)</span>
+                {t.form.email}{' '}
+                <span style={{ opacity: 0.5, fontWeight: 600 }}>{t.form.optional}</span>
               </span>
               <input
                 type="email"
                 autoComplete="email"
-                value={podaci.email}
-                onChange={(e) => upisi('email', e.target.value)}
-                placeholder="npr. amina@gmail.com"
+                value={fields.email}
+                onChange={(e) => updateField('email', e.target.value)}
+                placeholder={t.form.placeholderEmail}
                 style={{
                   ...fieldStyle,
-                  ...(greske.email ? { borderColor: '#C0503A' } : {}),
+                  ...(errors.email ? { borderColor: '#C0503A' } : {}),
                 }}
               />
             </label>
-            {doktori.length > 0 && (
+            {doctors.length > 0 && (
               <label style={{ display: 'block' }}>
                 <span style={labelTextStyle}>
-                  Doktor{' '}
+                  {t.form.doctor}{' '}
                   <span style={{ opacity: 0.5, fontWeight: 600 }}>
-                    (opciono)
+                    {t.form.optional}
                   </span>
                 </span>
                 <select
-                  value={doktor}
-                  onChange={(e) => setDoktor(e.target.value)}
+                  value={doctor}
+                  onChange={(e) => setDoctor(e.target.value)}
                   style={{ ...fieldStyle, appearance: 'none' }}
                 >
-                  <option value="">— bez preferencije —</option>
-                  {doktori.map((d) => (
+                  <option value="">{t.form.noPreference}</option>
+                  {doctors.map((d) => (
                     <option key={d.id} value={d.id}>
-                      Dr. {d.ime} {d.prezime}
+                      Dr. {d.first_name} {d.last_name}
                     </option>
                   ))}
                 </select>
               </label>
             )}
             <label style={{ display: 'block' }}>
-              <span style={labelTextStyle}>Usluga</span>
+              <span style={labelTextStyle}>{t.form.service}</span>
               <select
-                value={podaci.usluga}
-                onChange={(e) => upisi('usluga', e.target.value)}
+                value={fields.service}
+                onChange={(e) => updateField('service', e.target.value)}
                 style={{ ...fieldStyle, appearance: 'none' }}
               >
-                {USLUGE.map((u) => (
-                  <option key={u}>{u}</option>
+                {/* values stay canonical (Bosnian) so admin data is consistent; labels are localized */}
+                {SERVICES.map((value, i) => (
+                  <option key={value} value={value}>
+                    {t.servicesList[i] ?? value}
+                  </option>
                 ))}
               </select>
             </label>
             <label style={{ display: 'block', gridColumn: '1 / -1' }}>
               <span style={labelTextStyle}>
-                Napomena{' '}
-                <span style={{ opacity: 0.5, fontWeight: 600 }}>(opciono)</span>
+                {t.form.notes}{' '}
+                <span style={{ opacity: 0.5, fontWeight: 600 }}>{t.form.optional}</span>
               </span>
               <textarea
-                value={podaci.napomena}
-                onChange={(e) => upisi('napomena', e.target.value)}
+                value={fields.notes}
+                onChange={(e) => updateField('notes', e.target.value)}
                 rows={2}
-                placeholder="Recite nam nešto više — strah, bol, želje…"
+                placeholder={t.form.placeholderNotes}
                 style={{ ...fieldStyle, resize: 'vertical' }}
               />
             </label>
@@ -479,11 +476,11 @@ export default function BookingForm() {
           >
             <button
               type="button"
-              onClick={naKorak2}
+              onClick={goToStep2}
               className="hv-cta"
-              style={dugmeStyle}
+              style={buttonStyle}
             >
-              Dalje — odaberi termin →
+              {t.form.next}
             </button>
             {error && (
               <span
@@ -501,11 +498,11 @@ export default function BookingForm() {
         </>
       )}
 
-      {korak === 2 && (
+      {step === 2 && (
         <>
-          {/* kalendar */}
+          {/* calendar */}
           <div>
-            <span style={labelTextStyle}>Odaberite datum</span>
+            <span style={labelTextStyle}>{t.form.chooseDate}</span>
             <div
               style={{
                 background: '#FDFBF6',
@@ -525,21 +522,21 @@ export default function BookingForm() {
                 <button
                   type="button"
                   onClick={() =>
-                    mozeNazad &&
-                    setMjesec(
-                      new Date(mjesec.getFullYear(), mjesec.getMonth() - 1, 1),
+                    canPrev &&
+                    setMonth(
+                      new Date(month.getFullYear(), month.getMonth() - 1, 1),
                     )
                   }
-                  disabled={!mozeNazad}
-                  aria-label="Prethodni mjesec"
+                  disabled={!canPrev}
+                  aria-label={t.form.prevMonth}
                   style={{
                     border: 'none',
                     background: '#E7F0FB',
                     borderRadius: '999px',
                     width: '32px',
                     height: '32px',
-                    cursor: mozeNazad ? 'pointer' : 'default',
-                    opacity: mozeNazad ? 1 : 0.35,
+                    cursor: canPrev ? 'pointer' : 'default',
+                    opacity: canPrev ? 1 : 0.35,
                     fontSize: '16px',
                   }}
                 >
@@ -552,26 +549,27 @@ export default function BookingForm() {
                     fontSize: '17px',
                   }}
                 >
-                  {MJESECI[mjesec.getMonth()]} {mjesec.getFullYear()}.
+                  {t.months[month.getMonth()]} {month.getFullYear()}
+                  {locale === 'bs' ? '.' : ''}
                 </div>
                 <button
                   type="button"
                   onClick={() =>
-                    mozeNaprijed &&
-                    setMjesec(
-                      new Date(mjesec.getFullYear(), mjesec.getMonth() + 1, 1),
+                    canNext &&
+                    setMonth(
+                      new Date(month.getFullYear(), month.getMonth() + 1, 1),
                     )
                   }
-                  disabled={!mozeNaprijed}
-                  aria-label="Sljedeći mjesec"
+                  disabled={!canNext}
+                  aria-label={t.form.nextMonth}
                   style={{
                     border: 'none',
                     background: '#E7F0FB',
                     borderRadius: '999px',
                     width: '32px',
                     height: '32px',
-                    cursor: mozeNaprijed ? 'pointer' : 'default',
-                    opacity: mozeNaprijed ? 1 : 0.35,
+                    cursor: canNext ? 'pointer' : 'default',
+                    opacity: canNext ? 1 : 0.35,
                     fontSize: '16px',
                   }}
                 >
@@ -586,7 +584,7 @@ export default function BookingForm() {
                   textAlign: 'center',
                 }}
               >
-                {DANI_KRATKO.map((d) => (
+                {t.daysShort.map((d) => (
                   <div
                     key={d}
                     style={{
@@ -599,18 +597,18 @@ export default function BookingForm() {
                     {d}
                   </div>
                 ))}
-                {celije.map((d, i) => {
+                {cells.map((d, i) => {
                   if (!d) return <div key={`p${i}`} />;
-                  const iso = fmtDatum(d);
-                  const radni = slotoviZaDan(d.getDay()).length > 0;
-                  const dostupan = radni && d >= danas && d <= maxDatum;
-                  const odabran = datum === iso;
+                  const iso = formatDate(d);
+                  const working = slotsForDay(d.getDay()).length > 0;
+                  const available = working && d >= today && d <= maxDate;
+                  const selected = date === iso;
                   return (
                     <button
                       key={iso}
                       type="button"
-                      disabled={!dostupan}
-                      onClick={() => setDatum(iso)}
+                      disabled={!available}
+                      onClick={() => setDate(iso)}
                       style={{
                         border: 'none',
                         borderRadius: '12px',
@@ -618,17 +616,17 @@ export default function BookingForm() {
                         fontSize: '14px',
                         fontWeight: 700,
                         fontFamily: 'inherit',
-                        cursor: dostupan ? 'pointer' : 'default',
-                        background: odabran
+                        cursor: available ? 'pointer' : 'default',
+                        background: selected
                           ? '#7EAEE8'
-                          : dostupan
+                          : available
                             ? '#FFFFFF'
                             : 'transparent',
-                        color: odabran ? '#243038' : '#3D4142',
-                        opacity: dostupan ? 1 : 0.3,
-                        boxShadow: odabran
+                        color: selected ? '#243038' : '#3D4142',
+                        opacity: available ? 1 : 0.3,
+                        boxShadow: selected
                           ? '0 8px 16px -8px rgba(126,174,232,.9)'
-                          : dostupan
+                          : available
                             ? '0 1px 0 rgba(61,65,66,.12)'
                             : 'none',
                       }}
@@ -641,11 +639,11 @@ export default function BookingForm() {
             </div>
           </div>
 
-          {/* slotovi */}
-          {datum && (
+          {/* time slots */}
+          {date && (
             <div>
-              <span style={labelTextStyle}>Odaberite vrijeme</span>
-              {ucitavam ? (
+              <span style={labelTextStyle}>{t.form.chooseTime}</span>
+              {loading ? (
                 <div
                   style={{
                     fontSize: '14px',
@@ -654,36 +652,36 @@ export default function BookingForm() {
                     padding: '6px 2px',
                   }}
                 >
-                  Učitavam slobodne termine…
+                  {t.form.loadingSlots}
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {slotovi.map((s) => {
-                    const slobodan = !zauzeto.includes(s);
-                    const odabran = vrijeme === s;
+                  {slots.map((s) => {
+                    const free = !booked.includes(s);
+                    const selected = time === s;
                     return (
                       <button
                         key={s}
                         type="button"
-                        disabled={!slobodan}
-                        onClick={() => setVrijeme(s)}
+                        disabled={!free}
+                        onClick={() => setTime(s)}
                         style={{
                           border:
-                            '2px solid ' + (odabran ? '#7EAEE8' : '#EDE5D4'),
-                          background: odabran
+                            '2px solid ' + (selected ? '#7EAEE8' : '#EDE5D4'),
+                          background: selected
                             ? '#7EAEE8'
-                            : slobodan
+                            : free
                               ? '#FFFFFF'
                               : '#F1EBDD',
-                          color: odabran ? '#243038' : '#3D4142',
-                          textDecoration: slobodan ? 'none' : 'line-through',
-                          opacity: slobodan ? 1 : 0.45,
+                          color: selected ? '#243038' : '#3D4142',
+                          textDecoration: free ? 'none' : 'line-through',
+                          opacity: free ? 1 : 0.45,
                           borderRadius: '999px',
                           padding: '8px 14px',
                           fontSize: '14px',
                           fontWeight: 800,
                           fontFamily: 'inherit',
-                          cursor: slobodan ? 'pointer' : 'default',
+                          cursor: free ? 'pointer' : 'default',
                         }}
                       >
                         {s}
@@ -705,20 +703,20 @@ export default function BookingForm() {
           >
             <button
               type="button"
-              onClick={() => posalji(false)}
-              disabled={pending || !datum || !vrijeme}
+              onClick={() => send(false)}
+              disabled={pending || !date || !time}
               className="hv-cta"
               style={{
-                ...dugmeStyle,
-                cursor: pending || !datum || !vrijeme ? 'default' : 'pointer',
-                opacity: pending || !datum || !vrijeme ? 0.6 : 1,
+                ...buttonStyle,
+                cursor: pending || !date || !time ? 'default' : 'pointer',
+                opacity: pending || !date || !time ? 0.6 : 1,
               }}
             >
-              {pending ? 'Šaljemo…' : 'Rezerviši termin'}
+              {pending ? t.form.sending : t.form.submit}
             </button>
             <button
               type="button"
-              onClick={() => posalji(true)}
+              onClick={() => send(true)}
               disabled={pending}
               style={{
                 background: 'transparent',
@@ -732,12 +730,12 @@ export default function BookingForm() {
                 cursor: pending ? 'default' : 'pointer',
               }}
             >
-              Ne mogu naći termin — predložite mi vi
+              {t.form.propose}
             </button>
             <button
               type="button"
               onClick={() => {
-                setKorak(1);
+                setStep(1);
                 setError(null);
               }}
               style={{
@@ -752,7 +750,7 @@ export default function BookingForm() {
                 textUnderlineOffset: '3px',
               }}
             >
-              ← nazad na podatke
+              {t.form.back}
             </button>
             {error && (
               <span

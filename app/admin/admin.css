@@ -1,4 +1,4 @@
-/* Admin panel — ista paleta kao sajt, mirniji ton. */
+/* Admin panel — same palette as the site, calmer tone. */
 
 .adm-shell { min-height: 100vh; background: #F5F0E8; }
 
@@ -18,76 +18,116 @@
   transition: background .2s ease;
 }
 .adm-nav a:hover { background: #FFFFFF; color: #3D4142; }
-.adm-nav a.aktivna { background: #7EAEE8; color: #243038; }
-.adm-odjava {
+.adm-nav a.active { background: #7EAEE8; color: #243038; }
+.adm-logout {
   border: 2px solid rgba(61, 65, 66, .25); background: none; cursor: pointer;
   font-family: var(--font-nunito); font-weight: 800; font-size: 13px;
   padding: 7px 14px; border-radius: 999px; color: #3D4142;
 }
-.adm-odjava:hover { border-color: #3D4142; }
+.adm-logout:hover { border-color: #3D4142; }
 
 .adm-main { max-width: 1200px; margin: 0 auto; padding: clamp(20px, 4vw, 40px) clamp(16px, 3vw, 32px) 80px; }
 
-.adm-naslov { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-.adm-naslov h1 { margin: 0; font-family: var(--font-fredoka); font-weight: 700; font-size: clamp(26px, 4vw, 36px); }
+.adm-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.adm-heading h1 { margin: 0; font-family: var(--font-fredoka); font-weight: 700; font-size: clamp(26px, 4vw, 36px); }
 
-.adm-karta {
+.adm-card {
   background: #FFFFFF; border: 2px solid #F0E8D8; border-radius: 22px;
   padding: clamp(18px, 3vw, 28px); box-shadow: 0 20px 40px -30px rgba(61, 65, 66, .35);
 }
 
-.adm-dugme {
+.adm-btn {
   display: inline-flex; align-items: center; gap: 8px;
   background: #7EAEE8; color: #243038; border: none; cursor: pointer;
   font-family: var(--font-fredoka); font-weight: 600; font-size: 15px;
   padding: 11px 22px; border-radius: 999px; text-decoration: none;
   transition: transform .2s ease;
 }
-.adm-dugme:hover { transform: scale(1.04); color: #243038; }
-.adm-dugme.sekundarno { background: #FFFFFF; border: 2px solid #EDE5D4; }
-.adm-dugme.opasno { background: #FBE7DA; color: #A05A42; }
-.adm-dugme.malo { font-size: 13px; padding: 7px 14px; }
+.adm-btn:hover { transform: scale(1.04); color: #243038; }
+.adm-btn.secondary { background: #FFFFFF; border: 2px solid #EDE5D4; }
+.adm-btn.danger { background: #FBE7DA; color: #A05A42; }
+.adm-btn.sm { font-size: 13px; padding: 7px 14px; }
 
-.adm-tabela { width: 100%; border-collapse: collapse; font-size: 14.5px; }
-.adm-tabela th { text-align: left; font-size: 12px; letter-spacing: .08em; opacity: .55; padding: 8px 12px; border-bottom: 2px solid #F0E8D8; }
-.adm-tabela td { padding: 12px; border-bottom: 1px solid #F5EFE2; }
-.adm-tabela tr:last-child td { border-bottom: none; }
-.adm-tabela a { font-weight: 800; color: #3E5F86; }
+.adm-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.adm-table th { text-align: left; font-size: 12px; letter-spacing: .08em; opacity: .55; padding: 8px 12px; border-bottom: 2px solid #F0E8D8; }
+.adm-table td { padding: 12px; border-bottom: 1px solid #F5EFE2; }
+.adm-table tr:last-child td { border-bottom: none; }
+.adm-table a { font-weight: 800; color: #3E5F86; }
 
-.adm-forma { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-.adm-forma .puno { grid-column: 1 / -1; }
-.adm-forma label span { display: block; font-weight: 800; font-size: 13px; margin-bottom: 6px; }
-.adm-forma input, .adm-forma select, .adm-forma textarea {
+.adm-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.adm-form .full { grid-column: 1 / -1; }
+.adm-form label span { display: block; font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+.adm-form input, .adm-form select, .adm-form textarea {
   width: 100%; box-sizing: border-box; padding: 11px 14px; border-radius: 14px;
   border: 2px solid #EDE5D4; background: #FDFBF6; font-size: 14.5px;
 }
 
-.adm-znacka { display: inline-block; border-radius: 999px; padding: 3px 12px; font-size: 12px; font-weight: 800; }
+.adm-badge { display: inline-block; border-radius: 999px; padding: 3px 12px; font-size: 12px; font-weight: 800; }
 
-.adm-prazno { text-align: center; padding: 40px 20px; opacity: .6; font-weight: 700; }
+.adm-empty { text-align: center; padding: 40px 20px; opacity: .6; font-weight: 700; }
 
-.adm-kal { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-@media (max-width: 900px) { .adm-kal { grid-template-columns: 1fr; } }
-.adm-kal-dan { background: #FFFFFF; border: 2px solid #F0E8D8; border-radius: 18px; padding: 12px; min-height: 120px; }
-.adm-kal-dan.danas { border-color: #7EAEE8; }
-.adm-kal-dan h3 { margin: 0 0 10px; font-family: var(--font-fredoka); font-weight: 600; font-size: 15px; }
-.adm-kal-dan h3 small { display: block; font-family: var(--font-nunito); font-size: 11.5px; font-weight: 800; opacity: .5; }
-.adm-termin { border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; font-size: 13px; }
-.adm-termin b { font-size: 13.5px; }
-.adm-termin .akcije { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
-.adm-termin .akcije > button,
-.adm-termin .akcije > form > button {
+.adm-cal { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+@media (max-width: 900px) { .adm-cal { grid-template-columns: 1fr; } }
+.adm-cal-day { background: #FFFFFF; border: 2px solid #F0E8D8; border-radius: 18px; padding: 12px; min-height: 120px; }
+.adm-cal-day.today { border-color: #7EAEE8; }
+.adm-cal-day h3 { margin: 0 0 10px; font-family: var(--font-fredoka); font-weight: 600; font-size: 15px; }
+.adm-cal-day h3 small { display: block; font-family: var(--font-nunito); font-size: 11.5px; font-weight: 800; opacity: .5; }
+.adm-appointment { border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; font-size: 13px; }
+.adm-appointment b { font-size: 13.5px; }
+.adm-appointment .actions { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.adm-appointment .actions > button,
+.adm-appointment .actions > form > button {
   border: none; cursor: pointer; border-radius: 999px; padding: 3px 10px;
   font-family: var(--font-nunito); font-weight: 800; font-size: 11.5px; background: rgba(255, 255, 255, .75);
 }
 
 .adm-stat { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px; }
-.adm-stat .adm-karta { padding: 18px 22px; }
+.adm-stat .adm-card { padding: 18px 22px; }
 .adm-stat b { display: block; font-family: var(--font-fredoka); font-weight: 700; font-size: 34px; color: #5B8FD4; }
 .adm-stat span { font-size: 13px; font-weight: 800; opacity: .6; }
 
-.adm-greska { background: #FBE7DA; color: #A05A42; border-radius: 14px; padding: 12px 16px; font-weight: 800; font-size: 14px; }
+.adm-error { background: #FBE7DA; color: #A05A42; border-radius: 14px; padding: 12px 16px; font-weight: 800; font-size: 14px; }
 
-/* modal (npr. zavrsavanje termina) */
+.adm-form .full > span:first-of-type {
+  display: block; font-weight: 800; font-size: 13px; margin-bottom: 6px;
+}
+
+.content-editor {
+  border: 2px solid #EDE5D4; border-radius: 16px; background: #FDFBF6; overflow: hidden;
+}
+.content-editor.uploading { opacity: .72; }
+.content-toolbar {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px;
+  border-bottom: 2px solid #EDE5D4; background: #FFFFFF;
+}
+.content-toolbar button {
+  font-family: var(--font-nunito); font-weight: 800; font-size: 13px;
+  padding: 6px 11px; border-radius: 10px; border: 2px solid #EDE5D4;
+  background: #FDFBF6; cursor: pointer; color: #3D4142;
+}
+.content-toolbar button:hover { border-color: #7EAEE8; }
+.content-toolbar button.active { background: #7EAEE8; border-color: #7EAEE8; color: #243038; }
+.content-toolbar button:disabled { opacity: .5; cursor: wait; }
+.content-editor .tiptap, .content-editor .content-prose {
+  min-height: 280px; padding: 14px 16px; outline: none; font-size: 15px; line-height: 1.65; font-weight: 600;
+}
+.content-editor .tiptap p, .content-editor .content-prose p { margin: 0 0 12px; }
+.content-editor .tiptap h2, .content-editor .content-prose h2 {
+  font-family: var(--font-fredoka); font-weight: 700; font-size: 24px; margin: 18px 0 10px;
+}
+.content-editor .tiptap h3, .content-editor .content-prose h3 {
+  font-family: var(--font-fredoka); font-weight: 700; font-size: 19px; margin: 14px 0 8px;
+}
+.content-editor .tiptap img, .content-editor .content-prose img {
+  max-width: 100%; height: auto; border-radius: 14px; margin: 8px 0 14px; display: block;
+}
+.content-editor .tiptap ul, .content-editor .content-prose ul,
+.content-editor .tiptap ol, .content-editor .content-prose ol { margin: 0 0 12px; padding-left: 1.3em; }
+.content-editor .tiptap a, .content-editor .content-prose a { color: #3E5F86; text-decoration: underline; }
+.content-editor .tiptap blockquote, .content-editor .content-prose blockquote {
+  margin: 0 0 12px; padding: 8px 14px; border-left: 4px solid #7EAEE8; background: #E7F0FB; border-radius: 0 12px 12px 0;
+}
+
+/* modal (e.g. completing an appointment) */
 .adm-modal{border:none;border-radius:22px;padding:24px;max-width:440px;width:calc(100vw - 48px);box-shadow:0 40px 80px -40px rgba(61,65,66,.6);background:#FFFFFF;color:#3D4142}
 .adm-modal::backdrop{background:rgba(61,65,66,.45);backdrop-filter:blur(2px)}
