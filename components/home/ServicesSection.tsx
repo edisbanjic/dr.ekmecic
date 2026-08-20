@@ -13,9 +13,9 @@ export default function ServicesSection() {
     <>
       <div style={{background:"#F5F0E8",lineHeight:"0",marginTop:"-46px"}}><svg viewBox="0 0 1440 90" preserveAspectRatio="none" style={{display:"block",width:"100%",height:"clamp(44px,7vw,90px)"}}><path d="M0,50 C180,90 360,10 560,34 C760,58 900,84 1080,58 C1240,36 1340,20 1440,44 L1440,90 L0,90 Z" fill="#FBF8F1"></path></svg></div>
 
-      <section id="services" style={{background:"#FBF8F1",padding:"clamp(60px,9vw,110px) 0 clamp(70px,10vw,120px)"}}>
+      <section style={{background:"#FBF8F1",padding:"clamp(60px,9vw,110px) 0 clamp(70px,10vw,120px)"}}>
         <div style={{maxWidth:"1200px",margin:"0 auto",padding:"0 clamp(18px,4vw,32px)"}}>
-          <div data-reveal="" style={{display:"flex",alignItems:"flex-end",justifyContent:"space-between",gap:"24px",flexWrap:"wrap",marginBottom:"clamp(32px,5vw,52px)"}}>
+          <div id="services" data-reveal="" style={{display:"flex",alignItems:"flex-end",justifyContent:"space-between",gap:"24px",flexWrap:"wrap",marginBottom:"clamp(32px,5vw,52px)"}}>
             <div>
               <div style={{display:"inline-flex",alignItems:"center",gap:"8px",background:"#E7F0FB",borderRadius:"999px",padding:"8px 16px",fontFamily:"var(--font-fredoka)",fontWeight:"600",fontSize:"12.5px",letterSpacing:".14em",color:"#3E5F86"}}>{t.badge}</div>
               <h2 style={{margin:"16px 0 0",fontFamily:"var(--font-fredoka)",fontWeight:"700",fontSize:"clamp(38px,5.6vw,62px)",lineHeight:"1.02",letterSpacing:"-.01em"}}>{t.title}<span style={{color:"#F4A08A"}}>.</span></h2>

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
+import { contactPath, getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
 import {
   absoluteUrl,
+  contactAlternates,
   homeAlternates,
   postAlternates,
   tipsAlternates,
@@ -60,6 +61,32 @@ export function tipsMetadata(locale: Locale): Metadata {
       card: "summary_large_image",
       title: t.tips.title,
       description: t.tips.description,
+      images: [OG_IMAGE],
+    },
+  };
+}
+
+export function contactMetadata(locale: Locale): Metadata {
+  const t = getDict(locale).meta;
+  const url = absoluteUrl(contactPath(locale));
+  return {
+    title: t.contact.title,
+    description: t.contact.description,
+    alternates: { canonical: url, languages: contactAlternates() },
+    openGraph: {
+      type: "website",
+      locale: t.ogLocale,
+      alternateLocale: alternateOgLocale(locale),
+      url,
+      siteName: t.siteName,
+      title: t.contact.title,
+      description: t.contact.description,
+      images: [{ url: OG_IMAGE, alt: t.siteName }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t.contact.title,
+      description: t.contact.description,
       images: [OG_IMAGE],
     },
   };

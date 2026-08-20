@@ -4,15 +4,18 @@ import PostContent from "@/components/PostContent";
 import PostShare from "@/components/PostShare";
 import { BookingTrigger } from "@/components/BookingModal";
 import { useLocale } from "@/components/LocaleProvider";
-import { formatPrettyDate, getDict, homeAnchor, tipsPath, type Locale } from "@/lib/i18n";
+import RelatedPosts from "@/components/tips/RelatedPosts";
+import { contactPath, formatPrettyDate, getDict, tipsPath, type Locale } from "@/lib/i18n";
 import type { Post } from "@/lib/types";
 
 /** Post markup — copy comes from LocaleProvider so a language switch updates in place. */
 export default function PostArticleView({
   post,
+  relatedPosts,
   shareUrls,
 }: {
   post: Post;
+  relatedPosts: Post[];
   shareUrls: Record<Locale, string>;
 }) {
   const { locale } = useLocale();
@@ -138,7 +141,7 @@ export default function PostArticleView({
               {t.post.ctaBook}
             </BookingTrigger>
             <a
-              href={homeAnchor(locale, "contact", false)}
+              href={contactPath(locale)}
               className="hv1"
               style={{
                 display: "inline-flex",
@@ -160,6 +163,7 @@ export default function PostArticleView({
           </div>
         </div>
       </section>
+      <RelatedPosts posts={relatedPosts} />
     </article>
   );
 }

@@ -18,14 +18,21 @@ export default function AppointmentForm({
   patients,
   staff,
   fromAppointment,
+  initialDate,
+  initialTime,
+  initialStaffId,
 }: {
   patients: Patient[];
   staff: Staff[];
   /** "To arrange" request whose data is copied; cancelled when booked. */
   fromAppointment?: Appointment | null;
+  /** Preselected slot, e.g. when opened by clicking an empty slot in the week view. */
+  initialDate?: string;
+  initialTime?: string;
+  initialStaffId?: string;
 }) {
   const [state, formAction, pending] = useActionState(createAppointment, {});
-  const [staffId, setStaffId] = useState(fromAppointment?.staff_id ?? "");
+  const [staffId, setStaffId] = useState(fromAppointment?.staff_id ?? initialStaffId ?? "");
   const [name, setName] = useState(fromAppointment?.name ?? "");
   const [phone, setPhone] = useState(fromAppointment?.phone ?? "");
 
@@ -40,9 +47,12 @@ export default function AppointmentForm({
     return d;
   }, [today]);
 
-  const [month, setMonth] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [month, setMonth] = useState(() => {
+    const base = initialDate ? parseDate(initialDate) : today;
+    return new Date(base.getFullYear(), base.getMonth(), 1);
+  });
+  const [date, setDate] = useState(initialDate ?? "");
+  const [time, setTime] = useState(initialTime ?? "");
   const [booked, setBooked] = useState<{ time: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -52,9 +62,15 @@ export default function AppointmentForm({
     if (!date) return;
     let active = true;
     setLoading(true);
-    setTime("");
     getBookedAdmin(date, staffId || null)
-      .then((z) => active && setBooked(z))
+      .then((z) => {
+        if (!active) return;
+        setBooked(z);
+        // keep the chosen time as long as it is a valid, free slot — switching
+        // doctor or date only clears it when it no longer fits
+        const valid = slotsForDay(parseDate(date).getDay());
+        setTime((t) => (t && valid.includes(t) && !z.some((b) => b.time === t) ? t : ""));
+      })
       .finally(() => active && setLoading(false));
     return () => {
       active = false;

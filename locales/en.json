@@ -12,6 +12,10 @@
       "title": "Smile Corner — tips and news | Dr. Ekmečić",
       "description": "Dental tips and news from the dental clinic of Dr. Ekmečić, Cazin, Bosnia."
     },
+    "contact": {
+      "title": "Contact — Dr. Ekmečić | Dental Clinic Cazin",
+      "description": "Call us, send a message or visit the dental clinic of Dr. Ekmečić in Cazin — Bolnička bb. Phone: 037 514 771."
+    },
     "postNotFound": "Post not found — Dr. Ekmečić",
     "postFallbackDescription": "Dental tips and news from the dental clinic of Dr. Ekmečić, Cazin, Bosnia."
   },
@@ -209,6 +213,21 @@
     "copyright": "© 2026 General dental practice, owner Dr. Kamala Ekmečić",
     "madeWith": "Made with a smile"
   },
+  "contactPage": {
+    "badge": "CONTACT",
+    "title": "We're here for you",
+    "lead": "Call, message or drop by — we're happy to help and sort out an appointment.",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "addressLabel": "Address",
+    "hoursLabel": "Opening hours",
+    "hoursText": "See the schedule",
+    "socialLabel": "Message us",
+    "bookCta": "Book appointment",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp",
+    "facebook": "Facebook"
+  },
   "map": {
     "boxAria": "Map — clinic location in Cazin",
     "iframeTitle": "Map — Cazin",
@@ -245,7 +264,9 @@
     "ctaTitle": "Book a stress-free appointment",
     "ctaText": "If you're curious what a check-up looks like, which equipment we use or why a calm approach matters to us, the nicest way is to meet in person. We're here to answer your questions and make every visit easier, warmer and more relaxed.",
     "ctaBook": "Book appointment →",
-    "ctaContact": "Contact us"
+    "ctaContact": "Contact us",
+    "relatedTitle": "More tips",
+    "relatedAll": "All tips →"
   },
   "share": {
     "label": "Share",

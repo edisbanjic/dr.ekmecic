@@ -1,4 +1,4 @@
-import { getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
+import { contactPath, getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
 import { getSiteUrl } from "./site";
 import type { Post } from "./types";
 
@@ -33,6 +33,10 @@ export function homeAlternates() {
 
 export function tipsAlternates() {
   return languageAlternates({ bs: tipsPath("bs"), en: tipsPath("en") });
+}
+
+export function contactAlternates() {
+  return languageAlternates({ bs: contactPath("bs"), en: contactPath("en") });
 }
 
 export function postAlternates(slug: string) {

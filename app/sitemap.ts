@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { homePath, tipsPath, postPath } from "@/lib/i18n";
+import { contactPath, homePath, tipsPath, postPath } from "@/lib/i18n";
 import { getPosts } from "@/lib/posts";
 import { absoluteUrl } from "@/lib/seo";
 
@@ -40,6 +40,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.7,
       alternates: pair(tipsPath("bs"), tipsPath("en")),
+    },
+    {
+      url: absoluteUrl(contactPath("bs")),
+      changeFrequency: "monthly",
+      priority: 0.8,
+      alternates: pair(contactPath("bs"), contactPath("en")),
+    },
+    {
+      url: absoluteUrl(contactPath("en")),
+      changeFrequency: "monthly",
+      priority: 0.7,
+      alternates: pair(contactPath("bs"), contactPath("en")),
     },
   ];
 

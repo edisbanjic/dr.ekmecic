@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale } from "@/components/LocaleProvider";
+import PostCover from "@/components/tips/PostCover";
 import { CATEGORIES, CATEGORY_COLORS } from "@/lib/categories";
 import { formatPrettyDate, getDict, postPath, tipsPath } from "@/lib/i18n";
 import type { Post } from "@/lib/types";
@@ -130,19 +131,10 @@ export default function TipsIndexView({
                 }}
               >
                 <div style={{ display: "block" }}>
-                  {post.image_url && (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={post.image_url}
-                      alt=""
-                      style={{
-                        width: "100%",
-                        height: featured ? "320px" : i % 3 === 0 ? "280px" : i % 2 === 0 ? "238px" : "210px",
-                        display: "block",
-                        objectFit: "cover",
-                      }}
-                    />
-                  )}
+                  <PostCover
+                    src={post.image_url}
+                    height={featured ? 320 : i % 3 === 0 ? 280 : i % 2 === 0 ? 238 : 210}
+                  />
                   <div
                     style={{
                       padding: featured ? "30px 32px" : "24px 26px 26px",

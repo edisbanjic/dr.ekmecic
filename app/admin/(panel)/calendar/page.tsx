@@ -9,11 +9,34 @@ import type { Staff } from "@/lib/types";
 import { fullName } from "@/lib/types";
 import NoSupabase from "@/components/admin/NoSupabase";
 import CompleteAppointment from "@/components/admin/CompleteAppointment";
+import { NewAppointmentProvider, SlotButton } from "@/components/admin/CalendarSlots";
 import { getDoctorsAdmin, getMyStaff } from "@/lib/admin";
 import { findPatient, type PatientBrief } from "@/lib/match";
 import { getSupabaseServer } from "@/lib/supabase-server";
-import { DAYS, formatDate, MONTHS, parseDate, STATUSES } from "@/lib/appointments";
-import type { Appointment } from "@/lib/types";
+import {
+  DAYS,
+  formatDate,
+  MONTHS,
+  OPENING_HOURS,
+  parseDate,
+  SLOT_MINUTES,
+  STATUSES,
+} from "@/lib/appointments";
+import type { Appointment, Patient } from "@/lib/types";
+
+const toMin = (t: string) => parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(3, 5), 10);
+const toHM = (m: number) =>
+  `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
+
+/** What a given slot means on a given weekday. */
+function slotKind(weekday: number, slot: string): "open" | "pause" | "closed" {
+  const h = OPENING_HOURS[weekday];
+  if (!h) return "closed";
+  const m = toMin(slot);
+  if (m < toMin(h.from) || m + SLOT_MINUTES > toMin(h.to)) return "closed";
+  if (m >= toMin(h.pause[0]) && m < toMin(h.pause[1])) return "pause";
+  return "open";
+}
 
 /** Assign (or change) a doctor from the appointment card. */
 function DoctorForm({ t, doctors }: { t: Appointment; doctors: Staff[] }) {
@@ -167,11 +190,11 @@ export default async function CalendarPage({
   const [{ data }, { data: undatedData }, { data: patientsData }] = await Promise.all([
     query,
     undatedQuery,
-    supabase.from("patients").select("id, first_name, last_name, phone"),
+    supabase.from("patients").select("*").order("last_name"),
   ]);
   const appointments = (data ?? []) as Appointment[];
   const undated = (undatedData ?? []) as Appointment[];
-  const patients = (patientsData ?? []) as PatientBrief[];
+  const patients = (patientsData ?? []) as Patient[];
 
   const doctorName = (id: string | null) => {
     const d = doctors.find((d) => d.id === id);
@@ -193,6 +216,60 @@ export default async function CalendarPage({
     d.setDate(d.getDate() + i);
     return d;
   });
+
+  // shared timeline for the week — union of all days' opening hours, so the
+  // same time sits in the same row across columns
+  const weekHours = days
+    .map((d) => OPENING_HOURS[d.getDay()])
+    .filter((h): h is NonNullable<typeof h> => h !== null);
+  const rows: string[] = [];
+  if (weekHours.length > 0) {
+    const start = Math.min(...weekHours.map((h) => toMin(h.from)));
+    const end = Math.max(...weekHours.map((h) => toMin(h.to)));
+    for (let m = start; m + SLOT_MINUTES <= end; m += SLOT_MINUTES) rows.push(toHM(m));
+  }
+
+  const appointmentCard = (t: Appointment) => {
+    const st = STATUSES[t.status];
+    return (
+      <div key={t.id} className="adm-appointment" style={{ background: st.bg, color: st.color }}>
+        <b>{t.time?.slice(0, 5)}</b> · {t.name}
+        {!activeDoctor && doctorName(t.staff_id) && (
+          <div style={{ fontWeight: 800 }}>{doctorName(t.staff_id)}</div>
+        )}
+        {t.service && <div style={{ opacity: 0.8 }}>{t.service}</div>}
+        {t.phone && <div style={{ opacity: 0.8 }}>{t.phone}</div>}
+        {t.email && <div style={{ opacity: 0.8, wordBreak: "break-all" }}>{t.email}</div>}
+        {t.report && (
+          <div style={{ marginTop: "4px", fontSize: "12px", fontStyle: "italic", opacity: 0.85 }}>
+            „{t.report}“
+          </div>
+        )}
+        <div style={{ marginTop: "4px", fontSize: "11px", fontWeight: 800, letterSpacing: ".04em" }}>
+          {st.label.toUpperCase()}
+        </div>
+        <ChartForAppointment t={t} patients={patients} />
+        {t.status !== "cancelled" && t.status !== "completed" && (
+          <DoctorForm t={t} doctors={doctors} />
+        )}
+        {t.status !== "cancelled" && t.status !== "completed" && (
+          <div className="actions">
+            {t.status === "pending" && (
+              <form action={changeAppointmentStatus.bind(null, t.id, "confirmed")}>
+                <button type="submit">Potvrdi</button>
+              </form>
+            )}
+            {t.status === "confirmed" && (
+              <CompleteAppointment appointmentId={t.id} hasChart={!!t.patient_id} />
+            )}
+            <form action={changeAppointmentStatus.bind(null, t.id, "cancelled")}>
+              <button type="submit">Otkaži</button>
+            </form>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -292,64 +369,65 @@ export default async function CalendarPage({
         {MONTHS[fri.getMonth()].toLowerCase()} {fri.getFullYear()}.
       </p>
 
-      <div className="adm-cal">
-        {days.map((d) => {
-          const iso = formatDate(d);
-          const daily = appointments.filter((t) => t.date === iso);
-          return (
-            <div key={iso} className={"adm-cal-day" + (iso === todayIso ? " today" : "")}>
-              <h3>
-                {DAYS[(d.getDay() + 6) % 7]}
-                <small>{d.getDate()}. {MONTHS[d.getMonth()].toLowerCase()}</small>
-              </h3>
-              {daily.length === 0 && (
-                <div style={{ fontSize: "12.5px", opacity: 0.4, fontWeight: 700 }}>Nema termina</div>
-              )}
-              {daily.map((t) => {
-                const st = STATUSES[t.status];
-                return (
-                  <div key={t.id} className="adm-appointment" style={{ background: st.bg, color: st.color }}>
-                    <b>{t.time?.slice(0, 5)}</b> · {t.name}
-                    {!activeDoctor && doctorName(t.staff_id) && (
-                      <div style={{ fontWeight: 800 }}>{doctorName(t.staff_id)}</div>
-                    )}
-                    {t.service && <div style={{ opacity: 0.8 }}>{t.service}</div>}
-                    {t.phone && <div style={{ opacity: 0.8 }}>{t.phone}</div>}
-                    {t.email && <div style={{ opacity: 0.8, wordBreak: "break-all" }}>{t.email}</div>}
-                    {t.report && (
-                      <div style={{ marginTop: "4px", fontSize: "12px", fontStyle: "italic", opacity: 0.85 }}>
-                        „{t.report}“
-                      </div>
-                    )}
-                    <div style={{ marginTop: "4px", fontSize: "11px", fontWeight: 800, letterSpacing: ".04em" }}>
-                      {st.label.toUpperCase()}
+      <NewAppointmentProvider patients={patients} staff={doctors} initialStaffId={activeDoctor}>
+        <div className="adm-cal">
+          {days.map((d) => {
+            const iso = formatDate(d);
+            const daily = appointments.filter((t) => t.date === iso);
+            const isPast = iso < todayIso;
+            // appointments whose time falls outside the slot grid (edge case)
+            const offGrid = daily.filter((t) => !t.time || !rows.includes(t.time.slice(0, 5)));
+            return (
+              <div key={iso} className={"adm-cal-day" + (iso === todayIso ? " today" : "")}>
+                <h3>
+                  {DAYS[(d.getDay() + 6) % 7]}
+                  <small>{d.getDate()}. {MONTHS[d.getMonth()].toLowerCase()}</small>
+                </h3>
+                {offGrid.map(appointmentCard)}
+                {rows.map((slot) => {
+                  const at = daily.filter((t) => t.time?.slice(0, 5) === slot);
+                  const kind = slotKind(d.getDay(), slot);
+                  const activeAt = at.filter((t) => t.status !== "cancelled");
+                  // per-doctor availability: with a doctor filter the slot must be
+                  // free for that doctor; in the all-doctors view it stays bookable
+                  // while any doctor is free (a doctorless appointment blocks the
+                  // slot until it gets a doctor assigned)
+                  const bookable =
+                    kind === "open" &&
+                    !isPast &&
+                    (activeDoctor
+                      ? activeAt.length === 0
+                      : activeAt.length < doctors.length &&
+                        !activeAt.some((t) => !t.staff_id));
+                  return (
+                    <div key={slot}>
+                      {at.map(appointmentCard)}
+                      {bookable && <SlotButton date={iso} time={slot} />}
+                      {at.length === 0 && !bookable && kind === "open" && (
+                        <div className="adm-slot past">
+                          <span>{slot}</span>
+                        </div>
+                      )}
+                      {at.length === 0 && kind === "pause" && (
+                        <div className="adm-slot-off">
+                          <span>{slot}</span>
+                          <i>pauza</i>
+                        </div>
+                      )}
+                      {at.length === 0 && kind === "closed" && (
+                        <div className="adm-slot-off">
+                          <span>{slot}</span>
+                          <i>ne radimo</i>
+                        </div>
+                      )}
                     </div>
-                    <ChartForAppointment t={t} patients={patients} />
-                    {t.status !== "cancelled" && t.status !== "completed" && (
-                      <DoctorForm t={t} doctors={doctors} />
-                    )}
-                    {t.status !== "cancelled" && t.status !== "completed" && (
-                      <div className="actions">
-                        {t.status === "pending" && (
-                          <form action={changeAppointmentStatus.bind(null, t.id, "confirmed")}>
-                            <button type="submit">Potvrdi</button>
-                          </form>
-                        )}
-                        {t.status === "confirmed" && (
-                          <CompleteAppointment appointmentId={t.id} hasChart={!!t.patient_id} />
-                        )}
-                        <form action={changeAppointmentStatus.bind(null, t.id, "cancelled")}>
-                          <button type="submit">Otkaži</button>
-                        </form>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </NewAppointmentProvider>
     </>
   );
 }

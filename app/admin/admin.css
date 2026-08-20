@@ -72,6 +72,25 @@
 .adm-cal-day.today { border-color: #7EAEE8; }
 .adm-cal-day h3 { margin: 0 0 10px; font-family: var(--font-fredoka); font-weight: 600; font-size: 15px; }
 .adm-cal-day h3 small { display: block; font-family: var(--font-nunito); font-size: 11.5px; font-weight: 800; opacity: .5; }
+.adm-slot {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  border: 1.5px dashed #E3D9C4; background: #FDFBF6; border-radius: 10px;
+  padding: 5px 10px; margin-bottom: 6px; cursor: pointer;
+  font-family: var(--font-nunito); font-weight: 800; font-size: 12px; color: #3D4142;
+  opacity: .55; transition: opacity .15s, background .15s, border-color .15s;
+}
+.adm-slot:hover { opacity: 1; background: #E7F0FB; border-color: #7EAEE8; }
+.adm-slot .plus { font-size: 14px; line-height: 1; color: #5B8FD4; }
+.adm-slot.past, .adm-slot.past:hover {
+  cursor: default; opacity: .22; background: #FDFBF6; border-color: #E3D9C4;
+}
+.adm-slot-off {
+  display: flex; align-items: center; justify-content: space-between;
+  border-radius: 10px; padding: 5px 10px; margin-bottom: 6px;
+  font-weight: 800; font-size: 11.5px; color: #3D4142; opacity: .32;
+  background: repeating-linear-gradient(-45deg, #F5F0E8 0 6px, #FBF8F1 6px 12px);
+}
+.adm-slot-off i { font-style: normal; letter-spacing: .04em; }
 .adm-appointment { border-radius: 12px; padding: 8px 10px; margin-bottom: 8px; font-size: 13px; }
 .adm-appointment b { font-size: 13.5px; }
 .adm-appointment .actions { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }

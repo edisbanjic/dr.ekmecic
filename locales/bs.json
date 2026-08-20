@@ -12,6 +12,10 @@
       "title": "Kutak za osmijeh — savjeti i novosti | Dr. Ekmečić",
       "description": "Savjeti i novosti iz stomatološke ordinacije dr. Ekmečić, Cazin."
     },
+    "contact": {
+      "title": "Kontakt — Dr. Ekmečić | Stomatološka ordinacija Cazin",
+      "description": "Nazovite nas, pošaljite poruku ili dođite u ordinaciju dr. Ekmečić u Cazinu — Bolnička bb. Telefon: 037 514 771."
+    },
     "postNotFound": "Objava nije pronađena — Dr. Ekmečić",
     "postFallbackDescription": "Savjeti i novosti iz stomatološke ordinacije dr. Ekmečić, Cazin."
   },
@@ -209,6 +213,21 @@
     "copyright": "© 2026 Opća stomatološka ordinacija, vl. dr. Kamala Ekmečić",
     "madeWith": "Napravljeno s osmijehom"
   },
+  "contactPage": {
+    "badge": "KONTAKT",
+    "title": "Tu smo za tebe",
+    "lead": "Nazovi, pošalji poruku ili svrati — rado odgovaramo i pomažemo oko termina.",
+    "phoneLabel": "Telefon",
+    "emailLabel": "Email",
+    "addressLabel": "Adresa",
+    "hoursLabel": "Radno vrijeme",
+    "hoursText": "Pogledaj raspored",
+    "socialLabel": "Piši nam",
+    "bookCta": "Zakaži termin",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp",
+    "facebook": "Facebook"
+  },
   "map": {
     "boxAria": "Mapa — lokacija ordinacije u Cazinu",
     "iframeTitle": "Mapa — Cazin",
@@ -245,7 +264,9 @@
     "ctaTitle": "Rezervišite termin bez stresa",
     "ctaText": "Ako vas zanima kako izgleda pregled, koje uređaje koristimo ili zašto nam je važan miran pristup, najljepše je da se upoznamo uživo. Tu smo da odgovorimo na pitanja i učinimo da svaki dolazak bude lakši, topliji i opušteniji.",
     "ctaBook": "Zakaži termin →",
-    "ctaContact": "Kontaktiraj nas"
+    "ctaContact": "Kontaktiraj nas",
+    "relatedTitle": "Ostale vijesti",
+    "relatedAll": "Sve vijesti →"
   },
   "share": {
     "label": "Podijeli",

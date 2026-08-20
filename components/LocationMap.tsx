@@ -19,14 +19,20 @@ const DIRECTIONS = `https://www.google.com/maps/dir/?api=1&destination=${LAT},${
 const STREET_VIEW_SRC =
   "https://www.google.com/maps/embed?pb=!4v1787170258664!6m8!1m7!1soTwkXzzwj2wHJPFWdaTUXw!2m2!1d44.96623974455438!2d15.93225772888374!3f280.00696!4f0!5f0.7820865974627469";
 
+type LocationMapProps = {
+  /** `footer` = dark chrome; `page` = light contact page. */
+  variant?: "footer" | "page";
+};
+
 /**
  * Interactive Mapbox GL map of the clinic location. The Mapbox library is
  * loaded dynamically on first viewport entry so it does not weigh down the
  * initial load. Without NEXT_PUBLIC_MAPBOX_TOKEN it falls back to an OSM
  * iframe, so the site still works without a key.
  */
-export default function LocationMap() {
+export default function LocationMap({ variant = "footer" }: LocationMapProps) {
   const t = getDict(useLocale().locale).map;
+  const onPage = variant === "page";
   const box = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [view, setView] = useState<"map" | "street">("map");
@@ -104,15 +110,15 @@ export default function LocationMap() {
   }, [visible]);
 
   return (
-    <div className="map-footer" style={{ flex: "1 1 300px", minWidth: "260px" }}>
+    <div className={onPage ? "map-page" : "map-footer"} style={{ flex: "1 1 300px", minWidth: onPage ? 0 : "260px", width: "100%" }}>
       <div
         style={{
           position: "relative",
-          borderRadius: "24px",
+          borderRadius: onPage ? "22px" : "24px",
           overflow: "hidden",
-          border: "4px solid rgba(245,240,232,.14)",
+          border: onPage ? "2px solid #E8DFD0" : "4px solid rgba(245,240,232,.14)",
           lineHeight: "0",
-          background: "rgba(245,240,232,.06)",
+          background: onPage ? "#FFFFFF" : "rgba(245,240,232,.06)",
         }}
       >
         <div
@@ -156,7 +162,7 @@ export default function LocationMap() {
           ))}
         </div>
 
-        <div style={{ width: "100%", height: "230px" }}>
+        <div style={{ width: "100%", height: onPage ? "clamp(300px,38vw,400px)" : "230px" }}>
           {TOKEN && (
             <div
               ref={box}
@@ -182,13 +188,13 @@ export default function LocationMap() {
           />
         </div>
       </div>
-      <div style={{ fontSize: "13px", opacity: ".6", marginTop: "8px" }}>
+      <div style={{ fontSize: "13px", opacity: onPage ? 0.7 : 0.6, marginTop: "8px", fontWeight: onPage ? 600 : undefined }}>
         {t.addressShort} —{" "}
         <a
           href={DIRECTIONS}
           target="_blank"
           rel="noopener"
-          style={{ color: "#F5F0E8", textDecoration: "underline", textUnderlineOffset: "3px" }}
+          style={{ color: onPage ? "#3E5F86" : "#F5F0E8", textDecoration: "underline", textUnderlineOffset: "3px" }}
         >
           {t.directions}
         </a>

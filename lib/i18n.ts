@@ -29,6 +29,11 @@ export function postPath(locale: Locale, slug: string): string {
   return `${tipsPath(locale)}/${slug}`;
 }
 
+/** Contact URL — Bosnian keeps its localized /kontakt URL (rewritten to /contact). */
+export function contactPath(locale: Locale): string {
+  return locale === "bs" ? "/kontakt" : "/en/contact";
+}
+
 /** Link to a home-page section: plain anchor on the home page itself. */
 export function homeAnchor(locale: Locale, id: string, onHome: boolean): string {
   return onHome ? `#${id}` : `${homePath(locale)}#${id}`;
@@ -48,6 +53,7 @@ export function pageTitle(pathname: string, locale: Locale): string | null {
   const t = getDict(locale).meta;
   if (pathname === "/" || pathname === "/en") return t.home.title;
   if (pathname === "/savjeti" || pathname === "/tips" || pathname === "/en/tips") return t.tips.title;
+  if (pathname === "/kontakt" || pathname === "/contact" || pathname === "/en/contact") return t.contact.title;
   return null;
 }
 
@@ -58,10 +64,12 @@ export function switchLocalePath(pathname: string, to: Locale): string {
     if (pathname === "/savjeti" || pathname === "/tips") return "/en/tips";
     if (pathname.startsWith("/savjeti/")) return `/en/tips/${pathname.slice("/savjeti/".length)}`;
     if (pathname.startsWith("/tips/")) return `/en/tips/${pathname.slice("/tips/".length)}`;
+    if (pathname === "/kontakt" || pathname === "/contact") return "/en/contact";
     return "/en";
   }
   if (pathname === "/en" || pathname === "/en/") return "/";
   if (pathname === "/en/tips") return "/savjeti";
   if (pathname.startsWith("/en/tips/")) return `/savjeti/${pathname.slice("/en/tips/".length)}`;
+  if (pathname === "/en/contact") return "/kontakt";
   return "/";
 }
