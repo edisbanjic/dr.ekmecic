@@ -1,5 +1,5 @@
 import CoverImage from "@/components/admin/CoverImage";
-import ContentEditor from "@/components/admin/ContentEditor";
+import ContentEditor from "@/components/admin/ContentEditorLazy";
 import { CATEGORIES } from "@/lib/posts";
 import { formatDate } from "@/lib/appointments";
 import type { Post } from "@/lib/types";

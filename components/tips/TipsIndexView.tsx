@@ -1,22 +1,24 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useLocale } from "@/components/LocaleProvider";
 import PostCover from "@/components/tips/PostCover";
 import { CATEGORIES, CATEGORY_COLORS } from "@/lib/categories";
 import { formatPrettyDate, getDict, postPath, tipsPath } from "@/lib/i18n";
 import type { Post } from "@/lib/types";
 
-/** Tips index markup — copy comes from LocaleProvider so a language switch updates in place. */
-export default function TipsIndexView({
-  posts,
-  activeCategory,
-}: {
-  posts: Post[];
-  activeCategory: string | null;
-}) {
+/**
+ * Tips index markup — copy comes from LocaleProvider so a language switch
+ * updates in place. The category filter reads ?category= on the client so the
+ * page itself can stay static (CDN-cached) on Vercel.
+ */
+export default function TipsIndexView({ posts }: { posts: Post[] }) {
   const { locale } = useLocale();
+  const rawCategory = useSearchParams()?.get("category") ?? null;
+  const activeCategory = rawCategory && CATEGORIES.includes(rawCategory) ? rawCategory : null;
+  const shownPosts = activeCategory ? posts.filter((p) => p.category === activeCategory) : posts;
   const t = getDict(locale).tips;
-  const hasPosts = posts.length > 0;
+  const hasPosts = shownPosts.length > 0;
   const basePath = tipsPath(locale);
   const categoryLabel = (value: string) =>
     t.categories[value as keyof typeof t.categories] ?? value;
@@ -107,9 +109,9 @@ export default function TipsIndexView({
         </div>
       ) : (
         <div className="tips-masonry" style={{ marginTop: "clamp(28px,4vw,44px)" }}>
-          {posts.map((post, i) => {
+          {shownPosts.map((post, i) => {
             const tone = CATEGORY_COLORS[post.category] ?? { color: "#3E5F86", bg: "#E7F0FB" };
-            const featured = posts.length > 2 && i % 5 === 0;
+            const featured = shownPosts.length > 2 && i % 5 === 0;
             return (
               <a
                 key={post.id}

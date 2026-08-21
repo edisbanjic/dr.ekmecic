@@ -1,6 +1,6 @@
 "use client";
 
-import BookingForm from "@/components/BookingForm";
+import BookingForm from "@/components/BookingFormLazy";
 import { useLocale } from "@/components/LocaleProvider";
 import { getDict } from "@/lib/i18n";
 
