@@ -9,7 +9,10 @@ import {
 } from "./seo";
 import type { Post } from "./types";
 
-const OG_IMAGE = "/assets/hero-smile.webp";
+// Dedicated 1200×630 share card — portrait photos get cropped badly by FB/Viber/WhatsApp.
+const OG_IMAGE = "/assets/og-image.jpg";
+const OG_WIDTH = 1200;
+const OG_HEIGHT = 630;
 
 const alternateOgLocale = (locale: Locale) => (locale === "bs" ? "en_US" : "bs_BA");
 
@@ -29,7 +32,7 @@ export function homeMetadata(locale: Locale): Metadata {
       siteName: t.siteName,
       title: t.home.title,
       description: t.home.description,
-      images: [{ url: OG_IMAGE, alt: t.siteName }],
+      images: [{ url: OG_IMAGE, width: OG_WIDTH, height: OG_HEIGHT, alt: t.siteName }],
     },
     twitter: {
       card: "summary_large_image",
@@ -55,7 +58,7 @@ export function tipsMetadata(locale: Locale): Metadata {
       siteName: t.siteName,
       title: t.tips.title,
       description: t.tips.description,
-      images: [{ url: OG_IMAGE, alt: t.siteName }],
+      images: [{ url: OG_IMAGE, width: OG_WIDTH, height: OG_HEIGHT, alt: t.siteName }],
     },
     twitter: {
       card: "summary_large_image",
@@ -81,7 +84,7 @@ export function contactMetadata(locale: Locale): Metadata {
       siteName: t.siteName,
       title: t.contact.title,
       description: t.contact.description,
-      images: [{ url: OG_IMAGE, alt: t.siteName }],
+      images: [{ url: OG_IMAGE, width: OG_WIDTH, height: OG_HEIGHT, alt: t.siteName }],
     },
     twitter: {
       card: "summary_large_image",

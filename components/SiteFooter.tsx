@@ -34,7 +34,8 @@ export default function SiteFooter({ home = false }: { home?: boolean }) {
           <div style={{display:"flex",gap:"clamp(32px,5vw,64px)",flexWrap:"wrap",alignItems:"flex-start"}}>
             <div style={{flex:"1 1 320px",minWidth:"280px"}}>
               <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
-                <span style={{fontFamily:"var(--font-fredoka)",fontWeight:"700",fontSize:"clamp(34px,4.5vw,50px)",letterSpacing:".02em",display:"inline-flex",alignItems:"flex-end",color:"#F5F0E8"}}>DR.&nbsp;EK<svg viewBox="0 0 100 100" style={{width:".86em",height:".86em",margin:"0 2px .04em"}}><defs><clipPath id="tcut-f"><path d="M50 13C43 6 37 4 30 5C17 8 13 19 14 32C15 44 20 53 24 66C27 77 28 92 36 92C44 92 41 76 50 76C59 76 56 92 64 92C72 92 73 77 76 66C80 53 85 44 86 32C87 19 83 8 70 5C63 4 57 6 50 13Z"></path></clipPath></defs><path d="M50 13C43 6 37 4 30 5C17 8 13 19 14 32C15 44 20 53 24 66C27 77 28 92 36 92C44 92 41 76 50 76C59 76 56 92 64 92C72 92 73 77 76 66C80 53 85 44 86 32C87 19 83 8 70 5C63 4 57 6 50 13Z" fill="#7EAEE8"></path><path d="M8 66C28 80 47 71 59 50C67 36 71 21 73 4" stroke="#FFFFFF" strokeWidth="14" fill="none" strokeLinecap="round" clipPath="url(#tcut-f)"></path></svg>EČIĆ</span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/assets/logo-light.webp" alt={t.footer.logoAlt} width={1060} height={190} style={{height:"clamp(36px,4.8vw,53px)",width:"auto",display:"block"}} />
                 <span style={{fontSize:"11px",fontWeight:"800",letterSpacing:".34em",color:"#7EAEE8"}}>{t.footer.tagline}</span>
               </div>
               <p style={{margin:"18px 0 0",fontFamily:"var(--font-shantell)",fontWeight:"500",fontSize:"19px",opacity:".9"}}>{t.footer.slogan} <span style={{color:"#F4A08A"}}>✦</span></p>

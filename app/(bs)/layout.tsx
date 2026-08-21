@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "../globals.css";
 import { fontClassName } from "../fonts";
 import { getDict } from "@/lib/i18n";
@@ -10,6 +10,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: t.meta.home.title,
   description: t.meta.home.description,
+  applicationName: t.meta.siteName,
+  // Google Search Console: set GOOGLE_SITE_VERIFICATION in the env to verify without a DNS record.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
+  other: {
+    "geo.region": "BA",
+    "geo.placename": "Cazin",
+    ICBM: "44.966270, 15.932116",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#F5F0E8",
 };
 
 /** Root layout for the Bosnian (default) site at /. English lives under /en. */

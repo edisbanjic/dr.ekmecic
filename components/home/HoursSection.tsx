@@ -140,6 +140,7 @@ export default function HoursSection() {
             </span>
             <div style={{ display: 'grid', gap: '8px' }}>
               <div
+                className="hours-row"
                 style={{
                   display: 'flex',
                   alignItems: 'baseline',
@@ -158,13 +159,14 @@ export default function HoursSection() {
                   {t.monWed}
                 </div>
                 <div
+                  className="hours-line"
                   style={{
                     flex: '1',
                     borderBottom: '3px dotted rgba(245,240,232,.3)',
                     transform: 'translateY(-5px)',
                   }}
                 ></div>
-                <div style={{ textAlign: 'right' }}>
+                <div className="hours-time" style={{ textAlign: 'right' }}>
                   <div
                     style={{
                       fontWeight: '800',
@@ -179,6 +181,7 @@ export default function HoursSection() {
                 </div>
               </div>
               <div
+                className="hours-row"
                 style={{
                   display: 'flex',
                   alignItems: 'baseline',
@@ -216,13 +219,14 @@ export default function HoursSection() {
                   </span>
                 </div>
                 <div
+                  className="hours-line"
                   style={{
                     flex: '1',
                     borderBottom: '3px dotted rgba(36,48,56,.35)',
                     transform: 'translateY(-5px)',
                   }}
                 ></div>
-                <div style={{ textAlign: 'right' }}>
+                <div className="hours-time" style={{ textAlign: 'right' }}>
                   <div
                     style={{
                       fontWeight: '800',
@@ -237,6 +241,7 @@ export default function HoursSection() {
                 </div>
               </div>
               <div
+                className="hours-row"
                 style={{
                   display: 'flex',
                   alignItems: 'baseline',
@@ -255,13 +260,14 @@ export default function HoursSection() {
                   {t.friday}
                 </div>
                 <div
+                  className="hours-line"
                   style={{
                     flex: '1',
                     borderBottom: '3px dotted rgba(245,240,232,.3)',
                     transform: 'translateY(-5px)',
                   }}
                 ></div>
-                <div style={{ textAlign: 'right' }}>
+                <div className="hours-time" style={{ textAlign: 'right' }}>
                   <div
                     style={{
                       fontWeight: '800',
@@ -276,6 +282,7 @@ export default function HoursSection() {
                 </div>
               </div>
               <div
+                className="hours-row"
                 style={{
                   display: 'flex',
                   alignItems: 'baseline',
@@ -294,13 +301,14 @@ export default function HoursSection() {
                   {t.weekend}
                 </div>
                 <div
+                  className="hours-line"
                   style={{
                     flex: '1',
                     borderBottom: '3px dotted rgba(245,240,232,.3)',
                     transform: 'translateY(-5px)',
                   }}
                 ></div>
-                <div style={{ textAlign: 'right' }}>
+                <div className="hours-time" style={{ textAlign: 'right' }}>
                   <div
                     style={{
                       fontFamily: 'var(--font-shantell)',

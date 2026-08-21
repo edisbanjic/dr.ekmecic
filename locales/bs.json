@@ -20,6 +20,7 @@
     "postFallbackDescription": "Savjeti i novosti iz stomatološke ordinacije dr. Ekmečić, Cazin."
   },
   "header": {
+    "logoAlt": "Dr. Ekmečić — stomatološka ordinacija",
     "tagline": "STOMATOLOŠKA ORDINACIJA",
     "nav": {
       "services": "Usluge",
@@ -29,7 +30,9 @@
     },
     "call": "Pozovi",
     "bookCta": "Zakaži termin",
-    "langSwitchAria": "Switch to English"
+    "langSwitchAria": "Switch to English",
+    "menuOpen": "Otvori meni",
+    "menuClose": "Zatvori meni"
   },
   "hero": {
     "titlePre": "Osmijeh koji ",
@@ -203,6 +206,7 @@
     "close": "Zatvori"
   },
   "footer": {
+    "logoAlt": "Dr. Ekmečić — stomatološka ordinacija",
     "tagline": "STOMATOLOŠKA ORDINACIJA",
     "slogan": "Osmijeh koji voliš pokazati",
     "contactTitle": "Kontakt",

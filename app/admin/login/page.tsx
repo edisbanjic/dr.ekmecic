@@ -32,17 +32,16 @@ export default function LoginPage() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: "6px" }}>
-          <svg viewBox="0 0 100 100" style={{ width: "44px" }} aria-hidden="true">
-            <path
-              d="M50 5C31 5 15 15 15 34c0 13 6 21 10 33 3 9 3.5 23 12 23 8 0 6.5-16 13-16s5 16 13 16c8.5 0 9-14 12-23 4-12 10-20 10-33C85 15 69 5 50 5Z"
-              fill="#7EAEE8"
-            />
-          </svg>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/logo-full.webp"
+            alt="Dr. Ekmečić — stomatološka ordinacija"
+            width={1060}
+            height={248}
+            style={{ width: "100%", maxWidth: "230px", height: "auto", margin: "0 auto 14px", display: "block" }}
+          />
           <div style={{ fontFamily: "var(--font-fredoka)", fontWeight: 700, fontSize: "24px" }}>
             Admin prijava
-          </div>
-          <div style={{ fontSize: "13px", opacity: 0.6, fontWeight: 700, letterSpacing: ".08em" }}>
-            ORDINACIJA DR. EKMEČIĆ
           </div>
         </div>
         <label>

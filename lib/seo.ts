@@ -51,11 +51,25 @@ export function clinicJsonLd(locale: Locale) {
     "@type": "Dentist",
     "@id": `${getSiteUrl()}/#clinic`,
     name: t.meta.clinicName,
+    alternateName: t.meta.siteName,
     description: t.meta.home.description,
     url: absoluteUrl(homePath(locale)),
-    image: absoluteUrl("/assets/hero-clinic.webp"),
+    logo: absoluteUrl("/assets/logo-full.png"),
+    image: [
+      absoluteUrl("/assets/og-image.jpg"),
+      absoluteUrl("/assets/hero-clinic.webp"),
+      absoluteUrl("/assets/polaroid-waiting-room.webp"),
+    ],
     telephone: CLINIC.phone,
     email: CLINIC.email,
+    priceRange: "$$",
+    currenciesAccepted: "BAM",
+    medicalSpecialty: "Dentistry",
+    areaServed: [
+      { "@type": "City", name: "Cazin" },
+      { "@type": "AdministrativeArea", name: "Unsko-sanski kanton" },
+    ],
+    hasMap: `https://www.google.com/maps/search/?api=1&query=${CLINIC.latitude},${CLINIC.longitude}`,
     address: {
       "@type": "PostalAddress",
       streetAddress: CLINIC.street,
@@ -83,6 +97,20 @@ export function clinicJsonLd(locale: Locale) {
       },
     ],
     sameAs: [CLINIC.facebook],
+  };
+}
+
+/** schema.org FAQPage — mirrors the FAQ accordion on the home page. */
+export function faqJsonLd(locale: Locale) {
+  const t = getDict(locale);
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
   };
 }
 

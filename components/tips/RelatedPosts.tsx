@@ -39,7 +39,7 @@ export default function RelatedPosts({ posts }: { posts: Post[] }) {
                 transform: `rotate(${i % 2 === 0 ? "-.25deg" : ".25deg"})`,
               }}
             >
-              <PostCover src={post.image_url} className="related-posts-image" />
+              <PostCover src={post.image_url} alt={post.title} className="related-posts-image" />
               <div className="related-posts-body">
                 <div className="related-posts-meta">
                   <span

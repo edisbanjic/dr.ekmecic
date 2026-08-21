@@ -20,6 +20,7 @@
     "postFallbackDescription": "Dental tips and news from the dental clinic of Dr. Ekmečić, Cazin, Bosnia."
   },
   "header": {
+    "logoAlt": "Dr. Ekmečić — dental clinic",
     "tagline": "DENTAL CLINIC",
     "nav": {
       "services": "Services",
@@ -29,7 +30,9 @@
     },
     "call": "Call us",
     "bookCta": "Book appointment",
-    "langSwitchAria": "Prebaci na bosanski"
+    "langSwitchAria": "Prebaci na bosanski",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
   },
   "hero": {
     "titlePre": "A smile you ",
@@ -203,6 +206,7 @@
     "close": "Close"
   },
   "footer": {
+    "logoAlt": "Dr. Ekmečić — dental clinic",
     "tagline": "DENTAL CLINIC",
     "slogan": "A smile you love to show",
     "contactTitle": "Contact",

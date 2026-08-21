@@ -28,7 +28,7 @@ export default function AboutSection() {
             <div data-reveal="" style={{position:"relative",flex:"0 1 420px",minWidth:"290px",maxWidth:"460px",margin:"0 auto"}}>
               <div data-parallax="0.05" style={{position:"absolute",left:"-8%",top:"-6%",width:"112%",height:"110%",background:"rgba(244,160,138,.4)",borderRadius:"42% 58% 39% 61% / 55% 39% 61% 45%",transform:"rotate(7deg)"}}></div>
               <div style={{position:"relative",aspectRatio:"0.87",borderRadius:"54% 46% 58% 42% / 48% 56% 44% 52%",overflow:"hidden"}}>
-                <img src="/assets/dr-portrait.webp" alt={t.altPortrait} style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
+                <img src="/assets/dr-portrait.webp" alt={t.altPortrait} loading="lazy" decoding="async" style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
               </div>
               <span style={{position:"absolute",left:"-16px",top:"8%",width:"30px",transform:"rotate(-16deg)"}}><span style={{display:"block",animation:"floatY 8s ease-in-out infinite"}}><svg viewBox="0 0 100 100" style={{width:"100%",display:"block"}}><path d="M50 5C31 5 15 15 15 34c0 13 6 21 10 33 3 9 3.5 23 12 23 8 0 6.5-16 13-16s5 16 13 16c8.5 0 9-14 12-23 4-12 10-20 10-33C85 15 69 5 50 5Z" fill="#7EAEE8"></path></svg></span></span>
               <span style={{position:"absolute",right:"-6px",top:"-14px",fontSize:"24px",color:"#F4A08A",animation:"floatB 7s ease-in-out infinite"}}>✦</span>
@@ -53,7 +53,7 @@ export default function AboutSection() {
             <div style={{position:"relative",flex:"0 1 340px",minWidth:"260px",maxWidth:"380px",margin:"0 auto"}}>
               <div data-parallax="-0.04" style={{position:"absolute",left:"-8%",top:"-6%",width:"112%",height:"110%",background:"rgba(126,174,232,.4)",borderRadius:"58% 42% 61% 39% / 45% 61% 39% 55%",transform:"rotate(-7deg)"}}></div>
               <div style={{position:"relative",aspectRatio:"0.87",borderRadius:"46% 54% 42% 58% / 56% 48% 52% 44%",overflow:"hidden"}}>
-                <img src="/assets/dr-zehra.png" alt={t.team.altPortrait} style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
+                <img src="/assets/dr-zehra.png" alt={t.team.altPortrait} loading="lazy" decoding="async" style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
               </div>
               <span style={{position:"absolute",right:"-14px",top:"6%",width:"28px",transform:"rotate(14deg)"}}><span style={{display:"block",animation:"floatY 8s ease-in-out 1s infinite"}}><svg viewBox="0 0 100 100" style={{width:"100%",display:"block"}}><path d="M50 5C31 5 15 15 15 34c0 13 6 21 10 33 3 9 3.5 23 12 23 8 0 6.5-16 13-16s5 16 13 16c8.5 0 9-14 12-23 4-12 10-20 10-33C85 15 69 5 50 5Z" fill="#F4A08A"></path></svg></span></span>
               <span style={{position:"absolute",left:"-6px",top:"-14px",fontSize:"22px",color:"#5B8FD4",animation:"floatB 7s ease-in-out infinite"}}>✦</span>
@@ -71,7 +71,7 @@ export default function AboutSection() {
             <div style={{position:"relative",flex:"0 1 340px",minWidth:"260px",maxWidth:"380px",margin:"0 auto"}}>
               <div data-parallax="0.04" style={{position:"absolute",left:"-8%",top:"-6%",width:"112%",height:"110%",background:"rgba(244,160,138,.4)",borderRadius:"42% 58% 39% 61% / 55% 39% 61% 45%",transform:"rotate(7deg)"}}></div>
               <div style={{position:"relative",aspectRatio:"0.87",borderRadius:"54% 46% 58% 42% / 44% 52% 48% 56%",overflow:"hidden"}}>
-                <img src="/assets/hero-patient.webp" alt={t.tech.altPortrait} style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
+                <img src="/assets/hero-patient.webp" alt={t.tech.altPortrait} loading="lazy" decoding="async" style={{position:"absolute",inset:"0",width:"100%",height:"100%",display:"block",objectFit:"cover"}} />
               </div>
               <span style={{position:"absolute",left:"-14px",top:"6%",width:"28px",transform:"rotate(-14deg)"}}><span style={{display:"block",animation:"floatY 8s ease-in-out .5s infinite"}}><svg viewBox="0 0 100 100" style={{width:"100%",display:"block"}}><path d="M50 5C31 5 15 15 15 34c0 13 6 21 10 33 3 9 3.5 23 12 23 8 0 6.5-16 13-16s5 16 13 16c8.5 0 9-14 12-23 4-12 10-20 10-33C85 15 69 5 50 5Z" fill="#7EAEE8"></path></svg></span></span>
               <span style={{position:"absolute",right:"-6px",top:"-14px",fontSize:"22px",color:"#F4A08A",animation:"floatB 7s ease-in-out .8s infinite"}}>✦</span>
@@ -87,7 +87,7 @@ export default function AboutSection() {
           <div style={{display:"flex",gap:"clamp(18px,3vw,30px)",justifyContent:"center",flexWrap:"wrap",marginTop:"clamp(48px,7vw,80px)"}}>
             {t.polaroids.map((polaroid, i) => (
               <div key={i} data-reveal="" data-delay={POLAROID_STYLES[i].delay} style={{background:"#FFFFFF",padding:"12px 12px 14px",borderRadius:"6px",boxShadow:"0 20px 38px -20px rgba(61,65,66,.4)",transform:POLAROID_STYLES[i].rotate,marginTop:POLAROID_STYLES[i].marginTop}}>
-                <img src={POLAROID_IMAGES[i]} alt={polaroid.alt} style={{width:"230px",height:"170px",display:"block",objectFit:"cover",borderRadius:"2px"}} />
+                <img src={POLAROID_IMAGES[i]} alt={polaroid.alt} loading="lazy" decoding="async" style={{width:"230px",height:"170px",display:"block",objectFit:"cover",borderRadius:"2px"}} />
                 <div style={{fontFamily:"var(--font-shantell)",fontWeight:"500",fontSize:"18px",textAlign:"center",marginTop:"10px"}}>{polaroid.caption}{i === 1 && <> <span style={{color:"#5B8FD4"}}>✦</span></>}</div>
               </div>
             ))}

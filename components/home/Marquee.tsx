@@ -24,7 +24,7 @@ function Track({ items }: { items: string[] }) {
 export default function Marquee() {
   const items = getDict(useLocale().locale).marquee;
   return (
-    <div style={{position:"relative",zIndex:"6",transform:"rotate(-1.4deg)",margin:"-26px -2vw 0",width:"104vw"}}>
+    <div style={{position:"relative",zIndex:"6",transform:"rotate(-1.4deg)",margin:"-26px -2% 0",width:"104%"}}>
       <div style={{overflow:"hidden",background:"#3D4142",padding:"15px 0",boxShadow:"0 18px 34px -20px rgba(61,65,66,.55)"}}>
         <div id="marq-track" style={{display:"flex",width:"max-content",animation:"marquee 22s linear infinite"}}>
           <Track items={items} />

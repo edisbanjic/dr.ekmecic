@@ -133,6 +133,7 @@ export default function TipsIndexView({
                 <div style={{ display: "block" }}>
                   <PostCover
                     src={post.image_url}
+                    alt={post.title}
                     height={featured ? 320 : i % 3 === 0 ? 280 : i % 2 === 0 ? 238 : 210}
                   />
                   <div

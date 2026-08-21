@@ -10,8 +10,9 @@
   backdrop-filter: blur(12px);
   border-bottom: 2px solid rgba(61, 65, 66, .08);
 }
-.adm-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-fredoka); font-weight: 700; font-size: 18px; }
-.adm-brand small { display: block; font-family: var(--font-nunito); font-size: 9px; font-weight: 800; letter-spacing: .28em; color: #5B8FD4; }
+.adm-brand { display: flex; align-items: center; gap: 12px; }
+.adm-brand img { display: block; height: 24px; width: auto; }
+.adm-brand small { font-family: var(--font-nunito); font-size: 9px; font-weight: 800; letter-spacing: .28em; color: #5B8FD4; }
 .adm-nav { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
 .adm-nav a {
   font-weight: 800; font-size: 14px; padding: 8px 16px; border-radius: 999px;
