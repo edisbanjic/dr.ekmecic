@@ -4,23 +4,27 @@
     "clinicName": "General Dental Clinic Dr. Kamala Ekmečić",
     "ogLocale": "en_US",
     "home": {
-      "title": "Dr. Ekmečić — Dental Clinic Cazin, Bosnia",
-      "description": "General dental clinic of Dr. Kamala Ekmečić in Cazin, Bosnia — modern equipment, a gentle approach and 25+ years of experience. Book an appointment: 037 514 771.",
-      "keywords": ["dentist Cazin", "dental clinic Cazin", "dentist Bosnia", "Dr. Kamala Ekmečić", "tooth fillings", "teeth whitening", "pediatric dentistry"]
+      "title": "Dr. Ekmečić | Dental Clinic Cazin, Bosnia",
+      "description": "General dental clinic of Dr. Kamala Ekmečić in Cazin, Bosnia. Modern equipment, a gentle approach and 30+ years of experience. Book an appointment: 037 514 771.",
+      "keywords": ["dentist Cazin", "dental clinic Cazin", "dentist Bosnia", "Dr. Kamala Ekmečić", "tooth fillings", "dental jewelry", "pediatric dentistry"]
     },
     "tips": {
-      "title": "Smile Corner — tips and news | Dr. Ekmečić",
+      "title": "Smile Corner: tips and news | Dr. Ekmečić",
       "description": "Dental tips and news from the dental clinic of Dr. Ekmečić, Cazin, Bosnia."
     },
     "contact": {
-      "title": "Contact — Dr. Ekmečić | Dental Clinic Cazin",
-      "description": "Call us, send a message or visit the dental clinic of Dr. Ekmečić in Cazin — Bolnička bb. Phone: 037 514 771."
+      "title": "Contact | Dr. Ekmečić | Dental Clinic Cazin",
+      "description": "Call us, send a message or visit the dental clinic of Dr. Ekmečić in Cazin, Bolnička bb. Phone: 037 514 771."
     },
-    "postNotFound": "Post not found — Dr. Ekmečić",
-    "postFallbackDescription": "Dental tips and news from the dental clinic of Dr. Ekmečić, Cazin, Bosnia."
+    "postNotFound": "Post not found | Dr. Ekmečić",
+    "postFallbackDescription": "Dental tips and news from the dental clinic of Dr. Ekmečić, Cazin, Bosnia.",
+    "art": {
+      "title": "Art corner | Illustrations by Dr. Zehra Ekmečić",
+      "description": "Illustrations by Dr. Zehra Ekmečić: little lessons about dental health, drawn with plenty of color and a bit of humor."
+    }
   },
   "header": {
-    "logoAlt": "Dr. Ekmečić — dental clinic",
+    "logoAlt": "Dr. Ekmečić, dental clinic",
     "tagline": "DENTAL CLINIC",
     "nav": {
       "services": "Services",
@@ -35,10 +39,10 @@
     "menuClose": "Close menu"
   },
   "hero": {
-    "titlePre": "A smile you ",
-    "titleHighlight": "love",
-    "titlePost": " to show",
-    "lead": "Welcome to a clinic where even the biggest fear of the dentist turns into a smile — modern equipment, a gentle approach and a team that truly cares.",
+    "titlePre": "Keeping your ",
+    "titleHighlight": "smile",
+    "titlePost": " healthy",
+    "lead": "Welcome to a clinic where even the biggest fear of the dentist turns into a smile. Modern equipment, a gentle approach and a team that truly cares.",
     "ctaPrimary": "Book appointment",
     "ctaSecondary": "See our services",
     "orCall": "or call",
@@ -46,68 +50,116 @@
     "altClinic": "The clinic",
     "altPatient": "A happy patient",
     "badgeRating": "5.0 average rating",
-    "badgeYears": "25+ years of experience",
+    "badgeYears": "30+ years of experience",
     "badgeSmiles": "10,000+ smiles",
     "nameKamala": "Dr. Kamala Ekmečić",
     "nameZehra": "Dr. Zehra Ekmečić",
-    "nameTech": "John Doe"
+    "nameTech": "Lejla Nadarević"
   },
   "marquee": ["HEALTHY SMILE", "PAIN-FREE", "MODERN EQUIPMENT", "PERSONAL APPROACH"],
   "services": {
     "badge": "OUR SERVICES",
     "title": "Everything for your smile",
-    "lead": "From regular check-ups to a complete smile makeover — eight services under one roof.",
+    "lead": "From regular check-ups to a complete smile makeover. Eight services under one roof.",
     "startHere": "START HERE ✦",
     "cards": {
-      "general": { "title": "General dentistry", "text": "Check-ups, diagnostics and a clear treatment plan — the foundation of every healthy smile. Prevention is the best (and most affordable) dentistry." },
-      "fillings": { "title": "Tooth fillings", "text": "Aesthetic tooth-colored fillings — precise, durable and completely painless." },
-      "endo": { "title": "Root canal treatment", "text": "We save even the teeth that seem lost — with modern endodontics." },
-      "extraction": { "title": "Tooth extraction", "text": "When extraction is the only option: quick, careful and with gentle anesthesia." },
-      "prosthetics": { "title": "Prosthetics", "text": "Crowns, bridges and dentures indistinguishable from natural teeth." },
-      "whitening": { "title": "Teeth whitening", "text": "Professional whitening that is safe for enamel — a smile several shades brighter, often after the very first treatment." },
-      "scaling": { "title": "Tartar removal", "text": "Ultrasonic cleaning and polishing for fresh breath and healthy gums." },
-      "kids": { "title": "Pediatric dentistry", "text": "A first visit without tears: through play, patience and a little reward for bravery. Kids leave our clinic with a smile — and gladly come back." }
+      "general": {
+        "title": "General dentistry",
+        "text": "Check-ups, diagnostics and a clear treatment plan, the foundation of every healthy smile. Prevention is the best (and most affordable) dentistry."
+      },
+      "fillings": {
+        "title": "Tooth fillings",
+        "text": "Aesthetic tooth-colored fillings: precise, durable and completely painless."
+      },
+      "endo": {
+        "title": "Root canal treatment",
+        "text": "We save even the teeth that seem lost, with modern endodontics."
+      },
+      "extraction": {
+        "title": "Tooth extraction",
+        "text": "When extraction is the only option: quick, careful and with gentle anesthesia."
+      },
+      "prosthetics": {
+        "title": "Prosthetics",
+        "text": "Crowns, bridges and dentures indistinguishable from natural teeth."
+      },
+      "whitening": {
+        "title": "Dental jewelry and gems",
+        "text": "Tiny crystals bonded to the tooth surface. Painless, no grinding and easy to remove, for a smile that sparkles."
+      },
+      "scaling": {
+        "title": "Tartar removal",
+        "text": "Ultrasonic cleaning and polishing for fresh breath and healthy gums."
+      },
+      "kids": {
+        "title": "Pediatric dentistry",
+        "text": "A first visit without tears: through play, patience and a little reward for bravery. Kids leave our clinic with a smile and gladly come back."
+      }
     },
     "help": {
       "title": "Not sure what you need?",
-      "text": "Give us a call — we'll gladly advise you."
+      "text": "Give us a call, we'll gladly advise you."
     }
   },
   "about": {
     "badge": "MEET THE DOCTOR",
     "titlePre": "A steady hand, ",
     "titleHighlight": "a warm heart",
-    "p1": "Behind every healthy smile stands a patient heart. Dr. Kamala Ekmečić believes a visit to the dentist doesn't have to be stressful — that's why in our clinic there is always time for your questions, an explanation of every step and a break whenever you need one.",
-    "p2": "With continuous education and modern equipment, we approach every patient individually — because every smile tells its own story.",
-    "sticker": "25+ years by your smile",
+    "p1": "Behind every healthy smile stands a patient heart. Dr. Kamala Ekmečić believes a visit to the dentist doesn't have to be stressful. That's why in our clinic there is always time for your questions, an explanation of every step and a break whenever you need one.",
+    "p2": "With continuous education and modern equipment, we approach every patient individually, because every smile tells its own story.",
+    "sticker": "30+ years by your smile",
     "altPortrait": "Dr. Kamala Ekmečić",
     "stats": [
-      { "value": "25", "suffix": "+", "display": "25+", "label": "years of experience" },
-      { "value": "10000", "suffix": "+", "display": "10,000+", "label": "happy patients" },
-      { "value": "98", "suffix": "%", "display": "98%", "label": "come by referral" }
+      {
+        "value": "30",
+        "suffix": "+",
+        "display": "30+",
+        "label": "years of experience"
+      },
+      {
+        "value": "10000",
+        "suffix": "+",
+        "display": "10,000+",
+        "label": "happy patients"
+      },
+      {
+        "value": "98",
+        "suffix": "%",
+        "display": "98%",
+        "label": "come by referral"
+      }
     ],
     "team": {
       "badge": "OUR TEAM",
       "namePre": "Dr. Zehra ",
       "nameHighlight": "Ekmečić",
-      "p1": "A new generation of the same dedication — Dr. Zehra brings fresh knowledge, a steady hand and a smile that puts you at ease already in the waiting room. She is especially loved by our youngest patients and by everyone whom fear of the dentist has kept away until now.",
+      "p1": "A new generation of the same dedication: Dr. Zehra Ekmečić brings fresh knowledge, a steady hand and a smile that puts you at ease already in the waiting room. She keeps up with the latest methods in dentistry and takes the time to make every patient feel safe and at ease.",
       "p2": "Together we make sure every appointment goes calmly, thoroughly and ends with a smile.",
       "sticker": "a second pair of careful hands",
       "altPortrait": "Dr. Zehra Ekmečić"
     },
     "tech": {
-      "badge": "DENTAL TECHNICIAN",
-      "namePre": "John ",
-      "nameHighlight": "Doe",
-      "p1": "The third pair of careful hands on our team — our technician prepares the clinic, assists with every procedure and makes sure everything is ready before you even sit in the chair.",
+      "badge": "DENTAL NURSE",
+      "namePre": "Lejla ",
+      "nameHighlight": "Nadarević",
+      "p1": "The third pair of careful hands on our team. Our dental nurse prepares the clinic, assists with every procedure and makes sure everything is ready before you even sit in the chair.",
       "p2": "The quiet strength of the clinic: with her around, every appointment starts on time and runs without a hitch.",
       "sticker": "a third pair of hard-working hands",
-      "altPortrait": "Dental technician"
+      "altPortrait": "Lejla Nadarević, dental nurse"
     },
     "polaroids": [
-      { "caption": "our clinic", "alt": "The clinic" },
-      { "caption": "modern equipment", "alt": "Equipment" },
-      { "caption": "a corner for the bravest", "alt": "Waiting room" }
+      {
+        "caption": "our clinic",
+        "alt": "The clinic"
+      },
+      {
+        "caption": "modern equipment",
+        "alt": "Equipment"
+      },
+      {
+        "caption": "a corner for the bravest",
+        "alt": "A box of rewards for kids"
+      }
     ]
   },
   "hours": {
@@ -122,35 +174,66 @@
     "pauseThursday": "break 14:00 – 14:30",
     "closed": "closed",
     "closedNote": "see you on Monday!",
-    "tip": "Tip: on Thursdays we work in the afternoon — perfect if your mornings are busy."
+    "tip": "Tip: on Thursdays we work in the afternoon, perfect if your mornings are busy.",
+    "callFirstTitle": "Drop by, but give us a call first",
+    "callFirstText": "Now and then we are away from the clinic, even during opening hours. One quick call and you know we will be here to greet you with a smile.",
+    "callFirstCta": "Call"
   },
   "bookingSection": {
     "badge": "BOOKING",
     "titlePre": "Reserve your ",
     "titleHighlight": "appointment",
-    "lead": "Fill out the form and we'll call you to confirm your appointment — usually the same day. No waiting, no complications.",
-    "messagesNote": "We also reply to messages — feel free to write."
+    "lead": "Online booking is coming soon. Until then, call or message us and we will sort out a time quickly, usually the same day.",
+    "messagesNote": "We also reply to messages, feel free to write."
   },
   "reviews": {
     "badge": "REVIEWS",
     "titlePre": "Smiles speak ",
     "titleHighlight": "before we do",
-    "rating": "★ 5.0 — average rating from our patients",
+    "rating": "★ 5.0 average rating from our patients",
     "items": [
-      { "text": "“For years I kept postponing the dentist out of fear. Here I relaxed for the first time — they explain everything, nothing hurts, and the staff is wonderful.”", "name": "Amira K.", "role": "root canal treatment" },
-      { "text": "“My daughter had her first check-up and can't wait for the next one! Who would have thought a child would beg to go to the dentist.”", "name": "Emir H.", "role": "little Lamija's dad" },
-      { "text": "“Professional, quick and no waiting. Tartar removed, teeth like new. Highly recommended!”", "name": "Selma B.", "role": "tartar removal" },
-      { "text": "“My new crown looks so natural that even I can't tell the difference. Thank you for the patience and the perfect work!”", "name": "Jasmin M.", "role": "prosthetics" }
+      {
+        "text": "“For years I kept postponing the dentist out of fear. Here I relaxed for the first time. They explain everything, nothing hurts, and the staff is wonderful.”",
+        "name": "Amira K.",
+        "role": "root canal treatment"
+      },
+      {
+        "text": "“My daughter had her first check-up and can't wait for the next one! Who would have thought a child would beg to go to the dentist.”",
+        "name": "Emir H.",
+        "role": "little Lamija's dad"
+      },
+      {
+        "text": "“Professional, quick and no waiting. Tartar removed, teeth like new. Highly recommended!”",
+        "name": "Selma B.",
+        "role": "tartar removal"
+      },
+      {
+        "text": "“My new crown looks so natural that even I can't tell the difference. Thank you for the patience and the perfect work!”",
+        "name": "Jasmin M.",
+        "role": "prosthetics"
+      }
     ]
   },
   "faq": {
     "badge": "FAQ",
     "title": "You often ask us",
     "items": [
-      { "q": "Does a tooth filling hurt?", "a": "Honestly — no. We use modern anesthesia and techniques that make the procedure almost unnoticeable. And if you ever need a break, just raise your hand — we stop immediately." },
-      { "q": "What can I expect at the first check-up?", "a": "We get to know you and your teeth: a thorough examination, an X-ray if needed and a clear treatment plan with prices. No obligations and no surprises." },
-      { "q": "Do you work with children?", "a": "Of course — pediatric dentistry is our special love. We turn the first visit into a game: the child gets to know the clinic, takes a “ride” in the chair and receives a reward for bravery." },
-      { "q": "How can I pay?", "a": "Cash or card, whatever suits you. For bigger treatments we can always arrange payment in installments — don't hesitate to ask." }
+      {
+        "q": "Does a tooth filling hurt?",
+        "a": "With proper anesthesia and a careful approach, a filling can usually be done with minimal discomfort. Still, it is best to see a dentist before the pain starts, because timely treatment is often simpler."
+      },
+      {
+        "q": "What can I expect at the first check-up?",
+        "a": "We get to know you and your teeth: a thorough examination, an X-ray if needed and a clear treatment plan with prices."
+      },
+      {
+        "q": "Do you work with children?",
+        "a": "Of course! Pediatric dentistry is our special love. We turn the first visit into a game: the child gets to know the clinic, takes a “ride” in the chair and receives a reward for bravery."
+      },
+      {
+        "q": "How can I pay?",
+        "a": "Payment is in cash."
+      }
     ]
   },
   "form": {
@@ -162,15 +245,15 @@
     "email": "Email",
     "optional": "(optional)",
     "doctor": "Doctor",
-    "noPreference": "— no preference —",
+    "noPreference": "No preference",
     "service": "Service",
     "notes": "Note",
     "placeholderFirstName": "e.g. Amina",
     "placeholderLastName": "e.g. Hodžić",
     "placeholderPhone": "61 123 456",
     "placeholderEmail": "e.g. amina@gmail.com",
-    "placeholderNotes": "Tell us a bit more — fears, pain, wishes…",
-    "next": "Next — pick a time →",
+    "placeholderNotes": "Tell us a bit more: fears, pain, wishes…",
+    "next": "Next: pick a time →",
     "chooseDate": "Pick a date",
     "chooseTime": "Pick a time",
     "loadingSlots": "Loading available times…",
@@ -178,7 +261,7 @@
     "nextMonth": "Next month",
     "submit": "Book appointment",
     "sending": "Sending…",
-    "propose": "Can't find a slot — suggest one for me",
+    "propose": "Can't find a slot? Suggest one for me",
     "back": "← back to details",
     "errorPhone": "Enter a valid phone number (e.g. 61 123 456).",
     "errorDateTime": "Pick a date and time, or click “Suggest one for me”.",
@@ -195,18 +278,24 @@
     "date": "Please pick a date in the calendar.",
     "slot": "Please pick an available time.",
     "doctor": "Please select a doctor from the list.",
-    "taken": "This slot was just taken — please pick another one.",
+    "taken": "This slot was just taken, please pick another one.",
     "generic": "Something went wrong. Please try again or give us a call."
+  },
+  "comingSoon": {
+    "badge": "COMING SOON",
+    "titlePre": "Online booking ",
+    "titleHighlight": "is coming soon",
+    "text": "We are working on letting you book in just a few clicks. Until then, give us a call and we will gladly find you a time."
   },
   "modal": {
     "label": "BOOKING",
     "titlePre": "Reserve your ",
     "titleHighlight": "appointment",
-    "lead": "Fill in your details — we'll call you to confirm the appointment.",
+    "lead": "Online booking is coming soon. Until then, give us a call and we will find a time together.",
     "close": "Close"
   },
   "footer": {
-    "logoAlt": "Dr. Ekmečić — dental clinic",
+    "logoAlt": "Dr. Ekmečić, dental clinic",
     "tagline": "DENTAL CLINIC",
     "slogan": "A smile you love to show",
     "contactTitle": "Contact",
@@ -215,12 +304,13 @@
     "hoursPre": "Mon–Fri · see ",
     "hoursLink": "opening hours",
     "copyright": "© 2026 General dental practice, owner Dr. Kamala Ekmečić",
-    "madeWith": "Made with a smile"
+    "madeWith": "Made with a smile",
+    "artLink": "Zehra's art corner"
   },
   "contactPage": {
     "badge": "CONTACT",
     "title": "We're here for you",
-    "lead": "Call, message or drop by — we're happy to help and sort out an appointment.",
+    "lead": "Call, message or drop by, we're happy to help and sort out an appointment.",
     "phoneLabel": "Phone",
     "emailLabel": "Email",
     "addressLabel": "Address",
@@ -228,15 +318,14 @@
     "hoursText": "See the schedule",
     "socialLabel": "Message us",
     "bookCta": "Book appointment",
-    "viber": "Viber",
-    "whatsapp": "WhatsApp",
+    "instagram": "Instagram",
     "facebook": "Facebook"
   },
   "map": {
-    "boxAria": "Map — clinic location in Cazin",
-    "iframeTitle": "Map — Cazin",
-    "streetTitle": "3D street view — Cazin",
-    "pinAria": "Clinic — Bolnička bb, Cazin",
+    "boxAria": "Map: clinic location in Cazin",
+    "iframeTitle": "Map: Cazin",
+    "streetTitle": "3D street view: Cazin",
+    "pinAria": "Clinic, Bolnička bb, Cazin",
     "popupName": "Dr. Ekmečić",
     "popupAddress": "Bolnička bb, Cazin",
     "directions": "open directions",
@@ -292,9 +381,34 @@
     "Root canal treatment",
     "Tooth extraction",
     "Prosthetics",
-    "Teeth whitening",
+    "Dental jewelry",
     "Tartar removal",
     "Pediatric dentistry",
     "Something else"
-  ]
+  ],
+  "art": {
+    "badge": "ART CORNER",
+    "titlePre": "Zehra's ",
+    "titleHighlight": "art corner",
+    "lead": "When she puts down her instruments, Dr. Zehra Ekmečić picks up a pencil. Every illustration is a little lesson about dental health, drawn with plenty of color and a bit of humor.",
+    "signature": "drawn by Dr. Zehra Ekmečić",
+    "instagram": "Follow on Instagram",
+    "imageOne": "image",
+    "imageFew": "images",
+    "imageMany": "images",
+    "open": "View",
+    "close": "Close",
+    "prev": "Previous",
+    "next": "Next",
+    "nextStory": "Next story",
+    "viewerLabel": "Illustration viewer",
+    "hint": "Tap a story and swipe through it like on Instagram"
+  },
+  "artHome": {
+    "badge": "ART CORNER",
+    "titlePre": "From Zehra's ",
+    "titleHighlight": "art corner",
+    "lead": "Illustrations Dr. Zehra draws for our patients. We hung them up to dry, pick any one you like.",
+    "cta": "See all artwork"
+  }
 }

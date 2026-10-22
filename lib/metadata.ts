@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { contactPath, getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
+import { artPath, contactPath, getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
 import {
   absoluteUrl,
+  artAlternates,
   contactAlternates,
   homeAlternates,
   postAlternates,
@@ -95,6 +96,33 @@ export function contactMetadata(locale: Locale): Metadata {
   };
 }
 
+export function artMetadata(locale: Locale): Metadata {
+  const t = getDict(locale).meta;
+  const url = absoluteUrl(artPath(locale));
+  const image = absoluteUrl("/assets/art/cetkica-1.webp");
+  return {
+    title: t.art.title,
+    description: t.art.description,
+    alternates: { canonical: url, languages: artAlternates() },
+    openGraph: {
+      type: "website",
+      locale: t.ogLocale,
+      alternateLocale: alternateOgLocale(locale),
+      url,
+      siteName: t.siteName,
+      title: t.art.title,
+      description: t.art.description,
+      images: [{ url: image, width: 1240, height: 1754, alt: t.art.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t.art.title,
+      description: t.art.description,
+      images: [image],
+    },
+  };
+}
+
 export function postMetadata(post: Post | null, locale: Locale): Metadata {
   const t = getDict(locale).meta;
   if (!post) {
@@ -104,7 +132,7 @@ export function postMetadata(post: Post | null, locale: Locale): Metadata {
   const description = post.summary ?? t.postFallbackDescription;
   const images = post.image_url ? [{ url: post.image_url, alt: post.title }] : undefined;
   return {
-    title: `${post.title} — ${t.siteName}`,
+    title: `${post.title} | ${t.siteName}`,
     description,
     alternates: { canonical: url, languages: postAlternates(post.slug) },
     openGraph: {

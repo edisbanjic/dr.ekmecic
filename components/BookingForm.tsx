@@ -296,7 +296,7 @@ export default function BookingForm() {
         >
           {t.form.step1}
         </span>
-        <span style={{ opacity: 0.35 }}>—</span>
+        <span style={{ opacity: 0.35 }}>→</span>
         <span
           style={{
             background: step === 2 ? '#7EAEE8' : '#E7F0FB',

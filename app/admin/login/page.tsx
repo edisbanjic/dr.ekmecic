@@ -34,10 +34,10 @@ export default function LoginPage() {
         <div style={{ textAlign: "center", marginBottom: "6px" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/logo-full.webp"
+            src="/assets/brand-logo-full.webp"
             alt="Dr. Ekmečić — stomatološka ordinacija"
-            width={1060}
-            height={248}
+            width={1350}
+            height={363}
             style={{ width: "100%", maxWidth: "230px", height: "auto", margin: "0 auto 14px", display: "block" }}
           />
           <div style={{ fontFamily: "var(--font-fredoka)", fontWeight: 700, fontSize: "24px" }}>

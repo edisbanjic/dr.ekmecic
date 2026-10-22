@@ -9,6 +9,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
+import BookingComingSoon from "@/components/BookingComingSoon";
 import BookingForm from "@/components/BookingFormLazy";
 import { useLocale } from "@/components/LocaleProvider";
 import { getDict } from "@/lib/i18n";
@@ -81,7 +82,9 @@ export function BookingModalProvider({ children }: { children: ReactNode }) {
                 </h2>
                 <p className="booking-modal-lead">{t.modal.lead}</p>
               </div>
-              <BookingForm />
+              <BookingComingSoon>
+                <BookingForm />
+              </BookingComingSoon>
             </div>
           </div>
         </div>

@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="adm-topbar">
         <a href="/admin" className="adm-brand">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/assets/logo.webp" alt="Dr. Ekmečić" width={1060} height={190} />
+          <img src="/assets/brand-logo.webp" alt="Dr. Ekmečić" width={1350} height={245} />
           <small>ADMIN PANEL</small>
         </a>
         <AdminNav />

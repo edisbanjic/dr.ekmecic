@@ -5,7 +5,8 @@ import { getDict } from '@/lib/i18n';
 
 /** Opening hours card. */
 export default function HoursSection() {
-  const t = getDict(useLocale().locale).hours;
+  const dict = getDict(useLocale().locale);
+  const t = dict.hours;
   return (
     <>
       <div style={{ background: '#E9F1FB', lineHeight: '0' }}>
@@ -339,6 +340,74 @@ export default function HoursSection() {
             >
               <span style={{ color: '#7EAEE8' }}>✦</span>
               {t.tip}
+            </div>
+            <div
+              style={{
+                marginTop: '22px',
+                padding: 'clamp(16px,2.4vw,22px)',
+                borderRadius: '22px',
+                background: 'rgba(244,160,138,.12)',
+                border: '1px dashed rgba(244,160,138,.45)',
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '16px 18px',
+                alignItems: 'center',
+              }}
+            >
+              <span
+                aria-hidden="true"
+                style={{
+                  flex: '0 0 auto',
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: '#F4A08A',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transform: 'rotate(-8deg)',
+                }}
+              >
+                <svg viewBox="0 0 24 24" style={{ width: '22px', height: '22px' }}>
+                  <path
+                    d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
+                    fill="#3D4142"
+                  />
+                </svg>
+              </span>
+              <div style={{ flex: '1 1 260px', minWidth: 0 }}>
+                <div
+                  style={{
+                    fontFamily: 'var(--font-shantell)',
+                    fontWeight: '600',
+                    fontSize: '18px',
+                    color: '#F4A08A',
+                  }}
+                >
+                  {t.callFirstTitle}
+                </div>
+                <div style={{ fontSize: '14px', lineHeight: '1.55', opacity: '.8', marginTop: '4px' }}>
+                  {t.callFirstText}
+                </div>
+              </div>
+              <a
+                href="tel:+38737514771"
+                className="hv6"
+                style={{
+                  flex: '0 0 auto',
+                  background: '#F5F0E8',
+                  color: '#3D4142',
+                  fontFamily: 'var(--font-fredoka)',
+                  fontWeight: '600',
+                  fontSize: '15px',
+                  padding: '11px 20px',
+                  borderRadius: '999px',
+                  whiteSpace: 'nowrap',
+                  transition: 'transform .3s cubic-bezier(.34,1.56,.64,1)',
+                }}
+              >
+                {t.callFirstCta} {dict.phoneDisplay}
+              </a>
             </div>
           </div>
         </div>

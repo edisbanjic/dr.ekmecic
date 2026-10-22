@@ -5,8 +5,7 @@ import LocationMap from "@/components/LocationMap";
 import { useLocale } from "@/components/LocaleProvider";
 import { CLINIC } from "@/lib/seo";
 import { getDict, homeAnchor } from "@/lib/i18n";
-import { FaFacebookF, FaWhatsapp } from "react-icons/fa";
-import { SiViber } from "react-icons/si";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 
 const iconBtn = {
   display: "inline-flex",
@@ -106,11 +105,8 @@ export default function ContactPageView() {
               {t.bookCta}
             </BookingTrigger>
             <div style={{ display: "inline-flex", gap: "8px" }}>
-              <a href={`viber://chat?number=%2B${CLINIC.phone.replace("+", "")}`} aria-label={t.viber} title={t.viber} className="hv10" style={iconBtn}>
-                <SiViber size={20} color="#7B5CDB" />
-              </a>
-              <a href={`https://wa.me/${CLINIC.phone.replace("+", "")}`} aria-label={t.whatsapp} title={t.whatsapp} className="hv10" style={iconBtn}>
-                <FaWhatsapp size={20} color="#2FA84A" />
+              <a href={CLINIC.instagram} target="_blank" rel="noopener noreferrer" aria-label={t.instagram} title={t.instagram} className="hv10" style={iconBtn}>
+                <FaInstagram size={20} color="#D6407A" />
               </a>
               <a href={CLINIC.facebook} target="_blank" rel="noopener noreferrer" aria-label={t.facebook} title={t.facebook} className="hv10" style={iconBtn}>
                 <FaFacebookF size={18} color="#3E5F86" />
@@ -131,12 +127,15 @@ export default function ContactPageView() {
               <span style={{ fontSize: "12px", fontWeight: 800, letterSpacing: ".06em", color: "#5B8FD4", textTransform: "uppercase" as const }}>
                 {t.emailLabel}
               </span>
-              <a
-                href={`mailto:${CLINIC.email}`}
-                style={{ fontWeight: 700, fontSize: "15px", color: "#3D4142", textDecoration: "underline", textUnderlineOffset: "3px", wordBreak: "break-word", lineHeight: 1.4 }}
-              >
-                {CLINIC.email}
-              </a>
+              {[CLINIC.email, CLINIC.emailZehra].map((email) => (
+                <a
+                  key={email}
+                  href={`mailto:${email}`}
+                  style={{ fontWeight: 700, fontSize: "15px", color: "#3D4142", textDecoration: "underline", textUnderlineOffset: "3px", wordBreak: "break-word", lineHeight: 1.4, justifySelf: "start" }}
+                >
+                  {email}
+                </a>
+              ))}
             </div>
             <div style={{ display: "grid", gap: "4px" }}>
               <span style={{ fontSize: "12px", fontWeight: 800, letterSpacing: ".06em", color: "#5B8FD4", textTransform: "uppercase" as const }}>

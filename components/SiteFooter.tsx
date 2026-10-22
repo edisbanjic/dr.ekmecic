@@ -3,9 +3,8 @@
 import LangSwitcher from "@/components/LangSwitcher";
 import LocationMap from "@/components/LocationMap";
 import { useLocale } from "@/components/LocaleProvider";
-import { FaFacebookF, FaWhatsapp } from "react-icons/fa";
-import { SiViber } from "react-icons/si";
-import { getDict, homeAnchor } from "@/lib/i18n";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
+import { artPath, getDict, homeAnchor } from "@/lib/i18n";
 
 const socialLinkStyle = {
   display: "inline-flex",
@@ -35,22 +34,20 @@ export default function SiteFooter({ home = false }: { home?: boolean }) {
             <div style={{flex:"1 1 320px",minWidth:"280px"}}>
               <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/logo-light.webp" alt={t.footer.logoAlt} width={1060} height={190} style={{height:"clamp(36px,4.8vw,53px)",width:"auto",display:"block"}} />
+                <img src="/assets/brand-logo-light.webp" alt={t.footer.logoAlt} width={1350} height={245} style={{height:"clamp(36px,4.8vw,53px)",width:"auto",display:"block"}} />
                 <span style={{fontSize:"11px",fontWeight:"800",letterSpacing:".34em",color:"#7EAEE8"}}>{t.footer.tagline}</span>
               </div>
               <p style={{margin:"18px 0 0",fontFamily:"var(--font-shantell)",fontWeight:"500",fontSize:"19px",opacity:".9"}}>{t.footer.slogan} <span style={{color:"#F4A08A"}}>✦</span></p>
               <div style={{display:"flex",gap:"10px",marginTop:"22px",flexWrap:"wrap"}}>
                 <a href="tel:+38737514771" style={{background:"#7EAEE8",color:"#243038",fontFamily:"var(--font-fredoka)",fontWeight:"600",fontSize:"15px",padding:"11px 20px",borderRadius:"999px",transition:"transform .3s cubic-bezier(.34,1.56,.64,1)"}} className="hv9">{t.phoneDisplay}</a>
-                <a href="viber://chat?number=%2B38737514771" aria-label="Viber" title="Viber" style={socialLinkStyle} className="hv10">
-                  <SiViber size={22} color="#B89CFF" />
-                </a>
-                <a href="https://wa.me/38737514771" aria-label="WhatsApp" title="WhatsApp" style={socialLinkStyle} className="hv10">
-                  <FaWhatsapp size={22} color="#3FBD5A" />
+                <a href="https://www.instagram.com/dr.ekmecic_dental" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" style={socialLinkStyle} className="hv10">
+                  <FaInstagram size={22} color="#F5F0E8" />
                 </a>
                 <a href="https://www.facebook.com/drKamalaEkmecic" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook" style={socialLinkStyle} className="hv10">
                   <FaFacebookF size={20} color="#F5F0E8" />
                 </a>
               </div>
+              <a href={artPath(locale)} className="hv8" style={{display:"inline-flex",alignItems:"center",gap:"8px",marginTop:"18px",fontFamily:"var(--font-shantell)",fontWeight:"600",fontSize:"17px",color:"#F4A08A",textDecoration:"underline",textDecorationStyle:"wavy",textUnderlineOffset:"5px",transition:"transform .3s cubic-bezier(.34,1.56,.64,1)"}}>✎ {t.footer.artLink} →</a>
             </div>
             <div style={{flex:"0 1 260px",minWidth:"220px"}}>
               <div style={{fontFamily:"var(--font-fredoka)",fontWeight:"600",fontSize:"17px",marginBottom:"14px"}}>{t.footer.contactTitle}</div>
@@ -58,6 +55,7 @@ export default function SiteFooter({ home = false }: { home?: boolean }) {
                 <div style={{display:"flex",gap:"10px"}}><span style={{color:"#7EAEE8"}}>✦</span>{t.footer.addressLine1}<br />{t.footer.addressLine2}</div>
                 <div style={{display:"flex",gap:"10px"}}><span style={{color:"#7EAEE8"}}>✦</span>{t.phoneDisplay}</div>
                 <div style={{display:"flex",gap:"10px"}}><span style={{color:"#7EAEE8"}}>✦</span><a href="mailto:ekmecic.kamala@gmail.com" style={{color:"#F5F0E8",textDecoration:"underline",textUnderlineOffset:"3px",wordBreak:"break-all"}}>ekmecic.kamala@gmail.com</a></div>
+                <div style={{display:"flex",gap:"10px"}}><span style={{color:"#7EAEE8"}}>✦</span><a href="mailto:ekmecic.zehra.dr@gmail.com" style={{color:"#F5F0E8",textDecoration:"underline",textUnderlineOffset:"3px",wordBreak:"break-all"}}>ekmecic.zehra.dr@gmail.com</a></div>
                 <div style={{display:"flex",gap:"10px"}}><span style={{color:"#7EAEE8"}}>✦</span>{t.footer.hoursPre}<a href={to("hours")} style={{color:"#F5F0E8",textDecoration:"underline",textUnderlineOffset:"3px"}}>{t.footer.hoursLink}</a></div>
               </div>
             </div>

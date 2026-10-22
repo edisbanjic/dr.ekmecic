@@ -6,6 +6,7 @@ import SiteHeader from "@/components/SiteHeader";
 import type { Locale } from "@/lib/i18n";
 import { clinicJsonLd, faqJsonLd } from "@/lib/seo";
 import AboutSection from "./AboutSection";
+import ArtSection from "./ArtSection";
 import BookingSection from "./BookingSection";
 import FaqSection from "./FaqSection";
 import Hero from "./Hero";
@@ -35,6 +36,7 @@ export default function HomePage({ locale }: { locale: Locale }) {
         <BookingSection />
         <ReviewsSection />
         <FaqSection />
+        <ArtSection />
       </main>
       <SiteFooter home />
     </LocaleProvider>

@@ -7,7 +7,7 @@ export const SERVICES = [
   "Liječenje korijena",
   "Vađenje zuba",
   "Protetika",
-  "Izbjeljivanje",
+  "Dentalni nakit",
   "Uklanjanje kamenca",
   "Dječija stomatologija",
   "Nešto drugo",

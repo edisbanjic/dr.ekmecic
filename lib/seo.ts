@@ -1,10 +1,11 @@
-import { contactPath, getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
+import { artPath, contactPath, getDict, homePath, postPath, tipsPath, type Locale } from "./i18n";
 import { getSiteUrl } from "./site";
 import type { Post } from "./types";
 
 export const CLINIC = {
   phone: "+38737514771",
   email: "ekmecic.kamala@gmail.com",
+  emailZehra: "ekmecic.zehra.dr@gmail.com",
   street: "Bolnička bb",
   postalCode: "77220",
   city: "Cazin",
@@ -12,6 +13,7 @@ export const CLINIC = {
   latitude: 44.96627043157745,
   longitude: 15.93211628755716,
   facebook: "https://www.facebook.com/drKamalaEkmecic",
+  instagram: "https://www.instagram.com/dr.ekmecic_dental",
 } as const;
 
 export function absoluteUrl(path: string): string {
@@ -39,6 +41,10 @@ export function contactAlternates() {
   return languageAlternates({ bs: contactPath("bs"), en: contactPath("en") });
 }
 
+export function artAlternates() {
+  return languageAlternates({ bs: artPath("bs"), en: artPath("en") });
+}
+
 export function postAlternates(slug: string) {
   return languageAlternates({ bs: postPath("bs", slug), en: postPath("en", slug) });
 }
@@ -54,11 +60,11 @@ export function clinicJsonLd(locale: Locale) {
     alternateName: t.meta.siteName,
     description: t.meta.home.description,
     url: absoluteUrl(homePath(locale)),
-    logo: absoluteUrl("/assets/logo-full.png"),
+    logo: absoluteUrl("/assets/brand-logo-full.png"),
     image: [
       absoluteUrl("/assets/og-image.jpg"),
-      absoluteUrl("/assets/hero-clinic.webp"),
-      absoluteUrl("/assets/polaroid-waiting-room.webp"),
+      absoluteUrl("/assets/team-zehra.webp"),
+      absoluteUrl("/assets/gallery-clinic.webp"),
     ],
     telephone: CLINIC.phone,
     email: CLINIC.email,
@@ -96,7 +102,7 @@ export function clinicJsonLd(locale: Locale) {
         closes: "18:00",
       },
     ],
-    sameAs: [CLINIC.facebook],
+    sameAs: [CLINIC.instagram, CLINIC.facebook],
   };
 }
 

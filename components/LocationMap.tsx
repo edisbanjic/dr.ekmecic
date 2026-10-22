@@ -189,7 +189,7 @@ export default function LocationMap({ variant = "footer" }: LocationMapProps) {
         </div>
       </div>
       <div style={{ fontSize: "13px", opacity: onPage ? 0.7 : 0.6, marginTop: "8px", fontWeight: onPage ? 600 : undefined }}>
-        {t.addressShort} —{" "}
+        {t.addressShort} ·{" "}
         <a
           href={DIRECTIONS}
           target="_blank"

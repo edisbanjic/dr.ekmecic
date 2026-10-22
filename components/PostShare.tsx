@@ -120,7 +120,7 @@ export default function PostShare({ title, summary, url }: PostShareProps) {
   const t = getDict(useLocale().locale).share;
   const [copied, setCopied] = useState(false);
   const [canNativeShare, setCanNativeShare] = useState(false);
-  const text = summary ? `${title} — ${summary}` : title;
+  const text = summary ? `${title}: ${summary}` : title;
 
   useEffect(() => {
     setCanNativeShare(typeof navigator.share === "function");
