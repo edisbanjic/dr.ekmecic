@@ -45,10 +45,10 @@ export default function PostCover({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/assets/brand-logo-full.webp"
+        src="/assets/brand-logo-full.svg?v=2"
         alt=""
-        width={1350}
-        height={363}
+        width={2091}
+        height={533}
         style={{ width: "100%", maxWidth: "320px", height: "auto", display: "block" }}
       />
     </div>

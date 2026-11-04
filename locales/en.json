@@ -52,9 +52,9 @@
     "badgeRating": "5.0 average rating",
     "badgeYears": "30+ years of experience",
     "badgeSmiles": "10,000+ smiles",
-    "nameKamala": "Dr. Kamala Ekmečić",
-    "nameZehra": "Dr. Zehra Ekmečić",
-    "nameTech": "Lejla Nadarević"
+    "nameKamala": "Kamala Ekmečić, DMD",
+    "nameZehra": "Zehra Ekmečić, DMD",
+    "nameTech": "Lejla Nadarević, dental nurse"
   },
   "marquee": ["HEALTHY SMILE", "PAIN-FREE", "MODERN EQUIPMENT", "PERSONAL APPROACH"],
   "services": {
@@ -103,8 +103,8 @@
   },
   "about": {
     "badge": "MEET THE DOCTOR",
-    "titlePre": "A steady hand, ",
-    "titleHighlight": "a warm heart",
+    "titlePre": "Dr. Kamala ",
+    "titleHighlight": "Ekmečić",
     "p1": "Behind every healthy smile stands a patient heart. Dr. Kamala Ekmečić believes a visit to the dentist doesn't have to be stressful. That's why in our clinic there is always time for your questions, an explanation of every step and a break whenever you need one.",
     "p2": "With continuous education and modern equipment, we approach every patient individually, because every smile tells its own story.",
     "sticker": "30+ years by your smile",
@@ -136,7 +136,8 @@
       "p1": "A new generation of the same dedication: Dr. Zehra Ekmečić brings fresh knowledge, a steady hand and a smile that puts you at ease already in the waiting room. She keeps up with the latest methods in dentistry and takes the time to make every patient feel safe and at ease.",
       "p2": "Together we make sure every appointment goes calmly, thoroughly and ends with a smile.",
       "sticker": "a second pair of careful hands",
-      "altPortrait": "Dr. Zehra Ekmečić"
+      "altPortrait": "Dr. Zehra Ekmečić",
+      "education": "Graduated in 2025 from the Faculty of Dental Medicine, University of Rijeka"
     },
     "tech": {
       "badge": "DENTAL NURSE",
@@ -153,14 +154,15 @@
         "alt": "The clinic"
       },
       {
-        "caption": "modern equipment",
-        "alt": "Equipment"
+        "caption": "our entrance",
+        "alt": "Clinic entrance"
       },
       {
         "caption": "a corner for the bravest",
         "alt": "A box of rewards for kids"
       }
-    ]
+    ],
+    "education": "Graduated in 1996 from the School of Dental Medicine, University of Zagreb"
   },
   "hours": {
     "badge": "WHEN WE'RE HERE FOR YOU",
@@ -297,7 +299,7 @@
   "footer": {
     "logoAlt": "Dr. Ekmečić, dental clinic",
     "tagline": "DENTAL CLINIC",
-    "slogan": "A smile you love to show",
+    "slogan": "Keeping your smile healthy",
     "contactTitle": "Contact",
     "addressLine1": "Bolnička bb,",
     "addressLine2": "77220 Cazin, Bosnia and Herzegovina",

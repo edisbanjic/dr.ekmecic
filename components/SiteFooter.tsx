@@ -34,8 +34,7 @@ export default function SiteFooter({ home = false }: { home?: boolean }) {
             <div style={{flex:"1 1 320px",minWidth:"280px"}}>
               <div style={{display:"flex",flexDirection:"column",gap:"6px"}}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/assets/brand-logo-light.webp" alt={t.footer.logoAlt} width={1350} height={245} style={{height:"clamp(36px,4.8vw,53px)",width:"auto",display:"block"}} />
-                <span style={{fontSize:"11px",fontWeight:"800",letterSpacing:".34em",color:"#7EAEE8"}}>{t.footer.tagline}</span>
+                <img src="/assets/brand-logo-light.svg?v=2" alt={t.footer.logoAlt} width={2091} height={533} style={{height:"clamp(56px,6.5vw,76px)",width:"auto",display:"block",alignSelf:"flex-start"}} />
               </div>
               <p style={{margin:"18px 0 0",fontFamily:"var(--font-shantell)",fontWeight:"500",fontSize:"19px",opacity:".9"}}>{t.footer.slogan} <span style={{color:"#F4A08A"}}>✦</span></p>
               <div style={{display:"flex",gap:"10px",marginTop:"22px",flexWrap:"wrap"}}>

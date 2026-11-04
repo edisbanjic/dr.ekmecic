@@ -52,9 +52,9 @@
     "badgeRating": "5,0 prosječna ocjena",
     "badgeYears": "30+ godina iskustva",
     "badgeSmiles": "10.000+ osmijeha",
-    "nameKamala": "Dr. Kamala Ekmečić",
-    "nameZehra": "Dr. Zehra Ekmečić",
-    "nameTech": "Lejla Nadarević"
+    "nameKamala": "Kamala Ekmečić, dr. stom.",
+    "nameZehra": "Zehra Ekmečić, dr. dent. med.",
+    "nameTech": "Lejla Nadarević, med. sestra"
   },
   "marquee": ["ZDRAV OSMIJEH", "BEZ BOLA", "MODERNA OPREMA", "INDIVIDUALAN PRISTUP"],
   "services": {
@@ -103,8 +103,8 @@
   },
   "about": {
     "badge": "UPOZNAJTE DOKTORICU",
-    "titlePre": "Mirna ruka, ",
-    "titleHighlight": "toplo srce",
+    "titlePre": "Dr. Kamala ",
+    "titleHighlight": "Ekmečić",
     "p1": "Iza svakog zdravog osmijeha stoji strpljivo srce. Dr. Kamala Ekmečić vjeruje da posjeta stomatologu ne mora biti stresna. Zato u našoj ordinaciji uvijek ima vremena za vaša pitanja, objašnjenje svakog koraka i pauzu kad vam zatreba.",
     "p2": "Uz kontinuiranu edukaciju i modernu opremu, svakom pacijentu pristupamo individualno, jer svaki osmijeh priča svoju priču.",
     "sticker": "30+ godina uz vaš osmijeh",
@@ -136,7 +136,8 @@
       "p1": "Nova generacija iste posvećenosti: dr. Zehra Ekmečić u ordinaciju donosi svježa znanja, mirnu ruku i osmijeh koji opušta već u čekaonici. Prati najnovije metode u stomatologiji i svakom pacijentu posveti vrijeme da se osjeća sigurno i opušteno.",
       "p2": "Zajedno brinemo da svaki termin prođe mirno, temeljito i s osmijehom na kraju.",
       "sticker": "drugi par pažljivih ruku",
-      "altPortrait": "Dr. Zehra Ekmečić"
+      "altPortrait": "Dr. Zehra Ekmečić",
+      "education": "Diplomirala 2025. na Fakultetu dentalne medicine Sveučilišta u Rijeci"
     },
     "tech": {
       "badge": "MEDICINSKA SESTRA",
@@ -153,14 +154,15 @@
         "alt": "Ordinacija"
       },
       {
-        "caption": "moderna oprema",
-        "alt": "Oprema"
+        "caption": "naš ulaz",
+        "alt": "Ulaz u ordinaciju"
       },
       {
         "caption": "kutak za najhrabrije",
         "alt": "Kutija s nagradama za djecu"
       }
-    ]
+    ],
+    "education": "Diplomirala 1996. na Stomatološkom fakultetu Sveučilišta u Zagrebu"
   },
   "hours": {
     "badge": "KAD SMO TU ZA VAS",
@@ -297,7 +299,7 @@
   "footer": {
     "logoAlt": "Dr. Ekmečić, stomatološka ordinacija",
     "tagline": "STOMATOLOŠKA ORDINACIJA",
-    "slogan": "Osmijeh koji voliš pokazati",
+    "slogan": "Održavamo vaš osmijeh zdravim",
     "contactTitle": "Kontakt",
     "addressLine1": "Bolnička bb,",
     "addressLine2": "77220 Cazin, BiH",

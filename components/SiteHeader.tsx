@@ -96,8 +96,7 @@ export default function SiteHeader({ home = false }: { home?: boolean }) {
         <div style={{maxWidth:"1240px",margin:"0 auto",display:"flex",alignItems:"center",gap:"26px",padding:"13px clamp(16px,4vw,32px)"}}>
           <a href={home ? "#top" : homePath(locale)} style={{display:"flex",flexDirection:"column",lineHeight:"1",gap:"4px"}} onClick={() => home && setActive(null)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/brand-logo.webp" alt={t.header.logoAlt} width={1350} height={245} style={{height:"31px",width:"auto",display:"block"}} />
-            <span style={{fontSize:"8.5px",fontWeight:"800",letterSpacing:".34em",color:"#5B8FD4"}}>{t.header.tagline}</span>
+            <img src="/assets/brand-logo-full.svg?v=2" alt={t.header.logoAlt} width={2091} height={533} style={{height:"52px",width:"auto",display:"block"}} />
           </a>
           <nav id="nav-links" style={{display:"flex",gap:"24px",marginLeft:"auto",fontWeight:"700",fontSize:"15px"}}>
             <a

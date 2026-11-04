@@ -3,6 +3,16 @@
 import { useLocale } from "@/components/LocaleProvider";
 import { getDict } from "@/lib/i18n";
 
+/** Small pill showing where and when a doctor graduated. */
+function Education({ text }: { text: string }) {
+  return (
+    <div style={{display:"inline-flex",alignItems:"center",gap:"10px",marginTop:"18px",background:"#FFFFFF",borderRadius:"16px",padding:"10px 16px",fontSize:"14.5px",fontWeight:"700",lineHeight:"1.4",color:"#3E5F86"}}>
+      <svg viewBox="0 0 24 24" aria-hidden="true" style={{width:"20px",height:"20px",flex:"none"}}><path d="M12 3 1 9l11 6 9-4.91V17h2V9L12 3Zm-6.82 9.18v4L12 20l6.82-3.82v-4L12 16l-6.82-3.82Z" fill="#5B8FD4"></path></svg>
+      <span>{text}</span>
+    </div>
+  );
+}
+
 const STAT_COLORS = ["#5B8FD4", "#E8836A", undefined];
 const POLAROID_IMAGES = [
   "/assets/gallery-clinic.webp",
@@ -39,6 +49,7 @@ export default function AboutSection() {
               <h2 style={{margin:"16px 0 0",fontFamily:"var(--font-fredoka)",fontWeight:"700",fontSize:"clamp(36px,5vw,58px)",lineHeight:"1.04",letterSpacing:"-.01em"}}>{t.titlePre}<span style={{color:"#5B8FD4"}}>{t.titleHighlight}</span></h2>
               <p style={{margin:"22px 0 0",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>{t.p1}</p>
               <p style={{margin:"14px 0 0",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>{t.p2}</p>
+              <Education text={t.education} />
               <div style={{display:"flex",gap:"clamp(24px,4vw,48px)",flexWrap:"wrap",marginTop:"34px"}}>
                 {t.stats.map((stat, i) => (
                   <div key={i}>
@@ -64,6 +75,7 @@ export default function AboutSection() {
               <h3 style={{margin:"16px 0 0",fontFamily:"var(--font-fredoka)",fontWeight:"700",fontSize:"clamp(28px,4vw,44px)",lineHeight:"1.04",letterSpacing:"-.01em"}}>{t.team.namePre}<span style={{color:"#5B8FD4"}}>{t.team.nameHighlight}</span></h3>
               <p style={{margin:"18px 0 0",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>{t.team.p1}</p>
               <p style={{margin:"14px 0 0",fontSize:"16.5px",lineHeight:"1.65",fontWeight:"600",opacity:".85"}}>{t.team.p2}</p>
+              <div><Education text={t.team.education} /></div>
               <a href="https://www.linkedin.com/in/zehra-ekme%C4%8Di%C4%87-4781b5389/" target="_blank" rel="noopener" style={{display:"inline-flex",alignItems:"center",gap:"9px",marginTop:"22px",background:"#FFFFFF",borderRadius:"999px",padding:"10px 20px",fontWeight:"800",fontSize:"14px",transition:"transform .3s cubic-bezier(.34,1.56,.64,1)"}} className="hv7"><svg viewBox="0 0 24 24" style={{width:"16px",height:"16px"}}><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="#0A66C2"></path></svg>LinkedIn</a>
             </div>
           </div>
@@ -87,7 +99,7 @@ export default function AboutSection() {
           <div style={{display:"flex",gap:"clamp(18px,3vw,30px)",justifyContent:"center",flexWrap:"wrap",marginTop:"clamp(48px,7vw,80px)"}}>
             {t.polaroids.map((polaroid, i) => (
               <div key={i} data-reveal="" data-delay={POLAROID_STYLES[i].delay} style={{background:"#FFFFFF",padding:"12px 12px 14px",borderRadius:"6px",boxShadow:"0 20px 38px -20px rgba(61,65,66,.4)",transform:POLAROID_STYLES[i].rotate,marginTop:POLAROID_STYLES[i].marginTop}}>
-                <img src={POLAROID_IMAGES[i]} alt={polaroid.alt} loading="lazy" decoding="async" style={{width:"230px",height:"170px",display:"block",objectFit:"cover",borderRadius:"2px"}} />
+                <img src={POLAROID_IMAGES[i]} alt={polaroid.alt} loading="lazy" decoding="async" style={{width:"min(275px,70vw)",aspectRatio:"23/17",height:"auto",display:"block",objectFit:"cover",borderRadius:"2px"}} />
                 <div style={{fontFamily:"var(--font-shantell)",fontWeight:"500",fontSize:"18px",textAlign:"center",marginTop:"10px"}}>{polaroid.caption}{i === 1 && <> <span style={{color:"#5B8FD4"}}>✦</span></>}</div>
               </div>
             ))}
