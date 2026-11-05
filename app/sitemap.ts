@@ -67,24 +67,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Posts exist only in Bosnian (the /en copy canonicalises to it), so list one URL each.
   for (const post of posts) {
-    const alternates = pair(postPath("bs", post.slug), postPath("en", post.slug));
-    entries.push(
-      {
-        url: absoluteUrl(postPath("bs", post.slug)),
-        lastModified: post.date,
-        changeFrequency: "monthly",
-        priority: 0.6,
-        alternates,
-      },
-      {
-        url: absoluteUrl(postPath("en", post.slug)),
-        lastModified: post.date,
-        changeFrequency: "monthly",
-        priority: 0.5,
-        alternates,
-      },
-    );
+    entries.push({
+      url: absoluteUrl(postPath("bs", post.slug)),
+      lastModified: post.date,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    });
   }
 
   return entries;

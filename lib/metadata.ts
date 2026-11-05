@@ -5,7 +5,6 @@ import {
   artAlternates,
   contactAlternates,
   homeAlternates,
-  postAlternates,
   tipsAlternates,
 } from "./seo";
 import type { Post } from "./types";
@@ -128,29 +127,33 @@ export function postMetadata(post: Post | null, locale: Locale): Metadata {
   if (!post) {
     return { title: t.postNotFound, robots: { index: false, follow: false } };
   }
-  const url = absoluteUrl(postPath(locale, post.slug));
+  // Posts are written only in Bosnian; /en/tips/<slug> shows the same text, so
+  // the Bosnian URL is canonical for both (no duplicate content in Google).
+  const url = absoluteUrl(postPath("bs", post.slug));
   const description = post.summary ?? t.postFallbackDescription;
-  const images = post.image_url ? [{ url: post.image_url, alt: post.title }] : undefined;
+  // Without a cover, share the branded card instead of a preview with no image.
+  const image = post.image_url
+    ? { url: post.image_url, alt: post.title }
+    : { url: OG_IMAGE, width: OG_WIDTH, height: OG_HEIGHT, alt: post.title };
   return {
     title: `${post.title} | ${t.siteName}`,
     description,
-    alternates: { canonical: url, languages: postAlternates(post.slug) },
+    alternates: { canonical: url },
     openGraph: {
       type: "article",
-      locale: t.ogLocale,
-      alternateLocale: alternateOgLocale(locale),
+      locale: getDict("bs").meta.ogLocale,
       url,
       siteName: t.siteName,
       title: post.title,
       description,
-      images,
+      images: [image],
       publishedTime: post.date,
     },
     twitter: {
-      card: post.image_url ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: post.title,
       description,
-      images: post.image_url ? [post.image_url] : undefined,
+      images: [image.url],
     },
   };
 }
