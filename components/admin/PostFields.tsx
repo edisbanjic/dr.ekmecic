@@ -38,7 +38,7 @@ export default function PostFields({ post }: { post?: Post }) {
         <span>Sažetak (kratki uvod na kartici)</span>
         <input name="summary" defaultValue={post?.summary ?? ""} placeholder="Rečenica-dvije koje mame na čitanje…" />
       </label>
-      <CoverImage url={post?.image_url} />
+      <CoverImage url={post?.image_url} alt={post?.image_alt} />
       <ContentEditor content={post?.content} />
       <PostSeo post={post} />
       <label className="full" style={{ display: "flex", alignItems: "center", gap: "10px" }}>

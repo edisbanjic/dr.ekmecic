@@ -57,6 +57,7 @@
 
 .adm-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
 .adm-form .full { grid-column: 1 / -1; }
+.adm-form > * { min-width: 0; }
 .adm-form label span { display: block; font-weight: 800; font-size: 13px; margin-bottom: 6px; }
 .adm-form input, .adm-form select, .adm-form textarea {
   width: 100%; box-sizing: border-box; padding: 11px 14px; border-radius: 14px;

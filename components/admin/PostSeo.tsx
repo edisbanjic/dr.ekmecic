@@ -36,7 +36,7 @@ function Counter({ value, limits }: { value: string; limits: { min: number; max:
   );
 }
 
-type FormSnapshot = { title: string; summary: string; content: string; slug: string; coverFile: string | null };
+type FormSnapshot = { title: string; summary: string; content: string; slug: string; imageAlt: string; coverFile: string | null };
 
 /** Values the rest of the post form owns (title, content…), read live from the <form>. */
 function readForm(form: HTMLFormElement | null, prev: FormSnapshot): FormSnapshot {
@@ -53,6 +53,7 @@ function readForm(form: HTMLFormElement | null, prev: FormSnapshot): FormSnapsho
     summary: get("summary"),
     content: get("content"),
     slug: get("slug"),
+    imageAlt: get("image_alt"),
     coverFile: picked ? picked.name : null,
   };
 }
@@ -65,12 +66,12 @@ export default function PostSeo({ post }: { post?: Post }) {
     summary: post?.summary ?? "",
     content: post?.content ?? "",
     slug: post?.slug ?? "",
+    imageAlt: post?.image_alt ?? "",
     coverFile: null,
   });
   const [keyword, setKeyword] = useState(post?.focus_keyword ?? "");
   const [seoTitle, setSeoTitle] = useState(post?.seo_title ?? "");
   const [seoDescription, setSeoDescription] = useState(post?.seo_description ?? "");
-  const [imageAlt, setImageAlt] = useState(post?.image_alt ?? "");
   const [ogPreview, setOgPreview] = useState<string | null>(post?.og_image ?? null);
 
   // The editor writes its HTML into a hidden input without firing events, so poll.
@@ -99,7 +100,7 @@ export default function PostSeo({ post }: { post?: Post }) {
     contentHtml: form.content,
     focusKeyword: keyword,
     coverImage: hasCover ? "cover" : null,
-    coverImageAlt: imageAlt,
+    coverImageAlt: form.imageAlt,
     ogImage: ogPreview,
   });
   const checks = [...analysis.checks].sort((a, b) => ORDER[a.status] - ORDER[b.status]);
@@ -112,9 +113,9 @@ export default function PostSeo({ post }: { post?: Post }) {
         Sve je opcionalno — prazna polja koriste naslov, sažetak i cover sliku.
       </p>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "24px", alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: "24px", alignItems: "start" }}>
         {/* fields */}
-        <div style={{ display: "grid", gap: "16px" }}>
+        <div style={{ display: "grid", gap: "16px", minWidth: 0 }}>
           <label>
             <span>Ključna riječ (fraza)</span>
             <input
@@ -149,15 +150,6 @@ export default function PostSeo({ post }: { post?: Post }) {
             />
           </label>
           <label>
-            <span>Opis cover slike (alt tekst)</span>
-            <input
-              name="image_alt"
-              value={imageAlt}
-              onChange={(e) => setImageAlt(e.target.value)}
-              placeholder="npr. Dr. Zehra pregleda zube djetetu"
-            />
-          </label>
-          <label>
             <span>Posebna slika za dijeljenje (opcionalno)</span>
             <input
               type="file"
@@ -177,7 +169,7 @@ export default function PostSeo({ post }: { post?: Post }) {
         </div>
 
         {/* previews + checks */}
-        <div style={{ display: "grid", gap: "18px" }}>
+        <div style={{ display: "grid", gap: "18px", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
             <div
               style={{

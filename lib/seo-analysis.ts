@@ -220,7 +220,7 @@ export function analyzeSeo(input: SeoAnalysisInput): SeoAnalysis {
   if (!input.coverImage) {
     checks.push({ id: "cover", status: "ok", message: "Nema naslovne slike — članci sa slikom bolje izgledaju u pretrazi." });
   } else if (!input.coverImageAlt.trim()) {
-    checks.push({ id: "cover", status: "ok", message: "Naslovna slika nema opis (alt tekst) za Google i čitače ekrana." });
+    checks.push({ id: "cover", status: "ok", message: "Naslovna slika nema opis (alt tekst) — upišite ga ispod cover slike." });
   } else {
     checks.push({ id: "cover", status: "good", message: "Naslovna slika ima opis (alt tekst)." });
   }

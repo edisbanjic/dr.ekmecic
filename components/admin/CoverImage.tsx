@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 /** Post cover image — existing preview + pick a new file. */
-export default function CoverImage({ url }: { url?: string | null }) {
+export default function CoverImage({ url, alt }: { url?: string | null; alt?: string | null }) {
   const [preview, setPreview] = useState(url ?? "");
 
   return (
@@ -33,6 +33,13 @@ export default function CoverImage({ url }: { url?: string | null }) {
         Posebno od covera u sadržaju. JPG, PNG, WebP, GIF · do 4 MB.
         {url ? " Ostavi prazno da zadržiš postojeću." : ""}
       </p>
+      <label style={{ display: "block", marginTop: "14px" }}>
+        <span>Opis slike (alt tekst)</span>
+        <input name="image_alt" defaultValue={alt ?? ""} placeholder="npr. Dr. Zehra pregleda zube djetetu" />
+        <p style={{ margin: "6px 0 0", fontSize: "12.5px", fontWeight: 700, opacity: 0.55 }}>
+          Kratko opišite šta je na slici — Google ga čita, a i slabovidni korisnici.
+        </p>
+      </label>
     </div>
   );
 }
