@@ -115,7 +115,7 @@ export default function PostSeo({ post }: { post?: Post }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(300px, 100%), 1fr))", gap: "24px", alignItems: "start" }}>
         {/* fields */}
-        <div style={{ display: "grid", gap: "16px", minWidth: 0 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "16px", minWidth: 0 }}>
           <label>
             <span>Ključna riječ (fraza)</span>
             <input
@@ -169,7 +169,7 @@ export default function PostSeo({ post }: { post?: Post }) {
         </div>
 
         {/* previews + checks */}
-        <div style={{ display: "grid", gap: "18px", minWidth: 0 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: "18px", minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
             <div
               style={{

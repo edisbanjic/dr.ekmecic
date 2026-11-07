@@ -30,7 +30,7 @@ export default async function EditPostPage({ params }: { params: Promise<{ id: s
           </ConfirmButton>
         </div>
       </div>
-      <div className="adm-card" style={{ maxWidth: "820px" }}>
+      <div className="adm-card" style={{ maxWidth: "1000px" }}>
         <form action={updatePost.bind(null, post.id)} className="adm-form">
           <PostFields post={post} />
           <div className="full">

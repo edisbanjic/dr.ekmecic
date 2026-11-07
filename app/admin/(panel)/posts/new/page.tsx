@@ -12,7 +12,7 @@ export default async function NewPostPage() {
       <div className="adm-heading">
         <h1>Nova objava</h1>
       </div>
-      <div className="adm-card" style={{ maxWidth: "820px" }}>
+      <div className="adm-card" style={{ maxWidth: "1000px" }}>
         <form action={createPost} className="adm-form">
           <PostFields />
           <div className="full">
