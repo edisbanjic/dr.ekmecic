@@ -4,7 +4,7 @@ import ScrollEffects from "@/components/ScrollEffects";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import type { Locale } from "@/lib/i18n";
-import { clinicJsonLd, faqJsonLd } from "@/lib/seo";
+import { clinicJsonLd, faqJsonLd, websiteJsonLd } from "@/lib/seo";
 import AboutSection from "./AboutSection";
 import ArtSection from "./ArtSection";
 import BookingSection from "./BookingSection";
@@ -25,6 +25,7 @@ export default function HomePage({ locale }: { locale: Locale }) {
     <LocaleProvider initial={locale}>
       <JsonLd data={clinicJsonLd(locale)} />
       <JsonLd data={faqJsonLd(locale)} />
+      <JsonLd data={websiteJsonLd(locale)} />
       <ScrollEffects />
       <SiteHeader home />
       <main>

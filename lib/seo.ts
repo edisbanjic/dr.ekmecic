@@ -103,6 +103,125 @@ export function clinicJsonLd(locale: Locale) {
       },
     ],
     sameAs: [CLINIC.instagram, CLINIC.facebook],
+    founder: { "@id": `${getSiteUrl()}/#kamala` },
+    employee: doctorsJsonLd(locale),
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: t.services.title,
+      itemListElement: Object.values(t.services.cards).map((card) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "MedicalProcedure", name: card.title, description: card.text },
+      })),
+    },
+  };
+}
+
+/** The two dentists as schema.org Dentist persons (E-E-A-T: who treats you, where they studied). */
+export function doctorsJsonLd(locale: Locale) {
+  const t = getDict(locale).about;
+  const clinic = { "@id": `${getSiteUrl()}/#clinic` };
+  return [
+    {
+      "@type": ["Person", "Physician"],
+      "@id": `${getSiteUrl()}/#kamala`,
+      name: "dr. Kamala Ekmečić",
+      jobTitle: locale === "bs" ? "Doktorica stomatologije" : "Doctor of Dental Medicine",
+      description: t.p1,
+      image: absoluteUrl("/assets/team-kamala-5.webp"),
+      medicalSpecialty: "Dentistry",
+      alumniOf: { "@type": "CollegeOrUniversity", name: "Stomatološki fakultet Sveučilišta u Zagrebu" },
+      worksFor: clinic,
+    },
+    {
+      "@type": ["Person", "Physician"],
+      "@id": `${getSiteUrl()}/#zehra`,
+      name: "dr. Zehra Ekmečić",
+      jobTitle: locale === "bs" ? "Doktorica dentalne medicine" : "Doctor of Dental Medicine",
+      description: t.team.p1,
+      image: absoluteUrl("/assets/team-zehra.webp"),
+      medicalSpecialty: "Dentistry",
+      alumniOf: { "@type": "CollegeOrUniversity", name: "Fakultet dentalne medicine Sveučilišta u Rijeci" },
+      worksFor: clinic,
+    },
+  ];
+}
+
+/** schema.org WebSite — ties every page to one site and publisher. */
+export function websiteJsonLd(locale: Locale) {
+  const t = getDict(locale).meta;
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${getSiteUrl()}/#website`,
+    url: absoluteUrl(homePath(locale)),
+    name: t.siteName,
+    alternateName: t.clinicName,
+    inLanguage: locale,
+    publisher: { "@id": `${getSiteUrl()}/#clinic` },
+  };
+}
+
+/** Breadcrumb from the home page to a top-level subpage. */
+export function subpageBreadcrumb(locale: Locale, name: string, path: string) {
+  return breadcrumbJsonLd([
+    { name: getDict(locale).meta.siteName, url: absoluteUrl(homePath(locale)) },
+    { name, url: absoluteUrl(path) },
+  ]);
+}
+
+/** schema.org Blog for the tips index, listing the published posts. */
+export function blogJsonLd(posts: Post[], locale: Locale) {
+  const t = getDict(locale);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${absoluteUrl(tipsPath(locale))}#blog`,
+    url: absoluteUrl(tipsPath(locale)),
+    name: t.tips.title,
+    description: t.meta.tips.description,
+    inLanguage: locale,
+    isPartOf: { "@id": `${getSiteUrl()}/#website` },
+    publisher: { "@id": `${getSiteUrl()}/#clinic` },
+    blogPost: posts
+      .filter((p) => !p.no_index)
+      .map((p) => ({
+        "@type": "BlogPosting",
+        headline: p.title,
+        url: absoluteUrl(postPath("bs", p.slug)),
+        datePublished: p.date,
+        dateModified: p.updated_at ?? p.date,
+        ...(p.image_url ? { image: p.image_url } : {}),
+      })),
+  };
+}
+
+/** schema.org ContactPage pointing at the clinic entity. */
+export function contactPageJsonLd(locale: Locale) {
+  const t = getDict(locale).meta;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    url: absoluteUrl(contactPath(locale)),
+    name: t.contact.title,
+    description: t.contact.description,
+    inLanguage: locale,
+    isPartOf: { "@id": `${getSiteUrl()}/#website` },
+    about: { "@id": `${getSiteUrl()}/#clinic` },
+  };
+}
+
+/** schema.org CollectionPage for the illustrations by dr. Zehra. */
+export function artPageJsonLd(locale: Locale) {
+  const t = getDict(locale).meta;
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    url: absoluteUrl(artPath(locale)),
+    name: t.art.title,
+    description: t.art.description,
+    inLanguage: locale,
+    isPartOf: { "@id": `${getSiteUrl()}/#website` },
+    author: { "@id": `${getSiteUrl()}/#zehra` },
   };
 }
 
