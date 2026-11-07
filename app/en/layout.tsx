@@ -5,6 +5,7 @@ import "../globals.css";
 import { fontClassName } from "../fonts";
 import { getDict } from "@/lib/i18n";
 import { getSiteUrl } from "@/lib/site";
+import { siteVerification } from "@/lib/verification";
 
 const t = getDict("en");
 
@@ -13,9 +14,7 @@ export const metadata: Metadata = {
   title: t.meta.home.title,
   description: t.meta.home.description,
   applicationName: t.meta.siteName,
-  verification: process.env.GOOGLE_SITE_VERIFICATION
-    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
-    : undefined,
+  verification: siteVerification,
   other: {
     "geo.region": "BA",
     "geo.placename": "Cazin",
