@@ -7,6 +7,7 @@ import {
   homeAlternates,
   tipsAlternates,
 } from "./seo";
+import { excerpt } from "./seo-analysis";
 import type { Post } from "./types";
 
 // Dedicated 1200×630 share card — portrait photos get cropped badly by FB/Viber/WhatsApp.
@@ -130,30 +131,46 @@ export function postMetadata(post: Post | null, locale: Locale): Metadata {
   // Posts are written only in Bosnian; /en/tips/<slug> shows the same text, so
   // the Bosnian URL is canonical for both (no duplicate content in Google).
   const url = absoluteUrl(postPath("bs", post.slug));
-  const description = post.summary ?? t.postFallbackDescription;
-  // Without a cover, share the branded card instead of a preview with no image.
-  const image = post.image_url
-    ? { url: post.image_url, alt: post.title }
-    : { url: OG_IMAGE, width: OG_WIDTH, height: OG_HEIGHT, alt: post.title };
+  // Empty SEO fields fall back: seo_* → title/summary → excerpt of the content.
+  const title = post.seo_title?.trim() || `${post.title} | ${t.siteName}`;
+  const shareTitle = post.seo_title?.trim() || post.title;
+  const description =
+    post.seo_description?.trim() ||
+    post.summary?.trim() ||
+    excerpt(post.content, 160) ||
+    t.postFallbackDescription;
+  const alt = post.image_alt?.trim() || post.title;
+  // Share image: dedicated → cover → the branded site card.
+  const shareUrl = post.og_image || post.image_url;
+  const image = shareUrl
+    ? { url: shareUrl, alt }
+    : { url: OG_IMAGE, width: OG_WIDTH, height: OG_HEIGHT, alt };
   return {
-    title: `${post.title} | ${t.siteName}`,
+    title: { absolute: title },
     description,
+    ...(post.focus_keyword ? { keywords: [post.focus_keyword] } : {}),
     alternates: { canonical: url },
+    robots: post.no_index
+      ? { index: false, follow: true }
+      : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
     openGraph: {
       type: "article",
       locale: getDict("bs").meta.ogLocale,
       url,
       siteName: t.siteName,
-      title: post.title,
+      title: shareTitle,
       description,
       images: [image],
       publishedTime: post.date,
+      ...(post.updated_at ? { modifiedTime: post.updated_at } : {}),
+      section: post.category,
+      ...(post.focus_keyword ? { tags: [post.focus_keyword] } : {}),
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title: shareTitle,
       description,
-      images: [image.url],
+      images: [{ url: image.url, alt }],
     },
   };
 }

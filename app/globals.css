@@ -500,21 +500,26 @@ textarea:focus {
   font-weight: 500;
 }
 
+/* Grid (not CSS columns): with only a few posts, columns stacked them all in
+   the first column and left the rest of the row empty. */
 .tips-masonry {
-  column-count: 3;
-  column-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
 }
 .tips-card {
-  break-inside: avoid;
-  display: inline-block !important;
   width: 100%;
-  margin: 0 0 20px;
-  vertical-align: top;
 }
 
+@media (max-width: 960px) {
+  .tips-masonry {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 640px) {
   .tips-masonry {
-    column-count: 1;
+    grid-template-columns: 1fr;
   }
 }
 

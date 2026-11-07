@@ -42,7 +42,7 @@ export default function PostArticleView({
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={post.image_url}
-          alt={post.title}
+          alt={post.image_alt || post.title}
           fetchPriority="high"
           style={{
             display: "block", width: "100%", maxHeight: "420px", objectFit: "cover",

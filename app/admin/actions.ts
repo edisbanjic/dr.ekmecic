@@ -215,18 +215,42 @@ function postFromForm(formData: FormData) {
     category: CATEGORIES.includes(category) ? category : CATEGORIES[0],
     published: formData.get("published") === "on",
     date: s(formData, "date") || undefined,
+    // SEO — empty means "fall back to title / summary / cover" (see lib/metadata.ts)
+    seo_title: sOrNull(formData, "seo_title"),
+    seo_description: sOrNull(formData, "seo_description"),
+    focus_keyword: sOrNull(formData, "focus_keyword"),
+    image_alt: sOrNull(formData, "image_alt"),
+    no_index: formData.get("no_index") === "on",
   };
+}
+
+/** First free slug for `wanted` (adds -2, -3… if another post already has it). */
+async function uniqueSlug(
+  supabase: Awaited<ReturnType<typeof db>>,
+  wanted: string,
+  exceptId?: string
+): Promise<string> {
+  const base = slugify(wanted) || "post";
+  for (let i = 1; ; i++) {
+    const slug = i === 1 ? base : `${base}-${i}`;
+    let query = supabase.from("posts").select("id").eq("slug", slug);
+    if (exceptId) query = query.neq("id", exceptId);
+    const { data } = await query.maybeSingle();
+    if (!data) return slug;
+  }
 }
 
 /** Upload a post cover image; undefined = image was not changed. */
 async function uploadPostImage(
   supabase: Awaited<ReturnType<typeof db>>,
   postId: string,
-  formData: FormData
+  formData: FormData,
+  field: "image" | "og_image" = "image"
 ): Promise<string | undefined> {
-  const image = imageFromForm(formData);
+  const image = imageFromForm(formData, field);
   if (!image) return undefined;
-  const path = `cover/${postId}.${imageExt(image)}`;
+  const folder = field === "og_image" ? "share" : "cover";
+  const path = `${folder}/${postId}.${imageExt(image)}`;
   const { error } = await supabase.storage
     .from("posts")
     .upload(path, image, { upsert: true, contentType: image.type || undefined });
@@ -270,14 +294,7 @@ export async function createPost(formData: FormData): Promise<void> {
     throw new Error("Naslov i sadržaj su obavezni.");
   }
 
-  // unique slug: add a numeric suffix if taken
-  const base = slugify(post.title) || "post";
-  let slug = base;
-  for (let i = 2; ; i++) {
-    const { data } = await supabase.from("posts").select("id").eq("slug", slug).maybeSingle();
-    if (!data) break;
-    slug = `${base}-${i}`;
-  }
+  const slug = await uniqueSlug(supabase, post.title);
 
   const { data, error } = await supabase
     .from("posts")
@@ -287,8 +304,12 @@ export async function createPost(formData: FormData): Promise<void> {
   if (error) throw new Error("Greška pri kreiranju objave: " + error.message);
 
   const imageUrl = await uploadPostImage(supabase, data.id, formData);
-  if (imageUrl) {
-    await supabase.from("posts").update({ image_url: imageUrl }).eq("id", data.id);
+  const ogUrl = await uploadPostImage(supabase, data.id, formData, "og_image");
+  if (imageUrl || ogUrl) {
+    await supabase
+      .from("posts")
+      .update({ ...(imageUrl ? { image_url: imageUrl } : {}), ...(ogUrl ? { og_image: ogUrl } : {}) })
+      .eq("id", data.id);
   }
 
   revalidatePath("/admin/posts");
@@ -303,9 +324,18 @@ export async function updatePost(id: string, formData: FormData): Promise<void> 
     throw new Error("Naslov i sadržaj su obavezni.");
   }
   const imageUrl = await uploadPostImage(supabase, id, formData);
+  const ogUrl = await uploadPostImage(supabase, id, formData, "og_image");
+  const wantedSlug = s(formData, "slug");
+  const slug = wantedSlug ? await uniqueSlug(supabase, wantedSlug, id) : undefined;
   const { error } = await supabase
     .from("posts")
-    .update({ ...post, ...(imageUrl ? { image_url: imageUrl } : {}) })
+    .update({
+      ...post,
+      ...(slug ? { slug } : {}),
+      ...(imageUrl ? { image_url: imageUrl } : {}),
+      ...(ogUrl ? { og_image: ogUrl } : {}),
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", id);
   if (error) throw new Error("Greška pri izmjeni objave: " + error.message);
   revalidatePath(`/admin/posts/${id}`);

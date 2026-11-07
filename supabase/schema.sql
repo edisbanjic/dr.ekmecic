@@ -132,7 +132,15 @@ create table posts (
   image_url text,
   category text not null default 'Savjeti',
   published boolean not null default false,
-  date date not null default current_date
+  date date not null default current_date,
+  updated_at timestamptz not null default now(),
+  -- SEO (admin → Objave → "SEO i dijeljenje"); empty = fallback to title/summary/cover
+  seo_title text,
+  seo_description text,
+  focus_keyword text,
+  og_image text,
+  image_alt text,
+  no_index boolean not null default false
 );
 
 alter table posts enable row level security;

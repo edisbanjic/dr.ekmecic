@@ -120,20 +120,33 @@ export function faqJsonLd(locale: Locale) {
   };
 }
 
-/** schema.org Article for a tips post. */
+/** schema.org BlogPosting for a tips post (canonical = Bosnian URL). */
 export function articleJsonLd(post: Post, locale: Locale) {
   const t = getDict(locale);
+  const url = absoluteUrl(postPath("bs", post.slug));
+  const image = post.og_image || post.image_url || absoluteUrl("/assets/og-image.jpg");
+  const clinic = {
+    "@type": "Dentist",
+    "@id": `${getSiteUrl()}/#clinic`,
+    name: t.meta.clinicName,
+    url: absoluteUrl(homePath("bs")),
+    logo: { "@type": "ImageObject", url: absoluteUrl("/assets/brand-logo-full.png") },
+  };
   return {
     "@context": "https://schema.org",
-    "@type": "Article",
-    headline: post.title,
-    description: post.summary ?? undefined,
-    image: post.image_url ? [post.image_url] : undefined,
+    "@type": "BlogPosting",
+    headline: post.seo_title?.trim() || post.title,
+    description: post.seo_description?.trim() || post.summary || undefined,
+    image: [image],
     datePublished: post.date,
-    inLanguage: locale,
-    mainEntityOfPage: absoluteUrl(postPath(locale, post.slug)),
-    author: { "@type": "Organization", name: t.meta.clinicName },
-    publisher: { "@type": "Organization", name: t.meta.clinicName },
+    dateModified: post.updated_at ?? post.date,
+    inLanguage: "bs",
+    articleSection: post.category,
+    ...(post.focus_keyword ? { keywords: post.focus_keyword } : {}),
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    author: clinic,
+    publisher: clinic,
   };
 }
 

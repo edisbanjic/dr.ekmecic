@@ -1,4 +1,5 @@
 import CoverImage from "@/components/admin/CoverImage";
+import PostSeo from "@/components/admin/PostSeo";
 import ContentEditor from "@/components/admin/ContentEditorLazy";
 import { CATEGORIES } from "@/lib/posts";
 import { formatDate } from "@/lib/appointments";
@@ -12,6 +13,15 @@ export default function PostFields({ post }: { post?: Post }) {
         <span>Naslov</span>
         <input required name="title" defaultValue={post?.title ?? ""} placeholder="npr. Kako pobijediti strah od zubara?" />
       </label>
+      {post && (
+        <label className="full">
+          <span>URL (slug)</span>
+          <input name="slug" defaultValue={post.slug} pattern="[a-z0-9\-]+" placeholder="kako-pobijediti-strah-od-zubara" />
+          <p style={{ margin: "6px 0 0", fontSize: "12.5px", fontWeight: 700, opacity: 0.55 }}>
+            dr-kamalaekmecic.com/savjeti/<b>{post.slug}</b> · Mijenjajte samo prije dijeljenja — stari link prestaje raditi.
+          </p>
+        </label>
+      )}
       <label>
         <span>Datum</span>
         <input type="date" name="date" defaultValue={post?.date ?? formatDate(new Date())} />
@@ -30,6 +40,7 @@ export default function PostFields({ post }: { post?: Post }) {
       </label>
       <CoverImage url={post?.image_url} />
       <ContentEditor content={post?.content} />
+      <PostSeo post={post} />
       <label className="full" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <input type="checkbox" name="published" defaultChecked={post?.published ?? false} style={{ width: "auto" }} />
         <span style={{ margin: 0 }}>Objavljena — vidljiva na sajtu</span>

@@ -68,10 +68,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Posts exist only in Bosnian (the /en copy canonicalises to it), so list one URL each.
-  for (const post of posts) {
+  for (const post of posts.filter((p) => !p.no_index)) {
     entries.push({
       url: absoluteUrl(postPath("bs", post.slug)),
-      lastModified: post.date,
+      lastModified: post.updated_at ?? post.date,
       changeFrequency: "monthly",
       priority: 0.6,
     });

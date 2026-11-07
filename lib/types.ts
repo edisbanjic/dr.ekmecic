@@ -68,6 +68,14 @@ export type Post = {
   category: string;
   published: boolean;
   date: string;
+  // SEO (supabase/migrations/2026-11-07-post-seo.sql); empty = fallback
+  updated_at?: string | null;
+  seo_title?: string | null;
+  seo_description?: string | null;
+  focus_keyword?: string | null;
+  og_image?: string | null;
+  image_alt?: string | null;
+  no_index?: boolean | null;
 };
 
 export type ChartRecord = {
