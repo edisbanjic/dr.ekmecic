@@ -342,9 +342,10 @@
     "lead": "Short tips, news from the clinic and little reminders that make your smile even more carefree.",
     "all": "All",
     "soon": "coming soon",
-    "emptyCategoryTitle": "No posts in the “{category}” category yet.",
+    "emptyCategoryTitle": "Something lovely is on its way.",
     "emptyTitle": "The first tips are in the making.",
-    "emptyCategoryText": "Add a new post to this category and it will appear here right away.",
+    "emptyCategoryText": "There are no posts in “{category}” yet, but the first stories are already in the making. In the meantime, have a look at the other posts.",
+    "emptyCta": "See all posts",
     "emptyText": "Once the posts start rolling, this will be a little corner for tips, news and lovely stories from the clinic.",
     "readMore": "Read more",
     "categories": {

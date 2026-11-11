@@ -22,6 +22,7 @@ export default function TipsIndexView({ posts }: { posts: Post[] }) {
   const basePath = tipsPath(locale);
   const categoryLabel = (value: string) =>
     t.categories[value as keyof typeof t.categories] ?? value;
+  const emptyTone = (activeCategory && CATEGORY_COLORS[activeCategory]) || { color: "#3E5F86", bg: "#E7F0FB" };
 
   return (
     <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "clamp(40px,6vw,70px) clamp(18px,4vw,32px) 0" }}>
@@ -86,26 +87,91 @@ export default function TipsIndexView({ posts }: { posts: Post[] }) {
       {!hasPosts ? (
         <div
           style={{
+            position: "relative",
+            overflow: "hidden",
             marginTop: "clamp(28px,4vw,40px)",
-            background: "linear-gradient(180deg, #FFFFFF 0%, #FFF9F2 100%)",
-            border: "2px solid #F1E8D7",
-            borderRadius: "28px",
-            padding: "34px 28px",
-            boxShadow: "0 26px 46px -30px rgba(61,65,66,.28)",
-            maxWidth: "720px",
+            background: `linear-gradient(180deg, #FFFFFF 0%, ${emptyTone.bg} 240%)`,
+            border: `2px dashed ${emptyTone.bg}`,
+            borderRadius: "32px",
+            padding: "clamp(34px,6vw,56px) clamp(22px,5vw,48px)",
+            boxShadow: "0 26px 46px -32px rgba(61,65,66,.28)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
           }}
         >
-          <div style={{ fontFamily: "var(--font-shantell)", fontWeight: 600, fontSize: "18px", color: "#F4A08A" }}>
-            {t.soon}
+          <div aria-hidden="true" style={{ position: "relative", width: "clamp(150px,24vw,190px)", aspectRatio: "1" }}>
+            <span style={{ position: "absolute", inset: "6%", borderRadius: "58% 42% 61% 39% / 45% 61% 39% 55%", background: emptyTone.bg }} />
+            <span style={{ position: "absolute", inset: "17%", display: "block", animation: "floatY 7s ease-in-out infinite" }}>
+              <svg viewBox="0 0 100 100" style={{ width: "100%", display: "block", overflow: "visible" }}>
+                <path
+                  d="M50 5C31 5 15 15 15 34c0 13 6 21 10 33 3 9 3.5 23 12 23 8 0 6.5-16 13-16s5 16 13 16c8.5 0 9-14 12-23 4-12 10-20 10-33C85 15 69 5 50 5Z"
+                  fill="#FFFFFF"
+                  stroke={emptyTone.color}
+                  strokeWidth="3.2"
+                  strokeLinejoin="round"
+                />
+                <circle cx="39" cy="35" r="3.6" fill="#3D4142" />
+                <circle cx="61" cy="35" r="3.6" fill="#3D4142" />
+                <path d="M40 46c5.5 6.5 14.5 6.5 20 0" fill="none" stroke="#3D4142" strokeWidth="3.2" strokeLinecap="round" />
+                <circle cx="31" cy="43" r="4" fill="#F4A08A" opacity=".45" />
+                <circle cx="69" cy="43" r="4" fill="#F4A08A" opacity=".45" />
+              </svg>
+            </span>
+            <span style={{ position: "absolute", right: "2%", top: "4%", fontSize: "24px", color: "#F4A08A", animation: "bling 3.2s ease-in-out infinite" }}>✦</span>
+            <span style={{ position: "absolute", left: "0", top: "30%", fontSize: "16px", color: "#5B8FD4", animation: "bling 3.2s ease-in-out 1.1s infinite" }}>✦</span>
+            <span style={{ position: "absolute", left: "12%", bottom: "6%", fontSize: "13px", color: emptyTone.color, animation: "bling 3.2s ease-in-out 2s infinite" }}>✦</span>
+            <span
+              style={{
+                position: "absolute",
+                right: "-14%",
+                bottom: "8%",
+                transform: "rotate(-7deg)",
+                background: "#FFFFFF",
+                borderRadius: "14px",
+                padding: "6px 13px",
+                boxShadow: "0 14px 26px -16px rgba(61,65,66,.45)",
+                fontFamily: "var(--font-shantell)",
+                fontWeight: 600,
+                fontSize: "15px",
+                color: "#F4A08A",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {t.soon}
+            </span>
           </div>
-          <h2 style={{ margin: "10px 0 0", fontFamily: "var(--font-fredoka)", fontSize: "clamp(24px,4vw,34px)", lineHeight: 1.05 }}>
-            {activeCategory
-              ? t.emptyCategoryTitle.replace("{category}", categoryLabel(activeCategory))
-              : t.emptyTitle}
+          <h2 style={{ margin: "22px 0 0", maxWidth: "20ch", fontFamily: "var(--font-fredoka)", fontSize: "clamp(24px,4vw,34px)", lineHeight: 1.08 }}>
+            {activeCategory ? t.emptyCategoryTitle : t.emptyTitle}
           </h2>
-          <p style={{ margin: "14px 0 0", fontSize: "16px", lineHeight: 1.65, fontWeight: 600, opacity: 0.75 }}>
-            {activeCategory ? t.emptyCategoryText : t.emptyText}
+          <p style={{ margin: "12px 0 0", maxWidth: "52ch", fontSize: "16px", lineHeight: 1.65, fontWeight: 600, opacity: 0.75 }}>
+            {activeCategory
+              ? t.emptyCategoryText.replace("{category}", categoryLabel(activeCategory))
+              : t.emptyText}
           </p>
+          {activeCategory && (
+            <a
+              href={basePath}
+              className="hv-cta"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                marginTop: "22px",
+                padding: "12px 22px",
+                borderRadius: "999px",
+                background: emptyTone.color,
+                color: "#FFFFFF",
+                fontWeight: 800,
+                fontSize: "14.5px",
+                textDecoration: "none",
+                boxShadow: "0 14px 24px -16px rgba(61,65,66,.5)",
+              }}
+            >
+              {t.emptyCta} <span style={{ color: "#FFFFFF", opacity: 0.8 }}>✦</span>
+            </a>
+          )}
         </div>
       ) : (
         <div className="tips-masonry" style={{ marginTop: "clamp(28px,4vw,44px)" }}>

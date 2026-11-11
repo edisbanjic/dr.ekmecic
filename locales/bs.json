@@ -342,9 +342,10 @@
     "lead": "Kratki savjeti, novosti iz ordinacije i mali podsjetnici koji čine osmijeh još bezbrižnijim.",
     "all": "Sve",
     "soon": "uskoro",
-    "emptyCategoryTitle": "Još nema objava u kategoriji “{category}”.",
+    "emptyCategoryTitle": "Ovdje uskoro stiže nešto lijepo.",
     "emptyTitle": "Prvi savjeti su u pripremi.",
-    "emptyCategoryText": "Dodaj novu objavu u ovu kategoriju i ovdje će se odmah pojaviti.",
+    "emptyCategoryText": "U kategoriji “{category}” još nema objava, ali prve priče su već u pripremi. Dok čekate, zavirite u ostale objave.",
+    "emptyCta": "Pogledaj sve objave",
     "emptyText": "Kad objave krenu, ovdje će biti mali kutak za savjete, novosti i lijepe priče iz ordinacije.",
     "readMore": "Pročitaj više",
     "categories": {
