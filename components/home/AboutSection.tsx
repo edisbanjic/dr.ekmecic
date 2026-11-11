@@ -16,7 +16,7 @@ function Education({ text }: { text: string }) {
 const STAT_COLORS = ["#5B8FD4", "#E8836A", undefined];
 const POLAROID_IMAGES = [
   "/assets/gallery-clinic.webp",
-  "/assets/gallery-equipment.webp",
+  "/assets/gallery-entrance.webp",
   "/assets/gallery-kids.webp",
 ];
 const POLAROID_STYLES = [
